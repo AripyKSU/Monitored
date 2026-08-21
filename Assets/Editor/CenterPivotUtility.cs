@@ -14,7 +14,7 @@ public class CenterPivotUtility : Editor
 
         if (guids == null || guids.Length == 0)
         {
-            Debug.LogWarning("[CenterPivotUtility] No prefabs found in Assets/Prefabs!");
+            GameLog.LogWarning("[CenterPivotUtility] No prefabs found in Assets/Prefabs!");
             return;
         }
 
@@ -50,7 +50,7 @@ public class CenterPivotUtility : Editor
 
         EditorUtility.DisplayDialog("Pivot Centering Complete", 
             $"Successfully fixed and centered pivots for {processedCount} prefab(s) under Assets/Prefabs!", "OK");
-        Debug.Log($"[CenterPivotUtility] Processed {processedCount} prefabs.");
+        GameLog.Log($"[CenterPivotUtility] Processed {processedCount} prefabs.");
     }
 
     private static bool CenterPivotForGameObject(GameObject root, string prefabPath, string genMeshFolder)
@@ -119,4 +119,3 @@ public class CenterPivotUtility : Editor
         return modified;
     }
 }
-

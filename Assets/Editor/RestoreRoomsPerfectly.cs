@@ -28,7 +28,7 @@ public class RestoreRoomsPerfectly : Editor
             }
         }
 
-        Debug.Log($"[RestoreRooms] Indexed {meshDict.Count} original FBX meshes.");
+        GameLog.Log($"[RestoreRooms] Indexed {meshDict.Count} original FBX meshes.");
 
         // 2. Iterate through all Rooms prefabs
         string[] roomGuids = AssetDatabase.FindAssets("t:Prefab", new string[] { "Assets/Prefabs/Rooms" });
@@ -90,6 +90,6 @@ public class RestoreRoomsPerfectly : Editor
 
         EditorUtility.DisplayDialog("Rooms Restoration Complete", 
             $"Successfully restored original meshes and positions for {restoredCount} Rooms prefabs!", "OK");
-        Debug.Log($"[RestoreRooms] Restored {restoredCount} Rooms prefabs.");
+        GameLog.Log($"[RestoreRooms] Restored {restoredCount} Rooms prefabs.");
     }
 }

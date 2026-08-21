@@ -77,6 +77,6 @@ public class RestorePropPrefabs : Editor
 
         EditorUtility.DisplayDialog("Props Restoration Complete!", 
             $"Successfully restored original FBX meshes for {count} / {prefabGuids.Length} furniture/prop prefabs in Assets/Prefabs/Prefabs!", "OK");
-        Debug.Log($"[RestorePropPrefabs] Restored {count} prop prefabs.");
+        GameLog.Log($"[RestorePropPrefabs] Restored {count} prop prefabs.");
     }
 }

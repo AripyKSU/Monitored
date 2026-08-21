@@ -57,7 +57,7 @@ public class FixFloorsOnly : Editor
                 }
                 else
                 {
-                    Debug.LogWarning($"[FixFloorsOnly] Could not find mesh for floor '{mf.gameObject.name}' in Asylum.fbx");
+                    GameLog.LogWarning($"[FixFloorsOnly] Could not find mesh for floor '{mf.gameObject.name}' in Asylum.fbx");
                 }
             }
 
@@ -74,6 +74,6 @@ public class FixFloorsOnly : Editor
 
         EditorUtility.DisplayDialog("Floors Fixed!", 
             $"Successfully restored original meshes for {fixedCount} / {floorGuids.Length} Floor prefabs!", "OK");
-        Debug.Log($"[FixFloorsOnly] Fixed {fixedCount} floor prefabs.");
+        GameLog.Log($"[FixFloorsOnly] Fixed {fixedCount} floor prefabs.");
     }
 }

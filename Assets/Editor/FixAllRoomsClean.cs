@@ -117,6 +117,6 @@ public class FixAllRoomsClean : Editor
 
         EditorUtility.DisplayDialog("All Rooms Repaired!", 
             $"Successfully re-aligned structural walls/floors and restored original meshes for {fixedCount} Rooms prefabs!", "OK");
-        Debug.Log($"[FixAllRoomsClean] Repaired {fixedCount} Rooms prefabs.");
+        GameLog.Log($"[FixAllRoomsClean] Repaired {fixedCount} Rooms prefabs.");
     }
 }

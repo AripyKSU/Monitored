@@ -80,6 +80,6 @@ public class MakeModularPrefabsClean : Editor
 
         EditorUtility.DisplayDialog("Modular Centering Complete!", 
             $"Successfully centered mesh geometry at (0,0,0) for {count} Walls and Floors prefabs!", "OK");
-        Debug.Log($"[MakeModularPrefabsClean] Centered {count} prefabs.");
+        GameLog.Log($"[MakeModularPrefabsClean] Centered {count} prefabs.");
     }
 }

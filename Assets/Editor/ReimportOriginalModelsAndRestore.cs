@@ -12,7 +12,7 @@ public class ReimportOriginalModelsAndRestore : Editor
         string modelsFolder = "Assets/Abandoned_Asylum/Models";
         string[] fbxGuids = AssetDatabase.FindAssets("t:Model", new string[] { modelsFolder });
 
-        Debug.Log($"[Reimport] Re-importing {fbxGuids.Length} FBX files from disk...");
+        GameLog.Log($"[Reimport] Re-importing {fbxGuids.Length} FBX files from disk...");
         foreach (string guid in fbxGuids)
         {
             string fbxPath = AssetDatabase.GUIDToAssetPath(guid);
@@ -47,7 +47,7 @@ public class ReimportOriginalModelsAndRestore : Editor
             }
         }
 
-        Debug.Log($"[Reimport] Indexed {meshDict.Count} freshly imported FBX meshes.");
+        GameLog.Log($"[Reimport] Indexed {meshDict.Count} freshly imported FBX meshes.");
 
         // 4. Restore Rooms prefabs by re-linking original FBX meshes and resetting localPositions
         string[] roomGuids = AssetDatabase.FindAssets("t:Prefab", new string[] { "Assets/Prefabs/Rooms" });

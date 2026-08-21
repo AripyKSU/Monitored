@@ -12,7 +12,7 @@ public class RecreateRoomsFromShowScene : Editor
         string showScenePath = "Assets/Abandoned_Asylum/Show.unity";
         if (!File.Exists(showScenePath))
         {
-            Debug.LogError($"[RecreateRooms] Original scene file not found at {showScenePath}");
+            GameLog.LogError($"[RecreateRooms] Original scene file not found at {showScenePath}");
             return;
         }
 
@@ -48,7 +48,7 @@ public class RecreateRoomsFromShowScene : Editor
             }
             else
             {
-                Debug.LogWarning($"[RecreateRooms] Could not find original '{roomName}' in Show.unity.");
+                GameLog.LogWarning($"[RecreateRooms] Could not find original '{roomName}' in Show.unity.");
             }
         }
 
@@ -59,7 +59,7 @@ public class RecreateRoomsFromShowScene : Editor
 
         EditorUtility.DisplayDialog("Rooms Fully Recreated!", 
             $"Successfully recreated {count} / {existingRoomPrefabs.Length} Rooms prefabs from original untouched Show.unity scene!", "OK");
-        Debug.Log($"[RecreateRooms] Recreated {count} Rooms prefabs.");
+        GameLog.Log($"[RecreateRooms] Recreated {count} Rooms prefabs.");
     }
 
     private static GameObject FindGameObjectByName(GameObject[] rootObjects, string name)

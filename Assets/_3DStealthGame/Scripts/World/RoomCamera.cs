@@ -10,7 +10,22 @@ public class RoomCamera : MonoBehaviour
     [SerializeField] private CinemachineCamera virtualCamera;
 
     public CinemachineCamera VirtualCamera => virtualCamera;
+    public bool IsConfigured => virtualCamera != null;
 
+    /// <summary>
+    /// CameraDirector가 방 CCTV의 선택 우선순위를 변경할 때 사용하는 단일 진입점이다.
+    /// </summary>
+    public void SetPriority(int priority)
+    {
+        if (virtualCamera != null)
+        {
+            virtualCamera.Priority = priority;
+        }
+    }
+
+    /// <summary>
+    /// 같은 GameObject에 있는 CinemachineCamera를 자동 연결한다.
+    /// </summary>
     private void Reset()
     {
         virtualCamera = GetComponent<CinemachineCamera>();

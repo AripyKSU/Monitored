@@ -13,7 +13,7 @@ public class FixAndRestoreUtility : Editor
 
         if (guids == null || guids.Length == 0)
         {
-            Debug.LogWarning("[FixAndRestoreUtility] No prefabs found in Walls or Floors.");
+            GameLog.LogWarning("[FixAndRestoreUtility] No prefabs found in Walls or Floors.");
             return;
         }
 
@@ -38,7 +38,7 @@ public class FixAndRestoreUtility : Editor
 
         EditorUtility.DisplayDialog("Transform Reset Complete", 
             $"Successfully set Position to (0,0,0) and Rotation to Identity for {count} Walls and Floors prefabs!", "OK");
-        Debug.Log($"[FixAndRestoreUtility] Reset transform to 0,0,0 for {count} prefabs.");
+        GameLog.Log($"[FixAndRestoreUtility] Reset transform to 0,0,0 for {count} prefabs.");
     }
 
     [MenuItem("Tools/2. Restore Rooms Prefabs (Revert Child Positions & Meshes)")]
@@ -49,7 +49,7 @@ public class FixAndRestoreUtility : Editor
 
         if (guids == null || guids.Length == 0)
         {
-            Debug.LogWarning("[FixAndRestoreUtility] No prefabs found in Assets/Prefabs/Rooms.");
+            GameLog.LogWarning("[FixAndRestoreUtility] No prefabs found in Assets/Prefabs/Rooms.");
             return;
         }
 
@@ -105,6 +105,6 @@ public class FixAndRestoreUtility : Editor
 
         EditorUtility.DisplayDialog("Rooms Restore Complete", 
             $"Successfully restored child positions and original meshes for {count} Rooms prefabs!", "OK");
-        Debug.Log($"[FixAndRestoreUtility] Restored {count} Rooms prefabs.");
+        GameLog.Log($"[FixAndRestoreUtility] Restored {count} Rooms prefabs.");
     }
 }
