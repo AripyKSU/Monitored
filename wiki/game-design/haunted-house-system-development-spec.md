@@ -279,3 +279,8 @@ TargetCommand
 ## See Also
 
 - [폐건물 탈출 공포 게임 — 리부트 컨셉 기획](haunted-house-reboot-concept.md)
+- [`CoreSandbox` 씬 구조와 검증 구성](../technical-docs/coresandbox-scene-structure.md)
+- [`TargetCommand` 시스템 기술문서](../technical-docs/target-command-system.md)
+- [방과 CCTV 전환 시스템 기술문서](../technical-docs/cctv-room-transition-system.md)
+- [상호작용과 인벤토리 시스템 기술문서](../technical-docs/interaction-inventory-system.md)
+- [공용 일시정지 시스템 기술문서](../technical-docs/pause-system.md)

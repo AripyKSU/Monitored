@@ -60,14 +60,14 @@ public static class CoreSandboxStage4Setup
             throw new InvalidOperationException("Door_A_B에 Doorway가 없습니다.");
         }
 
-        GamePauseController pauseController = GetOrAdd<GamePauseController>(gameSession);
+        GamePauseService pauseService = GetOrAdd<GamePauseService>(gameSession);
         PlayerInventory inventory = GetOrAdd<PlayerInventory>(gameSession);
-        ConfigurePlayer(playerObject, pauseController);
+        ConfigurePlayer(playerObject, pauseService);
 
-        Stage4Ui ui = BuildStage4Ui(canvasObject, inventory, pauseController, keyIcon);
+        Stage4Ui ui = BuildStage4Ui(canvasObject, inventory, pauseService, keyIcon);
         ConfigureKeyPickup(keyObject, keyItem, keyMaterial, inventory, ui.MessagePanel);
         ConfigureMessageTarget(messageObject, ui.MessagePanel);
-        ConfigureLockedDoor(doorway, keyItem, inventory, pauseController, ui);
+        ConfigureLockedDoor(doorway, keyItem, inventory, pauseService, ui);
 
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
@@ -104,7 +104,7 @@ public static class CoreSandboxStage4Setup
     {
         var problems = new System.Collections.Generic.List<string>();
         ItemDefinition keyItem = AssetDatabase.LoadAssetAtPath<ItemDefinition>(KeyAssetPath);
-        GamePauseController pauseController = UnityEngine.Object.FindFirstObjectByType<GamePauseController>();
+        GamePauseService pauseService = UnityEngine.Object.FindFirstObjectByType<GamePauseService>();
         PlayerInventory inventory = UnityEngine.Object.FindFirstObjectByType<PlayerInventory>();
         InventoryPanel inventoryPanel = UnityEngine.Object.FindFirstObjectByType<InventoryPanel>(FindObjectsInactive.Include);
         ItemSelectionPanel selectionPanel = UnityEngine.Object.FindFirstObjectByType<ItemSelectionPanel>(FindObjectsInactive.Include);
@@ -116,7 +116,7 @@ public static class CoreSandboxStage4Setup
         ItemUseTarget[] itemUseTargets = UnityEngine.Object.FindObjectsByType<ItemUseTarget>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
         if (keyItem == null || !keyItem.TryValidate(out _)) problems.Add("유효한 Key ItemDefinition이 없습니다.");
-        if (pauseController == null) problems.Add("GamePauseController가 없습니다.");
+        if (pauseService == null) problems.Add("GamePauseService가 없습니다.");
         if (inventory == null) problems.Add("PlayerInventory가 없습니다.");
         if (inventoryPanel == null) problems.Add("InventoryPanel이 없습니다.");
         if (selectionPanel == null) problems.Add("ItemSelectionPanel이 없습니다.");
@@ -145,7 +145,7 @@ public static class CoreSandboxStage4Setup
         return true;
     }
 
-    private static void ConfigurePlayer(GameObject playerObject, GamePauseController pauseController)
+    private static void ConfigurePlayer(GameObject playerObject, GamePauseService pauseService)
     {
         Player player = playerObject.GetComponent<Player>();
         if (player == null)
@@ -153,7 +153,7 @@ public static class CoreSandboxStage4Setup
             throw new InvalidOperationException("Player 오브젝트에 Player 컴포넌트가 없습니다.");
         }
 
-        SetObjectReference(player, "pauseController", pauseController);
+        SetObjectReference(player, "pauseService", pauseService);
     }
 
     private static void ConfigureKeyPickup(
@@ -207,7 +207,7 @@ public static class CoreSandboxStage4Setup
         Doorway doorway,
         ItemDefinition keyItem,
         PlayerInventory inventory,
-        GamePauseController pauseController,
+        GamePauseService pauseService,
         Stage4Ui ui)
     {
         SetBool(doorway, "locked", true);
@@ -226,7 +226,7 @@ public static class CoreSandboxStage4Setup
             SetObjectReference(itemUseTarget, "requiredItem", keyItem);
             SetObjectReference(itemUseTarget, "effectComponent", doorTarget);
             SetObjectReference(itemUseTarget, "inventory", inventory);
-            SetObjectReference(itemUseTarget, "pauseController", pauseController);
+            SetObjectReference(itemUseTarget, "pauseService", pauseService);
             SetObjectReference(itemUseTarget, "selectionPanel", ui.SelectionPanel);
             SetObjectReference(itemUseTarget, "messagePanel", ui.MessagePanel);
             SetString(itemUseTarget, "successMessage", "열쇠가 맞았다. 문이 잠금 해제됐다.");
@@ -238,7 +238,7 @@ public static class CoreSandboxStage4Setup
     private static Stage4Ui BuildStage4Ui(
         GameObject canvasObject,
         PlayerInventory inventory,
-        GamePauseController pauseController,
+        GamePauseService pauseService,
         Sprite keyIcon)
     {
         Transform oldRoot = canvasObject.transform.Find("Stage4 UI");
@@ -287,7 +287,7 @@ public static class CoreSandboxStage4Setup
         inventoryButtonRect.pivot = Vector2.one;
 
         SetObjectReference(inventoryPanel, "inventory", inventory);
-        SetObjectReference(inventoryPanel, "pauseController", pauseController);
+        SetObjectReference(inventoryPanel, "pauseService", pauseService);
         SetBool(inventoryPanel, "pauseWhileOpen", true);
         SetObjectReference(inventoryPanel, "panelRoot", inventoryRoot);
         SetObjectReference(inventoryPanel, "itemContainer", inventoryContainer);

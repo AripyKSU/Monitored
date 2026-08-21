@@ -20,13 +20,15 @@ namespace HauntedHouse.Interaction
 
         [Header("공용 시스템")]
         [SerializeField] private PlayerInventory inventory;
-        [SerializeField] private GamePauseController pauseController;
+        [SerializeField] private GamePauseService pauseService;
         [SerializeField] private ItemSelectionPanel selectionPanel;
         [SerializeField] private MessagePanel messagePanel;
 
         [Header("결과 메시지")]
         [SerializeField, TextArea] private string successMessage;
         [SerializeField, TextArea] private string failureMessage = "이 아이템은 사용할 수 없습니다.";
+
+        private GamePauseService.PauseHandle pauseHandle;
 
         public IEnumerator Execute(TargetActionContext context)
         {
@@ -50,7 +52,7 @@ namespace HauntedHouse.Interaction
                 selectionFinished = true;
             }
 
-            GamePauseController.PauseHandle pauseHandle = pauseController.AcquirePause(this);
+            pauseHandle = pauseService.AcquirePause(this);
             selectionPanel.ItemSelected += HandleSelected;
             selectionPanel.Cancelled += HandleCancelled;
 
@@ -98,7 +100,7 @@ namespace HauntedHouse.Interaction
                 selectionPanel.ItemSelected -= HandleSelected;
                 selectionPanel.Cancelled -= HandleCancelled;
                 selectionPanel.Close();
-                pauseHandle.Dispose();
+                ReleasePause();
             }
         }
 
@@ -121,7 +123,7 @@ namespace HauntedHouse.Interaction
                 return false;
             }
 
-            if (inventory == null || pauseController == null || selectionPanel == null || messagePanel == null)
+            if (inventory == null || pauseService == null || selectionPanel == null || messagePanel == null)
             {
                 error = $"ItemUseTarget '{name}'의 인벤토리, 일시정지 또는 UI 참조가 누락됐습니다.";
                 return false;
@@ -140,9 +142,22 @@ namespace HauntedHouse.Interaction
         private void Reset()
         {
             inventory = FindFirstObjectByType<PlayerInventory>();
-            pauseController = FindFirstObjectByType<GamePauseController>();
+            pauseService = FindFirstObjectByType<GamePauseService>();
             selectionPanel = FindFirstObjectByType<ItemSelectionPanel>();
             messagePanel = FindFirstObjectByType<MessagePanel>();
+        }
+
+        /// <summary>대상 실행이 중단되는 경우에도 아이템 선택이 보유한 일시정지를 해제한다.</summary>
+        private void OnDisable()
+        {
+            ReleasePause();
+        }
+
+        /// <summary>현재 대상 실행이 획득한 일시정지 Handle을 안전하게 반환한다.</summary>
+        private void ReleasePause()
+        {
+            pauseHandle?.Dispose();
+            pauseHandle = null;
         }
     }
 }

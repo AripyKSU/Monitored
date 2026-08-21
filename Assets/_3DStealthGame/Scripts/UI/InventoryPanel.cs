@@ -13,7 +13,7 @@ namespace HauntedHouse.UI
     public sealed class InventoryPanel : MonoBehaviour
     {
         [SerializeField] private PlayerInventory inventory;
-        [SerializeField] private GamePauseController pauseController;
+        [SerializeField] private GamePauseService pauseService;
         [SerializeField] private bool pauseWhileOpen = true;
 
         [Header("화면 구성")]
@@ -24,14 +24,14 @@ namespace HauntedHouse.UI
         [SerializeField] private Text emptyLabel;
 
         private readonly List<InventoryItemView> spawnedViews = new();
-        private GamePauseController.PauseHandle pauseHandle;
+        private GamePauseService.PauseHandle pauseHandle;
 
         public bool IsOpen => panelRoot != null && panelRoot.activeSelf;
 
         private void Awake()
         {
             inventory ??= FindFirstObjectByType<PlayerInventory>();
-            pauseController ??= FindFirstObjectByType<GamePauseController>();
+            pauseService ??= FindFirstObjectByType<GamePauseService>();
 
             if (panelRoot != null)
             {
@@ -73,13 +73,13 @@ namespace HauntedHouse.UI
 
             if (pauseWhileOpen)
             {
-                if (pauseController == null)
+                if (pauseService == null)
                 {
-                    GameLog.LogError($"InventoryPanel '{name}'에 GamePauseController가 연결되지 않았습니다.", this);
+                    GameLog.LogError($"InventoryPanel '{name}'에 GamePauseService가 연결되지 않았습니다.", this);
                     return;
                 }
 
-                pauseHandle = pauseController.AcquirePause(this);
+                pauseHandle = pauseService.AcquirePause(this);
             }
 
             panelRoot.SetActive(true);
@@ -166,7 +166,7 @@ namespace HauntedHouse.UI
         private void Reset()
         {
             inventory = FindFirstObjectByType<PlayerInventory>();
-            pauseController = FindFirstObjectByType<GamePauseController>();
+            pauseService = FindFirstObjectByType<GamePauseService>();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace HauntedHouse.Commands
         [SerializeField, Min(0.1f)] private float moveTimeout = 30f;
 
         [Header("게임 흐름")]
-        [SerializeField] private GamePauseController pauseController;
+        [SerializeField] private GamePauseService pauseService;
 
         private PlayerMover mover;
 
@@ -39,7 +39,7 @@ namespace HauntedHouse.Commands
         private void Awake()
         {
             navMeshAgent ??= GetComponent<NavMeshAgent>();
-            pauseController ??= FindFirstObjectByType<GamePauseController>();
+            pauseService ??= FindFirstObjectByType<GamePauseService>();
             if (navMeshAgent == null)
             {
                 GameLog.LogError($"Player '{name}'에 NavMeshAgent가 없습니다.", this);
@@ -53,7 +53,7 @@ namespace HauntedHouse.Commands
                 arrivalTolerance,
                 pathResolveTimeout,
                 moveTimeout,
-                () => pauseController != null && pauseController.IsPaused);
+                () => pauseService != null && pauseService.IsPaused);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace HauntedHouse.Commands
         private void Reset()
         {
             navMeshAgent = GetComponent<NavMeshAgent>();
-            pauseController = FindFirstObjectByType<GamePauseController>();
+            pauseService = FindFirstObjectByType<GamePauseService>();
         }
     }
 }

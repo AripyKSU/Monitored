@@ -11,28 +11,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e2a3f308-b6e8-45cd-b24c-71dff15c9f26" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/indexLayout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/CenterPivotUtility.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/CenterPivotUtility.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/FixAllRoomsClean.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/FixAllRoomsClean.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/FixAndRestoreUtility.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/FixAndRestoreUtility.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/FixFloorsOnly.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/FixFloorsOnly.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/MakeModularPrefabsClean.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/MakeModularPrefabsClean.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/RecreateRoomsFromShowScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/RecreateRoomsFromShowScene.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ReimportOriginalModelsAndRestore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ReimportOriginalModelsAndRestore.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/RestorePropPrefabs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/RestorePropPrefabs.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/RestoreRoomsPerfectly.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/RestoreRoomsPerfectly.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Editor/Stage1NavigationSetup.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Editor/Stage1NavigationSetup.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/CameraDirector.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/CameraDirector.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Room.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Room.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/RoomCamera.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/RoomCamera.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/RoomTransition.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/RoomTransition.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Editor/CoreSandboxStage4Setup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_3DStealthGame/Editor/CoreSandboxStage4Setup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scenes/CoreSandbox.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_3DStealthGame/Scenes/CoreSandbox.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/Player.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Core/GamePauseController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Core/GamePauseController.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction/ItemUseTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction/ItemUseTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/UI/InventoryPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/UI/InventoryPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wiki/game-design/haunted-house-system-development-spec.md" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/game-design/haunted-house-system-development-spec.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wiki/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/index.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wiki/log.md" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/log.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -185,7 +174,7 @@
       <workItem from="1786072610508" duration="9931000" />
       <workItem from="1786323495684" duration="7179000" />
       <workItem from="1787116395424" duration="2993000" />
-      <workItem from="1787272841198" duration="3543000" />
+      <workItem from="1787272841198" duration="5562000" />
     </task>
     <servers />
   </component>
