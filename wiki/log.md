@@ -14,3 +14,5 @@
 - Updated: 폐건물 탈출 공포 게임 — 시스템 개발 사양
 
 ## [2026-08-21] lint | 0 issues found, 0 auto-fixed
+
+## [2026-08-25] query | Archived: 폐병원 스테이지 구성안 — 5개 세이브 구간

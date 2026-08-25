@@ -243,7 +243,7 @@ namespace HauntedHouse.Stealth
             }
         }
 
-        /// <summary>적 접촉을 포획 시스템에 전달하고 은신 중 접촉은 무시한다.</summary>
+        /// <summary>물리적으로 접촉한 플레이어를 포획 시스템에 전달하고 은신 중 접촉은 무시한다.</summary>
         private void HandleEnemyPlayerContact(EnemyController enemy, Player contactedPlayer)
         {
             GameLog.Log(
@@ -276,22 +276,15 @@ namespace HauntedHouse.Stealth
                 return;
             }
 
-            if (playerRoomTracker != null && enemy.CurrentRoom != playerRoomTracker.CurrentRoom)
-            {
-                GameLog.LogWarning(
-                    $"적과 플레이어의 논리 방이 달라 포획을 진행하지 않습니다. " +
-                    $"EnemyRoom={enemy.CurrentRoom?.RoomId ?? "null"}, " +
-                    $"PlayerRoom={playerRoomTracker.CurrentRoom?.RoomId ?? "null"}.",
-                    this);
-                return;
-            }
-
             if (captureDeathSystem == null)
             {
                 GameLog.LogError("EnemyChaseSystem에 PlayerCaptureDeathSystem이 연결되지 않았습니다.", this);
                 return;
             }
 
+            // 포획은 Doorway 통과 이벤트보다 물리 Collider 접촉을 우선 기준으로 삼는다.
+            // 적과 플레이어의 논리 방은 문 경계에서 갱신 시점이 어긋날 수 있으므로
+            // 여기서 방이 다르다는 이유만으로 실제 접촉을 폐기하지 않는다.
             bool captured = captureDeathSystem.TryCapture(enemy);
             GameLog.Log($"적 접촉 포획 요청 결과: {captured}.", this);
         }
