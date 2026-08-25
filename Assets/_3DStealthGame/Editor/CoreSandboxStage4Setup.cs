@@ -49,6 +49,7 @@ public static class CoreSandboxStage4Setup
         Material keyMaterial = CreateOrUpdateKeyMaterial();
 
         GameObject gameSession = RequireObject("GameSession");
+        GameObject playerSystems = GameObject.Find("PlayerSystems") ?? gameSession;
         GameObject playerObject = RequireObject("Player");
         GameObject canvasObject = RequireObject("Target UI");
         GameObject keyObject = FindEither("Room_A/KeyPickup", "Room_A/ItemTarget");
@@ -61,7 +62,7 @@ public static class CoreSandboxStage4Setup
         }
 
         GamePauseService pauseService = GetOrAdd<GamePauseService>(gameSession);
-        PlayerInventory inventory = GetOrAdd<PlayerInventory>(gameSession);
+        PlayerInventory inventory = GetOrAdd<PlayerInventory>(playerSystems);
         ConfigurePlayer(playerObject, pauseService);
 
         Stage4Ui ui = BuildStage4Ui(canvasObject, inventory, pauseService, keyIcon);
