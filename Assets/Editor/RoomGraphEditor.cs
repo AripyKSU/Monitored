@@ -68,7 +68,9 @@ namespace HauntedHouse.Editor
                     continue;
                 }
 
-                Vector3 roomPosition = node.Room.transform.position + Vector3.up * 0.5f;
+                // Room 루트는 논리 컨테이너일 수 있으므로, 베이크된 그래프 기준점을 사용한다.
+                // 이 값은 물리 메쉬 오브젝트의 Transform을 수정하지 않고 위치만 읽는다.
+                Vector3 roomPosition = node.GraphPosition + Vector3.up * 0.5f;
                 Handles.color = new Color(0.2f, 0.8f, 1f, 1f);
                 Handles.SphereHandleCap(0, roomPosition, Quaternion.identity, 0.35f, EventType.Repaint);
                 Handles.Label(roomPosition + Vector3.up * 0.5f, node.Room.RoomId);
@@ -80,12 +82,29 @@ namespace HauntedHouse.Editor
                         continue;
                     }
 
-                    Vector3 destinationPosition = edge.DestinationRoom.transform.position + Vector3.up * 0.5f;
+                    Vector3 destinationPosition = GetGraphPosition(graph, edge.DestinationRoom) + Vector3.up * 0.5f;
                     Handles.color = new Color(1f, 0.75f, 0.2f, 0.9f);
                     Handles.DrawAAPolyLine(3f, roomPosition, destinationPosition);
                     Handles.Label((roomPosition + destinationPosition) * 0.5f, edge.Doorway.name);
                 }
             }
+        }
+
+        /// <summary>
+        /// 베이크된 노드 배열에서 방의 기준 위치를 찾아 반환한다.
+        /// 간선 목적지가 배열에 없더라도 현재 Room 기준점으로 안전하게 표시한다.
+        /// </summary>
+        private static Vector3 GetGraphPosition(RoomGraph graph, Room room)
+        {
+            foreach (RoomGraphNodeData node in graph.BakedNodes)
+            {
+                if (node != null && node.Room == room)
+                {
+                    return node.GraphPosition;
+                }
+            }
+
+            return room != null ? room.GraphPosition : Vector3.zero;
         }
     }
 }

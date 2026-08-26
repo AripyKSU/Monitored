@@ -20,8 +20,6 @@ namespace HauntedHouse.UI
         [SerializeField] private PlayerRoomTracker playerRoomTracker;
 
         [Header("화면 마커")]
-        [Tooltip("Target UI/Markers 아래에서 사용할 Marker 종류를 선택한다.")]
-        [SerializeField] private TargetMarkerType markerType = TargetMarkerType.Item;
         [SerializeField] private Camera worldCamera;
         [SerializeField] private TargetMarkerPool markerPool;
 
@@ -39,9 +37,6 @@ namespace HauntedHouse.UI
         /// 이 Presenter가 표현하는 게임 규칙 대상이다.
         /// </summary>
         public Target Target => target;
-
-        /// <summary>이 Presenter가 풀에서 빌릴 Marker 종류를 반환한다.</summary>
-        public TargetMarkerType MarkerType => markerType;
 
         /// <summary>
         /// 참조를 보완하고 UI Button 클릭을 하나의 선택 요청으로 연결한다.
@@ -103,7 +98,9 @@ namespace HauntedHouse.UI
             SetClickAreaActive(isInsideScreen);
             if (isInsideScreen)
             {
-                activeMarker.position = screenPosition;
+                // WorldToScreenPoint의 z는 카메라로부터의 월드 깊이이므로 Overlay UI 위치에 사용하지 않는다.
+                // 깊이값까지 RectTransform에 넣으면 마커가 Canvas 평면에서 밀려 렌더링되지 않을 수 있다.
+                activeMarker.position = new Vector3(screenPosition.x, screenPosition.y, 0f);
             }
             else
             {
@@ -200,7 +197,9 @@ namespace HauntedHouse.UI
                 return false;
             }
 
-            activeMarker = markerPool.Acquire(markerType);
+            // 모든 Target은 동일한 공용 MoveTarget Marker 템플릿을 사용하되,
+            // 실제 인스턴스의 생성과 재사용은 기존 풀에 맡긴다.
+            activeMarker = markerPool.Acquire();
             if (activeMarker == null)
             {
                 return false;
@@ -228,7 +227,7 @@ namespace HauntedHouse.UI
 
             if (activeMarker != null && markerPool != null)
             {
-                markerPool.Release(markerType, activeMarker);
+                markerPool.Release(activeMarker);
             }
 
             activeMarkerButton = null;

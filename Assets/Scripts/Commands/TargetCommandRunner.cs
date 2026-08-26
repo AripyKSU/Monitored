@@ -53,13 +53,11 @@ namespace HauntedHouse.Commands
             stealthHideSystem ??= FindFirstObjectByType<StealthHideSystem>();
             gameSession ??= FindFirstObjectByType<GameSession>();
 
-            if (presenters == null || presenters.Length == 0)
-            {
-                // CoreSandbox 편의를 위한 초기 검색이며 명령 실행 중에는 다시 검색하지 않는다.
-                presenters = FindObjectsByType<TargetPresenter>(
-                    FindObjectsInactive.Include,
-                    FindObjectsSortMode.None);
-            }
+            // 씬 설정 후 Target이 추가됐더라도 직렬화된 이전 목록에 누락되지 않도록
+            // 현재 씬의 전체 Presenter를 시작 시점에 다시 수집한다.
+            presenters = FindObjectsByType<TargetPresenter>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None);
         }
 
         /// <summary>

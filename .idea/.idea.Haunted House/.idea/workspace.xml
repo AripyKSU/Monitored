@@ -12,314 +12,27 @@
   <component name="ChangeListManager">
     <list default="true" id="e2a3f308-b6e8-45cd-b24c-71dff15c9f26" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/CenterPivotUtility.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/CenterPivotUtility.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/FixAllRoomsClean.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/FixAllRoomsClean.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/FixAndRestoreUtility.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/FixAndRestoreUtility.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/FixFloorsOnly.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/FixFloorsOnly.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/MakeModularPrefabsClean.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/MakeModularPrefabsClean.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/RecreateRoomsFromShowScene.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/RecreateRoomsFromShowScene.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ReimportOriginalModelsAndRestore.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ReimportOriginalModelsAndRestore.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/RestorePropPrefabs.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/RestorePropPrefabs.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/RestoreRoomsPerfectly.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/RestoreRoomsPerfectly.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Antlers.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Antlers.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Antlers_2.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Antlers_2.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Asylum.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Asylum.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Asylum_BaseConstruction.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Asylum_BaseConstruction.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Bath.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Bath.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Bathroom_Shower.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Bathroom_Shower.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Bathroom_ToiletsWall.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Bathroom_ToiletsWall.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Bed.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Bed.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/BedFeather.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/BedFeather.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Bench.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Bench.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/BigBoiler.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/BigBoiler.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/BigHangs.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/BigHangs.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/BigKettle.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/BigKettle.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/BigShelf.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/BigShelf.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/BigShelf_Stock.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/BigShelf_Stock.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Board.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Board.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Box_V1.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Box_V1.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Box_V2.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Box_V2.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/CanOld.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/CanOld.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/CanOld_Damaged.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/CanOld_Damaged.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Carpet.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Carpet.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/CaseMetallic.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/CaseMetallic.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/ChairLeather.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/ChairLeather.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/ChairOffice.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/ChairOffice.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/ChairSchool.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/ChairSchool.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/ChairWhite.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/ChairWhite.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Chandelier.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Chandelier.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Crutches.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Crutches.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Cupboard.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Cupboard.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/CupboardLight.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/CupboardLight.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/CupboardLight_Broken.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/CupboardLight_Broken.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/CurtainsMedic.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/CurtainsMedic.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/DiningRoom_EnterFrame.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/DiningRoom_EnterFrame.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/DoorD_V1.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/DoorD_V1.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/DoorD_V2.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/DoorD_V2.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Door_V1.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Door_V1.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Door_V2.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Door_V2.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Door_V3.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Door_V3.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Elevator.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Elevator.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Elevator_Door.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Elevator_Door.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/FilmProjector.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/FilmProjector.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Fridge.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Fridge.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/GR_Glass.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/GR_Glass.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/GateHouse_Window.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/GateHouse_Window.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Heater.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Heater.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Kettle.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Kettle.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Keyboard.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Keyboard.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/KitchenShelf.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/KitchenShelf.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Lamp.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Lamp.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/LampWall.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/LampWall.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/MainDoor.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/MainDoor.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Map1stFloor.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Map1stFloor.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/MapGroundFloor.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/MapGroundFloor.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Mattress.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Mattress.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/MedRack.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/MedRack.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/MedRack_V2.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/MedRack_V2.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/MirrorShelf.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/MirrorShelf.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/MorgueBox.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/MorgueBox.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/MorgueWheelBed.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/MorgueWheelBed.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Mug.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Mug.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/NeonLamp 1.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/NeonLamp 1.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/NeonLamp.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/NeonLamp.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/NeonLift.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/NeonLift.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/PC_Monitor.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/PC_Monitor.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Paper.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Paper.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Pillar.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Pillar.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Pillow.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Pillow.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Pipe.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Pipe.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Plate.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Plate.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Plate_Broken.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Plate_Broken.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/PosterHuman.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/PosterHuman.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Pot.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Pot.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/ProjectorCloth.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/ProjectorCloth.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/SheetRack.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/SheetRack.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/SingleLight.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/SingleLight.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Sink_V1.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Sink_V1.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/SmallMetalicCase.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/SmallMetalicCase.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Sofa.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Sofa.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Sofa_Chair.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Sofa_Chair.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Statue.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Statue.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/SurgeryTable.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/SurgeryTable.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/SurgeryWheelBad.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/SurgeryWheelBad.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Suspension.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Suspension.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Suspension_V2.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Suspension_V2.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/TableKitchen.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/TableKitchen.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/TableOffice.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/TableOffice.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/TableSchool.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/TableSchool.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/TableSmall.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/TableSmall.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/TableWhite.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/TableWhite.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/TableWhiteKitchen.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/TableWhiteKitchen.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Table_Bed.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Table_Bed.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Tank.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Tank.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Tank_V2.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Tank_V2.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Tap.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Tap.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Television.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Television.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Toilet.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Toilet.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/WheelChair.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/WheelChair.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Window.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Window.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/WindowHall.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/WindowHall.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/WindowToilet.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/WindowToilet.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Window_Barrier.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Window_Barrier.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Window_DayRoom.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prefabs/Window_DayRoom.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Art/PostProcessing/Scary Volume Profile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_3DStealthGame/Art/PostProcessing/Scary Volume Profile.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/RoomGraphEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/RoomGraphEditor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemies/Killer_Enemy.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemies/Killer_Enemy.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Walls/Door_V3.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Walls/Door_V3.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Walls/SlideDoor.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Walls/SlideDoor.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox/NavMesh-Navigation.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox/NavMesh-Navigation.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/Player.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/PlayerMover.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/PlayerMover.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/TargetCommandRunner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/TargetCommandRunner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/DoorTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/DoorTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/MessageTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/MessageTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/TargetMarkerPool.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/TargetMarkerPool.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/TargetMarkerPoolGroup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/TargetMarkerPoolGroup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/TargetMarkerType.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/TargetMarkerType.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/TargetPresenter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/TargetPresenter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/World/DoorController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/World/DoorController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/World/Room.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/World/Room.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/World/RoomGraph.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/World/RoomGraph.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Editor/CoreSandboxStage4Setup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_3DStealthGame/Editor/CoreSandboxStage4Setup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scenes/CoreSandbox.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_3DStealthGame/Scenes/CoreSandbox.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/ITargetAction.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/ITargetAction.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/Player.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/Player.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/PlayerMover.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/PlayerMover.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/Target.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/Target.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/TargetActionContext.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/TargetActionContext.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/TargetCommandRunner.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/TargetCommandRunner.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/TargetCommandState.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Commands/TargetCommandState.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Core.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Core/GameLog.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Core/GameLog.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Core/GamePauseService.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Core/GamePauseService.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Enemies.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Enemies/EnemyController.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Enemies/EnemyController.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Enemies/EnemyRoomTracker.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Enemies/EnemyRoomTracker.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Enemies/EnemyState.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Enemies/EnemyState.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Enemies/PatrolPoint.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Enemies/PatrolPoint.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Enemies/PatrolRoute.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Enemies/PatrolRoute.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Enemy.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction/DoorTarget.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction/DoorTarget.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction/DummyMessageTargetAction.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction/DummyMessageTargetAction.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction/IItemUseEffect.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction/IItemUseEffect.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction/ItemPickupTarget.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction/ItemPickupTarget.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction/ItemUseTarget.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction/ItemUseTarget.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction/MessageTarget.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Interaction/MessageTarget.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Inventory.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Inventory/ItemDefinition.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Inventory/ItemDefinition.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Inventory/PlayerInventory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Inventory/PlayerInventory.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Progression.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Survival.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/Threat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/UI.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/UI/InventoryItemView.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/UI/InventoryItemView.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/UI/InventoryPanel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/UI/InventoryPanel.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/UI/ItemSelectionPanel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/UI/ItemSelectionPanel.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/UI/MessagePanel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/UI/MessagePanel.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/UI/TargetPresenter.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/UI/TargetPresenter.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/CameraDirector.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/CameraDirector.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/DoorController.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/DoorController.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/DoorTraversal.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/DoorTraversal.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/Doorway.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/Doorway.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/DoorwaySensor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/DoorwaySensor.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/PlayerRoomTracker.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/PlayerRoomTracker.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/Room.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/Room.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/RoomCamera.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Scripts/World/RoomCamera.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -409,26 +122,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "cidr.known.project.marker": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "master",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Unity 에디터에 연결.Unity 에디터에 연결">
     <configuration name="유닛 테스트(배치 모드)" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\6000.3.18f1\Editor\Unity.exe" />
@@ -479,6 +192,8 @@
       <workItem from="1787116395424" duration="2993000" />
       <workItem from="1787272841198" duration="6198000" />
       <workItem from="1787531314416" duration="9488000" />
+      <workItem from="1787646939627" duration="1474000" />
+      <workItem from="1787715911412" duration="6620000" />
     </task>
     <servers />
   </component>

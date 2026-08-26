@@ -73,6 +73,22 @@ namespace HauntedHouse.Commands
             yield return mover.MoveTo(approachPoint);
         }
 
+        /// <summary>
+        /// 이동 완료 후 플레이어가 지정한 월드 방향을 수평으로 바라보게 한다.
+        /// 문 통과처럼 같은 접근 지점을 반대 방향으로 재사용하는 경우 최종 방향을 별도로 확정할 때 사용한다.
+        /// </summary>
+        /// <param name="worldDirection">플레이어가 바라볼 월드 방향.</param>
+        public void FaceDirection(Vector3 worldDirection)
+        {
+            Vector3 horizontalDirection = Vector3.ProjectOnPlane(worldDirection, Vector3.up);
+            if (horizontalDirection.sqrMagnitude <= 0.0001f)
+            {
+                return;
+            }
+
+            transform.rotation = Quaternion.LookRotation(horizontalDirection.normalized, Vector3.up);
+        }
+
         /// <summary>진행 중인 이동을 중단하고 다음 명령이 이전 경로를 재사용하지 않게 한다.</summary>
         public void AbortMove()
         {

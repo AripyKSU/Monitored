@@ -4,19 +4,15 @@ using UnityEngine;
 namespace HauntedHouse.UI
 {
     /// <summary>
-    /// 하나의 TargetMarkerType에 해당하는 템플릿과 재사용 인스턴스를 보관하는 풀 그룹이다.
-    /// 씬 계층에서 종류별 부모 오브젝트로 보이므로 Inspector와 Hierarchy에서 용도를 확인하기 쉽다.
+    /// 공용 Target Marker 템플릿과 재사용 인스턴스를 보관하는 풀 그룹이다.
+    /// 템플릿의 복제와 반납만 담당하며, 어떤 Target이 사용하는지는 알지 않는다.
     /// </summary>
     public sealed class TargetMarkerPoolGroup : MonoBehaviour
     {
-        [SerializeField] private TargetMarkerType markerType;
         [SerializeField] private RectTransform template;
 
         private readonly Stack<RectTransform> availableMarkers = new Stack<RectTransform>();
         private readonly HashSet<RectTransform> activeMarkers = new HashSet<RectTransform>();
-
-        /// <summary>이 그룹이 제공하는 Marker 종류를 반환한다.</summary>
-        public TargetMarkerType MarkerType => markerType;
 
         /// <summary>이 그룹에서 복제하는 Marker 템플릿을 반환한다.</summary>
         public RectTransform Template => template;

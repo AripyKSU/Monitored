@@ -104,7 +104,7 @@ namespace HauntedHouse.Commands
 
             // 남은 거리와 실제 속도를 함께 확인해 감속 중인 프레임을 도착으로 오인하지 않는다.
             float moveElapsed = 0f;
-            while (!HasArrived())
+            while (!HasArrived(destination.position))
             {
                 if (!agent.enabled || !agent.isOnNavMesh)
                 {
@@ -201,7 +201,7 @@ namespace HauntedHouse.Commands
         /// <summary>
         /// NavMeshAgent가 허용 거리 안에 있으며 실질적으로 정지했는지 검사한다.
         /// </summary>
-        private bool HasArrived()
+        private bool HasArrived(Vector3 destinationPosition)
         {
             if (agent.pathPending || float.IsInfinity(agent.remainingDistance))
             {
@@ -210,8 +210,14 @@ namespace HauntedHouse.Commands
 
             float allowedDistance = agent.stoppingDistance + arrivalTolerance;
             bool isWithinDistance = agent.remainingDistance <= allowedDistance;
+            // OffMeshLink를 지나는 동안 remainingDistance가 일시적으로 0이 되어도
+            // 실제 목표 XZ에 도착하기 전에는 경로를 지우거나 이동을 완료하지 않는다.
+            float horizontalDistance = Vector3.ProjectOnPlane(
+                agent.transform.position - destinationPosition,
+                Vector3.up).magnitude;
+            bool isNearDestination = horizontalDistance <= allowedDistance + 0.15f;
             bool hasStoppedMoving = !agent.hasPath || agent.velocity.sqrMagnitude <= 0.01f;
-            return isWithinDistance && hasStoppedMoving;
+            return isWithinDistance && isNearDestination && hasStoppedMoving;
         }
 
         /// <summary>

@@ -170,7 +170,12 @@ namespace HauntedHouse.World
             {
                 List<RoomGraphEdgeData> edges = edgeLists[rooms[index]];
                 edges.Sort(CompareEdges);
-                newNodes[index] = new RoomGraphNodeData(rooms[index], edges.ToArray());
+                // 그래프 위치는 Room 루트를 이동하지 않고 현재 방의 전용 기준점에서 캡처한다.
+                // 따라서 Room 아래에 있는 물리 메쉬와 Collider의 위치에는 영향을 주지 않는다.
+                newNodes[index] = new RoomGraphNodeData(
+                    rooms[index],
+                    rooms[index].GraphPosition,
+                    edges.ToArray());
             }
 
             bakedNodes = newNodes;
@@ -322,18 +327,30 @@ namespace HauntedHouse.World
     public sealed class RoomGraphNodeData
     {
         [SerializeField] private Room room;
+        [SerializeField] private Vector3 graphPosition;
+        [SerializeField] private bool hasBakedGraphPosition;
         [SerializeField] private RoomGraphEdgeData[] edges = Array.Empty<RoomGraphEdgeData>();
 
         /// <summary>이 노드가 나타내는 Room을 반환한다.</summary>
         public Room Room => room;
 
+        /// <summary>
+        /// 이 노드가 표시될 월드 위치를 반환한다.
+        /// 이전 버전에서 베이크된 데이터는 저장 위치가 없으므로 현재 Room 기준점을 사용한다.
+        /// </summary>
+        public Vector3 GraphPosition => hasBakedGraphPosition
+            ? graphPosition
+            : room != null ? room.GraphPosition : Vector3.zero;
+
         /// <summary>이 Room에서 직접 이동할 수 있는 간선 목록을 반환한다.</summary>
         public IReadOnlyList<RoomGraphEdgeData> Edges => edges;
 
-        /// <summary>Room과 간선 배열을 가진 Bake 노드를 생성한다.</summary>
-        public RoomGraphNodeData(Room room, RoomGraphEdgeData[] edges)
+        /// <summary>Room, 베이크 시점의 그래프 위치, 간선 배열을 가진 Bake 노드를 생성한다.</summary>
+        public RoomGraphNodeData(Room room, Vector3 graphPosition, RoomGraphEdgeData[] edges)
         {
             this.room = room;
+            this.graphPosition = graphPosition;
+            hasBakedGraphPosition = true;
             this.edges = edges ?? Array.Empty<RoomGraphEdgeData>();
         }
     }

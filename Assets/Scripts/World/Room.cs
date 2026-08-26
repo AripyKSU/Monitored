@@ -10,13 +10,44 @@ public sealed class Room : MonoBehaviour
 {
     [SerializeField] private string roomId;
     [SerializeField] private RoomCamera roomCamera;
+    [Header("그래프 시각화 기준점")]
+    [Tooltip("RoomGraph가 이 방의 노드 위치로 사용할 Transform입니다. 비워 두면 RoomCamera 위치를 사용합니다.")]
+    [SerializeField] private Transform graphPositionSource;
     [SerializeField] private Transform playerSpawnPoint;
     [SerializeField] private Room[] adjacentRooms = Array.Empty<Room>();
 
     public string RoomId => roomId;
     public RoomCamera RoomCamera => roomCamera;
+    public Transform GraphPositionSource => graphPositionSource;
     public Transform PlayerSpawnPoint => playerSpawnPoint;
     public IReadOnlyList<Room> AdjacentRooms => adjacentRooms;
+
+    /// <summary>
+    /// RoomGraph 시각화와 베이크가 사용할 방의 월드 기준점을 반환한다.
+    /// 명시적인 기준점이 없으면 실제 방 안에 배치된 RoomCamera를 사용하고,
+    /// 카메라도 없을 때만 논리 Room 오브젝트의 위치로 되돌아간다.
+    /// </summary>
+    public Vector3 GraphPosition
+    {
+        get
+        {
+            // 그래프 기준점은 물리 메쉬를 이동시키지 않고 위치만 읽기 위한 참조다.
+            if (graphPositionSource != null)
+            {
+                return graphPositionSource.position;
+            }
+
+            // 기존 씬의 Room 루트가 섹터의 논리 컨테이너인 경우에도,
+            // 실제 방 안에 배치된 CCTV 위치로 그래프 노드를 표시한다.
+            if (roomCamera != null)
+            {
+                return roomCamera.transform.position;
+            }
+
+            // RoomCamera가 없는 임시 구성에서도 그래프가 완전히 깨지지 않도록 보수적으로 폴백한다.
+            return transform.position;
+        }
+    }
 
     /// <summary>
     /// 지정한 방이 문 하나로 직접 연결된 인접 방인지 확인한다.

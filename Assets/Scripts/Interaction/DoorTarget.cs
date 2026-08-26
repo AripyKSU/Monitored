@@ -61,15 +61,9 @@ namespace HauntedHouse.Interaction
             bool closedNormally = false;
 
             // Trigger 콜백에서 카메라와 논리 방을 같은 프레임에 확정한다.
-            void HandlePassageStarted(GameObject actor, DoorTraversal detectedTraversal)
+            void CommitPassage()
             {
-                if (passageCommitted || transitionFailed || actor != context.Player.gameObject)
-                {
-                    return;
-                }
-
-                if (detectedTraversal.SourceRoom != traversal.SourceRoom ||
-                    detectedTraversal.DestinationRoom != traversal.DestinationRoom)
+                if (passageCommitted || transitionFailed)
                 {
                     return;
                 }
@@ -91,6 +85,22 @@ namespace HauntedHouse.Interaction
                 passageCommitted = true;
             }
 
+            void HandlePassageStarted(GameObject actor, DoorTraversal detectedTraversal)
+            {
+                if (passageCommitted || transitionFailed || actor != context.Player.gameObject)
+                {
+                    return;
+                }
+
+                if (detectedTraversal.SourceRoom != traversal.SourceRoom ||
+                    detectedTraversal.DestinationRoom != traversal.DestinationRoom)
+                {
+                    return;
+                }
+
+                CommitPassage();
+            }
+
             doorway.PassageStarted += HandlePassageStarted;
 
             try
@@ -101,10 +111,22 @@ namespace HauntedHouse.Interaction
                 yield return context.Player.MoveTo(traversal.PassageStart);
                 if (!context.Player.LastMoveSucceeded)
                 {
+                    // 서로 다른 NavMesh Surface를 잇는 Link가 같은 프레임에 갱신 중이면 한 프레임 뒤 한 번만 재시도한다.
+                    yield return null;
+                    yield return context.Player.MoveTo(traversal.PassageStart);
+                }
+                if (!context.Player.LastMoveSucceeded)
+                {
                     GameLog.LogError(
                         $"문 통과 시작 지점 이동에 실패했습니다: {context.Player.LastMoveFailureReason}",
                         this);
                     yield break;
+                }
+
+                // Trigger 콜백 순서가 물리 프레임에 따라 늦어져도 Passage 지점 도착을 전환 확정의 안전 기준으로 사용한다.
+                if (!passageCommitted && !transitionFailed)
+                {
+                    CommitPassage();
                 }
 
                 if (transitionFailed || !passageCommitted)
@@ -124,6 +146,12 @@ namespace HauntedHouse.Interaction
                         this);
                     yield break;
                 }
+
+
+                // 목적지 접근 지점은 반대 방향에서 문을 클릭할 때도 사용되므로,
+                // 통과 완료 후에는 문 경계에서 방 안쪽으로 향하는 방향을 명시적으로 적용한다.
+                context.Player.FaceDirection(
+                    traversal.DestinationEntryPoint.position - traversal.PassageStart.position);
 
                 // 플레이어가 문을 완전히 통과한 뒤에만 0.25초 닫기 연출을 실행한다.
                 yield return doorway.Close();

@@ -183,7 +183,6 @@ public static class CoreSandboxStage4Setup
         target.SetSelectable(true);
 
         BuildKeyVisual(keyObject, keyMaterial);
-        SetMarkerLabel("Target UI/Markers/ItemTarget Marker/Label", "KEY");
     }
 
     private static void ConfigureMessageTarget(GameObject messageObject, MessagePanel messagePanel)
@@ -201,7 +200,6 @@ public static class CoreSandboxStage4Setup
         SetObjectReference(messageTarget, "messagePanel", messagePanel);
         SetString(messageTarget, "message", "문 너머에서 차가운 바람이 불어온다.");
         SetObjectReference(target, "actionComponent", messageTarget);
-        SetMarkerLabel("Target UI/Markers/ItemUseTarget Marker/Label", "NOTE");
     }
 
     private static void ConfigureLockedDoor(
@@ -628,17 +626,6 @@ public static class CoreSandboxStage4Setup
         if (component != null)
         {
             UnityEngine.Object.DestroyImmediate(component);
-        }
-    }
-
-    private static void SetMarkerLabel(string path, string value)
-    {
-        GameObject labelObject = GameObject.Find(path);
-        Text label = labelObject != null ? labelObject.GetComponent<Text>() : null;
-        if (label != null)
-        {
-            label.text = value;
-            EditorUtility.SetDirty(label);
         }
     }
 

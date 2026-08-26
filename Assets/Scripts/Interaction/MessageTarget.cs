@@ -15,6 +15,9 @@ namespace HauntedHouse.Interaction
         [SerializeField, TextArea] private string message;
         [SerializeField] private string completionId;
 
+        [Header("Audio")]
+        [SerializeField] private AudioClip messageInteractionSound;
+
         /// <summary>메시지 상호작용이 완료되었는지 반환한다.</summary>
         public bool IsCompleted { get; private set; }
 
@@ -30,6 +33,11 @@ namespace HauntedHouse.Interaction
             }
 
             yield return messagePanel.Show(message);
+            if (messageInteractionSound != null)
+            {
+                HauntedHouse.Audio.AudioManager.Instance?.PlayUiSfx(messageInteractionSound);
+            }
+
             IsCompleted = true;
             context?.MarkCompleted();
         }
