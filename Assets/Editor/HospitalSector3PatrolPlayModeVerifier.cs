@@ -5,9 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using HauntedHouse.Enemies;
 using HauntedHouse.Progression;
+using HauntedHouse.Stealth;
+using HauntedHouse.World;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using Unity.AI.Navigation;
 
 /// <summary>
 /// Sector3 살인마 Patrol의 Save3 복원·실제 방 순환을 저장 없이 검증하는 Editor 진입점이다.
@@ -75,6 +79,7 @@ public sealed class HospitalSector3PatrolVerificationRunner : MonoBehaviour
 
     private GameSession gameSession;
     private CheckpointService checkpointService;
+    private EnemyChaseSystem enemyChaseSystem;
     private CheckpointDefinition save3;
     private EnemyController enemy;
     private PatrolRoute route;
@@ -89,7 +94,24 @@ public sealed class HospitalSector3PatrolVerificationRunner : MonoBehaviour
 
         if (failures.Count == 0)
         {
-            yield return VerifySave3RestoreAndRoute();
+            // 검증 중에는 플레이어가 CenterHallway_B에 부활한 뒤 적과 같은 방에
+            // 들어가더라도 순찰 자체를 끝까지 관찰해야 하므로, 일반 추격 조정만
+            // 임시로 끈다. Play Mode 종료와 함께 원래 씬 설정으로 돌아간다.
+            if (enemyChaseSystem != null)
+            {
+                enemyChaseSystem.StopAllChases();
+                enemyChaseSystem.enabled = false;
+                Pass("순찰 검증 동안 EnemyChaseSystem을 임시 비활성화했습니다.");
+            }
+            else
+            {
+                Fail("순찰 격리를 위해 EnemyChaseSystem을 찾지 못했습니다.");
+            }
+
+            if (failures.Count == 0)
+            {
+                yield return VerifySave3RestoreAndRoute();
+            }
         }
 
         ReportResult();
@@ -122,6 +144,7 @@ public sealed class HospitalSector3PatrolVerificationRunner : MonoBehaviour
     {
         gameSession ??= FindFirstObjectByType<GameSession>();
         checkpointService = FindFirstObjectByType<CheckpointService>();
+        enemyChaseSystem = FindFirstObjectByType<EnemyChaseSystem>();
         save3 = FindObjectsByType<CheckpointDefinition>(FindObjectsInactive.Include, FindObjectsSortMode.None)
             .FirstOrDefault(candidate => candidate != null && candidate.CheckpointId == "Save3");
         enemy = FindObjectsByType<EnemyController>(FindObjectsInactive.Include, FindObjectsSortMode.None)
@@ -300,7 +323,39 @@ public sealed class HospitalSector3PatrolVerificationRunner : MonoBehaviour
 
         Fail(
             $"Enemy가 {RoomArrivalTimeout:0}초 안에 '{targetRoom.RoomId}'에 도착하지 못했습니다. " +
-            $"현재 Room: {enemy.CurrentRoom?.RoomId ?? "null"}");
+            $"현재 Room: {enemy.CurrentRoom?.RoomId ?? "null"}. {BuildMovementDiagnostics()}");
+    }
+
+    /// <summary>
+    /// 순찰이 특정 방에서 멈췄을 때 NavMesh와 논리 Gate의 현재 상태를 함께 기록한다.
+    /// 실제 실패 원인을 다음 실행에서 재현할 수 있도록 검증용 정보만 수집한다.
+    /// </summary>
+    private string BuildMovementDiagnostics()
+    {
+        if (enemy == null)
+        {
+            return "Enemy 참조 없음";
+        }
+
+        NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
+        EnemyDoorTraversal traversal = enemy.GetComponent<EnemyDoorTraversal>();
+        Doorway gate = FindObjectsByType<Doorway>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            .FirstOrDefault(candidate => candidate != null && candidate.name == "LogicalGate_CenterHallway_A_B");
+        NavMeshLink link = gate != null ? gate.GetComponent<NavMeshLink>() : null;
+
+        string agentState = agent == null
+            ? "Agent 없음"
+            : $"AgentPos={agent.transform.position}, Dest={agent.destination}, " +
+              $"Status={agent.pathStatus}, Pending={agent.pathPending}, Remaining={agent.remainingDistance:0.00}, " +
+              $"Velocity={agent.velocity}, Stopped={agent.isStopped}, OnNavMesh={agent.isOnNavMesh}";
+        string gateState = gate == null
+            ? "Gate 없음"
+            : $"GateLocked={gate.IsLocked}, GateOpen={gate.IsOpen}, LinkEnabled={link != null && link.enabled}";
+        string traversalState = traversal == null
+            ? "DoorTraversal 없음"
+            : $"Traversing={traversal.IsTraversing}, LastSucceeded={traversal.LastTraversalSucceeded}";
+
+        return $"{agentState}; {traversalState}; {gateState}";
     }
 
     /// <summary>RoomId로 씬의 논리 Room을 찾는다.</summary>

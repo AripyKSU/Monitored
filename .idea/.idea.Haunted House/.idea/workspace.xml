@@ -12,18 +12,10 @@
   <component name="ChangeListManager">
     <list default="true" id="e2a3f308-b6e8-45cd-b24c-71dff15c9f26" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Arts/Animations/PrefabDoors/Door_V3.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Arts/Animations/PrefabDoors/Door_V3.controller" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Arts/Animations/PrefabDoors/SlideDoor.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Arts/Animations/PrefabDoors/SlideDoor.controller" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalSector1Setup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalSector1Setup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Walls/Door_V3.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Walls/Door_V3.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Walls/SlideDoor.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Walls/SlideDoor.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalSector3PatrolPlayModeVerifier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalSector3PatrolPlayModeVerifier.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalSector3PatrolSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalSector3PatrolSetup.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Enemies/EnemyController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Enemies/EnemyController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Enemies/EnemyDoorTraversal.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Enemies/EnemyDoorTraversal.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/ItemUseTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/ItemUseTarget.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/CheckpointResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/CheckpointResolver.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wiki/todolist.md" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/todolist.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/TargetPresenter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/TargetPresenter.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -185,7 +177,7 @@
       <workItem from="1787531314416" duration="9488000" />
       <workItem from="1787646939627" duration="1474000" />
       <workItem from="1787715911412" duration="6620000" />
-      <workItem from="1787790801274" duration="11435000" />
+      <workItem from="1787790801274" duration="15451000" />
     </task>
     <servers />
   </component>

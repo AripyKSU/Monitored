@@ -45,6 +45,7 @@ namespace HauntedHouse.UI
         {
             target ??= GetComponent<Target>();
             clickArea ??= GetComponentInChildren<Collider>();
+            uiAnchor ??= transform.Find("UIAnchor");
             worldCamera ??= Camera.main;
             playerRoomTracker ??= FindFirstObjectByType<PlayerRoomTracker>();
             markerPool ??= FindFirstObjectByType<TargetMarkerPool>();
@@ -254,6 +255,7 @@ namespace HauntedHouse.UI
         {
             target = GetComponent<Target>();
             clickArea = GetComponentInChildren<Collider>();
+            uiAnchor = transform.Find("UIAnchor");
             worldCamera = Camera.main;
             playerRoomTracker = FindFirstObjectByType<PlayerRoomTracker>();
             markerPool = FindFirstObjectByType<TargetMarkerPool>();

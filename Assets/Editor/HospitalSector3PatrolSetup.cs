@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using HauntedHouse.Commands;
 using HauntedHouse.Enemies;
 using HauntedHouse.Progression;
 using HauntedHouse.World;
@@ -52,6 +53,10 @@ public static class HospitalSector3PatrolSetup
             throw new InvalidOperationException(
                 "Sector3 Patrol 구성에 필요한 RoomGraph, Enemy, Save3 또는 GameSession을 찾지 못했습니다.");
         }
+
+        // 중앙 복도 분할 이후에도 기존 문 설정 도구가 마지막으로 저장한 남쪽 Room 참조가
+        // 남아 있을 수 있으므로, Sector3 방향 문만 B 구역 소유로 보정한 뒤 그래프를 Bake한다.
+        EnsureSector3DoorOwnership(rooms);
 
         // 다른 Sector 작업이 Room·Doorway 참조를 바꾼 뒤에도 순찰 경로가 최신 그래프를
         // 사용해야 하므로, Setup 실행 시 현재 씬 기준으로 항상 한 번 다시 Bake한다.
@@ -159,6 +164,8 @@ public static class HospitalSector3PatrolSetup
         {
             errors.Add("Sector3 Patrol 대상 EnemyController가 없습니다.");
         }
+
+        ValidateSector3DoorOwnership(rooms, errors);
 
         if (save3 == null)
         {
@@ -338,6 +345,106 @@ public static class HospitalSector3PatrolSetup
             // 이 이름의 Route는 본 Setup이 만든 전용 오브젝트이므로, 참조를 canonicalRoute로
             // 통일한 뒤 Undo 가능한 방식으로만 정리한다.
             Undo.DestroyObjectImmediate(duplicate.gameObject);
+        }
+    }
+
+    /// <summary>
+    /// CenterHallway_B와 Sector3 Room을 잇는 기존 Doorway의 중앙 복도 쪽 Room 참조를 보정한다.
+    /// 동일 이름의 Kitchen↔ServiceHallway 문은 건드리지 않도록 양쪽 Room을 함께 확인한다.
+    /// </summary>
+    private static void EnsureSector3DoorOwnership(Room[] rooms)
+    {
+        Room centerA = UnityEngine.Object.FindObjectsByType<Room>(
+                FindObjectsInactive.Include, FindObjectsSortMode.None)
+            .FirstOrDefault(room => room != null && room.RoomId == "CenterHallway_A");
+        Room centerB = rooms.FirstOrDefault(room => room != null && room.RoomId == "CenterHallway_B");
+        Room diningRoom = rooms.FirstOrDefault(room => room != null && room.RoomId == "S3_DiningRoom");
+        Room serviceHallway = rooms.FirstOrDefault(room => room != null && room.RoomId == "S3_HallwayB");
+        if (centerA == null || centerB == null || diningRoom == null || serviceHallway == null)
+        {
+            return;
+        }
+
+        ReassignCenterRoomDoor(
+            "SlideDoor_To_ServiceHallway", centerA, centerB, serviceHallway);
+        ReassignCenterRoomDoor(
+            "SlideDoor_To_DiningRoom_From_Center", centerA, centerB, diningRoom);
+    }
+
+    /// <summary>지정한 중앙 복도↔Sector3 Doorway의 중앙 쪽 Room과 Target 소유 방을 B로 바꾼다.</summary>
+    private static void ReassignCenterRoomDoor(
+        string doorwayName, Room centerA, Room centerB, Room sectorRoom)
+    {
+        Doorway doorway = UnityEngine.Object.FindObjectsByType<Doorway>(
+                FindObjectsInactive.Include, FindObjectsSortMode.None)
+            .FirstOrDefault(candidate => candidate != null && candidate.name == doorwayName &&
+                ((candidate.RoomA == centerA && candidate.RoomB == sectorRoom) ||
+                 (candidate.RoomA == sectorRoom && candidate.RoomB == centerA)));
+        if (doorway == null)
+        {
+            return;
+        }
+
+        SerializedObject serialized = new SerializedObject(doorway);
+        if (doorway.RoomA == centerA)
+        {
+            serialized.FindProperty("roomA").objectReferenceValue = centerB;
+        }
+        else if (doorway.RoomB == centerA)
+        {
+            serialized.FindProperty("roomB").objectReferenceValue = centerB;
+        }
+
+        serialized.ApplyModifiedPropertiesWithoutUndo();
+        Undo.RecordObject(doorway, "Assign Sector3 doorway to CenterHallway_B");
+
+        // 플레이어가 CenterHallway_B에서 이 Target을 선택할 수 있도록 같은 방향 Target의
+        // 소유 방도 함께 갱신한다. Doorway의 실제 방향별 접근점은 그대로 재사용한다.
+        foreach (Target target in doorway.GetComponentsInChildren<Target>(true))
+        {
+            if (target != null && target.OwnerRoom == centerA)
+            {
+                SetObject(target, "ownerRoom", centerB);
+                EditorUtility.SetDirty(target);
+            }
+        }
+
+        EditorUtility.SetDirty(doorway.gameObject);
+    }
+
+    /// <summary>Sector3 순찰에 필요한 두 중앙 복도 문이 CenterHallway_B에 연결됐는지 검사한다.</summary>
+    private static void ValidateSector3DoorOwnership(Room[] rooms, List<string> errors)
+    {
+        Room centerB = rooms.FirstOrDefault(room => room != null && room.RoomId == "CenterHallway_B");
+        Room diningRoom = rooms.FirstOrDefault(room => room != null && room.RoomId == "S3_DiningRoom");
+        Room serviceHallway = rooms.FirstOrDefault(room => room != null && room.RoomId == "S3_HallwayB");
+        CheckDoorOwnership(
+            errors,
+            "SlideDoor_To_ServiceHallway",
+            centerB,
+            serviceHallway,
+            "CenterHallway_B ↔ S3_HallwayB 연결 문");
+        CheckDoorOwnership(
+            errors,
+            "SlideDoor_To_DiningRoom_From_Center",
+            centerB,
+            diningRoom,
+            "CenterHallway_B ↔ S3_DiningRoom 연결 문");
+    }
+
+    /// <summary>이름과 양쪽 Room이 일치하는 Doorway를 찾아 오류를 기록한다.</summary>
+    private static void CheckDoorOwnership(
+        List<string> errors, string doorwayName, Room first, Room second, string label)
+    {
+        bool exists = first != null && second != null &&
+                      UnityEngine.Object.FindObjectsByType<Doorway>(
+                              FindObjectsInactive.Include, FindObjectsSortMode.None)
+                          .Any(candidate => candidate != null && candidate.name == doorwayName &&
+                              ((candidate.RoomA == first && candidate.RoomB == second) ||
+                               (candidate.RoomA == second && candidate.RoomB == first)));
+        if (!exists)
+        {
+            errors.Add($"{label}이 CenterHallway_B 기준으로 연결되지 않았습니다.");
         }
     }
 
