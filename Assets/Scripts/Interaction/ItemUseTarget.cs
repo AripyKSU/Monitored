@@ -15,6 +15,8 @@ namespace HauntedHouse.Interaction
     {
         [Header("사용 조건")]
         [SerializeField] private ItemDefinition requiredItem;
+        [Tooltip("정답 아이템 사용 성공 시 인벤토리에서 제거할지 결정한다. 열쇠·손전등처럼 유지해야 하는 아이템은 끈다.")]
+        [SerializeField] private bool consumeItemOnSuccess = true;
         [Tooltip("IItemUseEffect를 구현한 MonoBehaviour를 연결한다.")]
         [SerializeField] private MonoBehaviour effectComponent;
 
@@ -30,8 +32,16 @@ namespace HauntedHouse.Interaction
 
         private GamePauseService.PauseHandle pauseHandle;
 
+        /// <summary>마지막 아이템 선택 실행의 최종 결과다.</summary>
+        public ItemUseResult LastResult { get; private set; } = ItemUseResult.None;
+
+        /// <summary>아이템 사용 결과가 확정될 때 결과와 선택 아이템을 전달한다.</summary>
+        public event Action<ItemUseResult, ItemDefinition> ResultResolved;
+
         public IEnumerator Execute(TargetActionContext context)
         {
+            LastResult = ItemUseResult.None;
+
             if (!TryValidateConfiguration(out string error))
             {
                 GameLog.LogError(error, this);
@@ -70,17 +80,19 @@ namespace HauntedHouse.Interaction
 
                 if (selectedItem == null)
                 {
+                    ResolveResult(ItemUseResult.Cancel, null);
                     yield break;
                 }
 
                 if (!MatchesRequiredItem(selectedItem))
                 {
                     yield return messagePanel.Show(failureMessage);
+                    ResolveResult(ItemUseResult.WrongItem, selectedItem);
                     yield break;
                 }
 
                 IItemUseEffect effect = effectComponent as IItemUseEffect;
-                if (!inventory.TryRemove(selectedItem))
+                if (consumeItemOnSuccess && !inventory.TryRemove(selectedItem))
                 {
                     GameLog.LogError(
                         $"선택한 아이템 '{selectedItem.ItemId}'을 PlayerInventory에서 제거하지 못했습니다.",
@@ -95,6 +107,8 @@ namespace HauntedHouse.Interaction
                 {
                     yield return messagePanel.Show(successMessage);
                 }
+
+                ResolveResult(ItemUseResult.CorrectItem, selectedItem);
             }
             finally
             {
@@ -103,6 +117,15 @@ namespace HauntedHouse.Interaction
                 selectionPanel.Close();
                 ReleasePause();
             }
+        }
+
+        /// <summary>아이템 사용 결과를 한 번 기록하고 외부 흐름에 전달한다.</summary>
+        /// <param name="result">확정된 선택 결과.</param>
+        /// <param name="selectedItem">선택한 아이템. 취소인 경우 null.</param>
+        private void ResolveResult(ItemUseResult result, ItemDefinition selectedItem)
+        {
+            LastResult = result;
+            ResultResolved?.Invoke(result, selectedItem);
         }
 
         public bool TryValidateConfiguration(out string error)

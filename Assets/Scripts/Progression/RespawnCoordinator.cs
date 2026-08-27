@@ -93,7 +93,10 @@ namespace HauntedHouse.Progression
             }
 
             // 사망 직전의 진행 flag를 제거하고 체크포인트 시점의 기준 flag만 다시 적용한다.
-            gameSession?.StoryFlags.ReplaceWith(checkpoint.ProgressFlags);
+            gameSession?.RestoreStoryProgress(checkpoint.StoryStage, checkpoint.ProgressFlags);
+
+            // 문은 사망 직전 상태와 무관하게 체크포인트가 지정한 잠금 기준으로 되돌린다.
+            RestoreDoorwayStates(checkpoint);
 
             // 먼저 모든 복원 대상의 완료 상태를 해제한 뒤 체크포인트에 지정된 상태만 적용한다.
             RestoreCompletedStates(checkpoint);
@@ -132,6 +135,26 @@ namespace HauntedHouse.Progression
 
             cameraDirector?.CutTo(checkpoint.RespawnRoom);
             yield return null;
+        }
+
+        /// <summary>체크포인트에 명시된 Doorway의 잠금 상태를 적용하고 열린 문짝을 닫아 둔다.</summary>
+        private static void RestoreDoorwayStates(CheckpointDefinition checkpoint)
+        {
+            if (checkpoint.DoorwayStates == null)
+            {
+                return;
+            }
+
+            foreach (CheckpointDoorwayState state in checkpoint.DoorwayStates)
+            {
+                if (state?.Doorway == null)
+                {
+                    continue;
+                }
+
+                state.Doorway.SetLocked(state.Locked);
+                state.Doorway.ForceClosed();
+            }
         }
 
         /// <summary>모든 상태 참여자를 미완료로 초기화한 뒤 정의된 완료 상태를 적용한다.</summary>

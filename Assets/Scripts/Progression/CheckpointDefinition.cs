@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using HauntedHouse.Enemies;
 using HauntedHouse.Inventory;
 using HauntedHouse.World;
@@ -21,8 +22,12 @@ namespace HauntedHouse.Progression
         [SerializeField] private ItemDefinition[] inventoryItems = Array.Empty<ItemDefinition>();
 
         [Header("스토리 복원")]
+        [SerializeField] private StoryStage storyStage = StoryStage.None;
         [SerializeField] private string[] progressFlags = Array.Empty<string>();
         [SerializeField] private CheckpointCompletedState[] completedStates = Array.Empty<CheckpointCompletedState>();
+
+        [Header("문 복원")]
+        [SerializeField] private CheckpointDoorwayState[] doorwayStates = Array.Empty<CheckpointDoorwayState>();
 
         [Header("적 복원")]
         [SerializeField] private CheckpointEnemyState[] enemyStates = Array.Empty<CheckpointEnemyState>();
@@ -40,11 +45,17 @@ namespace HauntedHouse.Progression
         /// <summary>복원 시 교체할 고유 아이템 목록이다.</summary>
         public ItemDefinition[] InventoryItems => inventoryItems;
 
+        /// <summary>복원 시 적용할 큰 스토리 진행 구간이다.</summary>
+        public StoryStage StoryStage => storyStage;
+
         /// <summary>복원 시 적용할 스토리 flag 목록이다.</summary>
         public string[] ProgressFlags => progressFlags;
 
         /// <summary>복원 시 적용할 대상·퍼즐 완료 상태 목록이다.</summary>
         public CheckpointCompletedState[] CompletedStates => completedStates;
+
+        /// <summary>복원 시 적용할 문 잠금 상태 목록이다.</summary>
+        public CheckpointDoorwayState[] DoorwayStates => doorwayStates;
 
         /// <summary>복원 시 적용할 적 상태 목록이다.</summary>
         public CheckpointEnemyState[] EnemyStates => enemyStates;
@@ -75,7 +86,8 @@ namespace HauntedHouse.Progression
             }
 
             if (!ValidateItems(out error) || !ValidateFlags(out error) ||
-                !ValidateCompletedStates(out error) || !ValidateEnemyStates(out error))
+                !ValidateCompletedStates(out error) || !ValidateDoorwayStates(out error) ||
+                !ValidateEnemyStates(out error))
             {
                 return false;
             }
@@ -165,6 +177,29 @@ namespace HauntedHouse.Progression
             return true;
         }
 
+        /// <summary>문 복원 목록에 빈 참조나 같은 문의 중복 정의가 없는지 검사한다.</summary>
+        private bool ValidateDoorwayStates(out string error)
+        {
+            var doorways = new HashSet<Doorway>();
+            foreach (CheckpointDoorwayState state in doorwayStates)
+            {
+                if (state == null || state.Doorway == null)
+                {
+                    error = $"CheckpointDefinition '{name}'의 DoorwayStates에 빈 참조가 있습니다.";
+                    return false;
+                }
+
+                if (!doorways.Add(state.Doorway))
+                {
+                    error = $"CheckpointDefinition '{name}'에 Doorway '{state.Doorway.name}'이 중복됩니다.";
+                    return false;
+                }
+            }
+
+            error = string.Empty;
+            return true;
+        }
+
         /// <summary>적 상태의 참조·경로·스폰 지점을 검사한다.</summary>
         private bool ValidateEnemyStates(out string error)
         {
@@ -232,6 +267,20 @@ namespace HauntedHouse.Progression
             error = string.Empty;
             return true;
         }
+    }
+
+    /// <summary>체크포인트 복원 시 Doorway 하나에 적용할 잠금 상태다.</summary>
+    [Serializable]
+    public sealed class CheckpointDoorwayState
+    {
+        [SerializeField] private Doorway doorway;
+        [SerializeField] private bool locked;
+
+        /// <summary>복원할 Doorway를 반환한다.</summary>
+        public Doorway Doorway => doorway;
+
+        /// <summary>복원 후 문을 잠글지 반환한다.</summary>
+        public bool Locked => locked;
     }
 
     /// <summary>체크포인트에서 적 하나를 복원하기 위한 경로·위치·활성 상태다.</summary>

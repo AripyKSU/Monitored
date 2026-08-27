@@ -227,7 +227,8 @@ namespace HauntedHouse.Stealth
 
             foreach (EnemyController enemy in enemies)
             {
-                if (enemy == null || !enemy.isActiveAndEnabled || enemy.State == EnemyState.Inactive)
+                if (enemy == null || !enemy.isActiveAndEnabled || enemy.State == EnemyState.Inactive ||
+                    enemy.Mode == EnemyMode.ScriptedSequence)
                 {
                     continue;
                 }
@@ -408,7 +409,8 @@ namespace HauntedHouse.Stealth
             if (enemy == null || currentRoom == null || player == null || playerRoomTracker == null ||
                 (stealthHideSystem != null && stealthHideSystem.IsHidden) ||
                 currentRoom != playerRoomTracker.CurrentRoom ||
-                !enemy.isActiveAndEnabled || enemy.State == EnemyState.Inactive || enemy.IsChasing)
+                !enemy.isActiveAndEnabled || enemy.State == EnemyState.Inactive ||
+                enemy.Mode == EnemyMode.ScriptedSequence || enemy.IsChasing)
             {
                 return;
             }
@@ -440,7 +442,8 @@ namespace HauntedHouse.Stealth
             if (enemy == null || player == null || playerRoomTracker == null ||
                 (stealthHideSystem != null && stealthHideSystem.IsHidden) ||
                 enemy.CurrentRoom != enteredRoom || playerRoomTracker.CurrentRoom != enteredRoom ||
-                !enemy.isActiveAndEnabled || enemy.State == EnemyState.Inactive)
+                !enemy.isActiveAndEnabled || enemy.State == EnemyState.Inactive ||
+                enemy.Mode == EnemyMode.ScriptedSequence)
             {
                 yield break;
             }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using HauntedHouse.Commands;
 using HauntedHouse.Inventory;
 using HauntedHouse.Stealth;
@@ -20,9 +21,13 @@ namespace HauntedHouse.Progression
         [SerializeField] private PlayerCaptureDeathSystem captureDeathSystem;
 
         private readonly StoryFlagSet storyFlags = new();
+        private StoryStage storyStage = StoryStage.None;
 
         /// <summary>현재 실행 세션의 유일한 StoryFlagSet이다.</summary>
         public StoryFlagSet StoryFlags => storyFlags;
+
+        /// <summary>현재 실행 세션의 큰 스토리 진행 구간이다.</summary>
+        public StoryStage CurrentStoryStage => storyStage;
 
         /// <summary>현재 세션 생명주기 단계를 반환한다.</summary>
         public GameSessionPhase Phase { get; private set; } = GameSessionPhase.Restoring;
@@ -35,6 +40,9 @@ namespace HauntedHouse.Progression
 
         /// <summary>세션 단계가 실제로 변경될 때 새 단계를 전달한다.</summary>
         public event Action<GameSessionPhase> PhaseChanged;
+
+        /// <summary>큰 스토리 진행 구간이 실제로 변경될 때 새 단계를 전달한다.</summary>
+        public event Action<StoryStage> StoryStageChanged;
 
         /// <summary>스토리 진행 Resolver가 해석할 일회성 사건을 전달한다.</summary>
         public event Action<StoryEvent> StoryEventPublished;
@@ -124,9 +132,49 @@ namespace HauntedHouse.Progression
             StoryEventPublished?.Invoke(storyEvent);
         }
 
-        /// <summary>
-        /// 초기 시작과 Restart가 공통으로 사용하는 복원 단계로 전환한다.
-        /// </summary>
+        /// <summary>지정한 스토리 진행 flag가 현재 세션에 있는지 반환한다.</summary>
+        public bool HasStoryFlag(string flagId)
+        {
+            return storyFlags.Contains(flagId);
+        }
+
+        /// <summary>스토리 진행 flag를 추가한다. 이미 존재하면 false를 반환한다.</summary>
+        public bool SetStoryFlag(string flagId)
+        {
+            return storyFlags.Add(flagId);
+        }
+
+        /// <summary>스토리 진행 flag를 제거한다. 존재하지 않으면 false를 반환한다.</summary>
+        public bool ClearStoryFlag(string flagId)
+        {
+            return storyFlags.Remove(flagId);
+        }
+
+        /// <summary>현재 큰 스토리 진행 구간을 변경한다.</summary>
+        public void SetStoryStage(StoryStage stage)
+        {
+            if (storyStage == stage)
+            {
+                return;
+            }
+
+            GameLog.Log($"Story Stage 변경: {storyStage} -> {stage}.", this);
+            storyStage = stage;
+            StoryStageChanged?.Invoke(storyStage);
+        }
+
+        /// <summary>체크포인트가 정의한 큰 진행 구간과 flag 목록으로 현재 스토리 상태를 복원한다.</summary>
+        public void RestoreStoryProgress(StoryStage stage, IEnumerable<string> progressFlags)
+        {
+            if (stage != StoryStage.None)
+            {
+                SetStoryStage(stage);
+            }
+
+            storyFlags.ReplaceWith(progressFlags);
+        }
+
+        /// <summary>초기 시작과 Restart가 공통으로 사용하는 복원 단계로 전환한다.</summary>
         public void BeginRestore()
         {
             SetPhase(GameSessionPhase.Restoring);

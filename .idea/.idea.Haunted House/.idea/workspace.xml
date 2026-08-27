@@ -12,27 +12,15 @@
   <component name="ChangeListManager">
     <list default="true" id="e2a3f308-b6e8-45cd-b24c-71dff15c9f26" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/RoomGraphEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/RoomGraphEditor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemies/Killer_Enemy.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemies/Killer_Enemy.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Walls/Door_V3.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Walls/Door_V3.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Walls/SlideDoor.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Walls/SlideDoor.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox/NavMesh-Navigation.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox/NavMesh-Navigation.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/Player.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/PlayerMover.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/PlayerMover.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/TargetCommandRunner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/TargetCommandRunner.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/DoorTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/DoorTarget.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/MessageTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/MessageTarget.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/TargetMarkerPool.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/TargetMarkerPool.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/TargetMarkerPoolGroup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/TargetMarkerPoolGroup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/TargetMarkerType.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/TargetMarkerType.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/TargetPresenter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/TargetPresenter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/World/DoorController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/World/DoorController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/World/Room.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/World/Room.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/World/RoomGraph.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/World/RoomGraph.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Editor/CoreSandboxStage4Setup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_3DStealthGame/Editor/CoreSandboxStage4Setup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Enemies/EnemyController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Enemies/EnemyController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/ItemUseTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/ItemUseTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/CheckpointDefinition.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/CheckpointDefinition.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/CheckpointResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/CheckpointResolver.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/CheckpointService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/CheckpointService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/GameSession.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/GameSession.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/RespawnCoordinator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/RespawnCoordinator.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -194,6 +182,7 @@
       <workItem from="1787531314416" duration="9488000" />
       <workItem from="1787646939627" duration="1474000" />
       <workItem from="1787715911412" duration="6620000" />
+      <workItem from="1787790801274" duration="3138000" />
     </task>
     <servers />
   </component>

@@ -46,9 +46,20 @@ public sealed class EnemyController : MonoBehaviour
         private bool chaseRoomReachedNotified;
         private bool chaseMovementHeld;
         private bool restoredFromCheckpoint;
+        private bool scriptedSequencePaused;
 
         /// <summary>현재 적 상태를 반환한다.</summary>
         public EnemyState State { get; private set; } = EnemyState.Inactive;
+
+        /// <summary>
+        /// 기존 세부 상태를 스토리 흐름용 상위 모드로 변환해 반환한다.
+        /// ScriptedSequence은 기존 State를 덮어쓰지 않고 일시 정지 플래그로 표현해 기존 AI와의 호환성을 유지한다.
+        /// </summary>
+        public EnemyMode Mode => State == EnemyState.Inactive
+            ? EnemyMode.Inactive
+            : scriptedSequencePaused
+                ? EnemyMode.ScriptedSequence
+                : State == EnemyState.Chasing ? EnemyMode.Chase : EnemyMode.Patrol;
 
         /// <summary>현재 적용된 순찰 경로를 반환한다.</summary>
         public PatrolRoute CurrentRoute { get; private set; }
@@ -199,6 +210,13 @@ public sealed class EnemyController : MonoBehaviour
                 return;
             }
 
+            // Sector2 스토리 흐름이 적의 이동을 잠시 소유한 동안에는 기존 Patrol·Chase 갱신을 멈춘다.
+            // GamePauseService의 전역 timeScale을 건드리지 않아 플레이어 자동 이동과 연출 코루틴은 계속 진행할 수 있다.
+            if (Mode == EnemyMode.ScriptedSequence)
+            {
+                return;
+            }
+
             if (traversalRoutine != null)
             {
                 return;
@@ -277,6 +295,7 @@ public sealed class EnemyController : MonoBehaviour
                 return false;
             }
 
+            scriptedSequencePaused = false;
             StopTraversal();
             StopMovement();
             currentDestination = null;
@@ -289,6 +308,43 @@ public sealed class EnemyController : MonoBehaviour
             SetState(EnemyState.Chasing);
             BeginChaseDestination();
             return true;
+        }
+
+        /// <summary>
+        /// 현재 적의 기존 이동을 중단하고 스토리 연출이 제어권을 갖는 모드로 전환한다.
+        /// 전역 Pause를 사용하지 않으므로 Sector2 연출 코드가 플레이어 자동 이동과 함께 사용할 수 있다.
+        /// </summary>
+        /// <returns>활성 적을 성공적으로 일시 정지했으면 true.</returns>
+        public bool PauseForScriptedSequence()
+        {
+            if (State == EnemyState.Inactive || State == EnemyState.Chasing)
+            {
+                return false;
+            }
+
+            StopTraversal();
+            StopMovement();
+            activePath = null;
+            activePathIndex = 0;
+            scriptedSequencePaused = true;
+            DestinationChanged?.Invoke(null);
+            return true;
+        }
+
+        /// <summary>
+        /// ScriptedSequence 일시 정지를 해제하고 현재 PatrolRoute를 기준으로 순찰을 재개한다.
+        /// </summary>
+        /// <returns>순찰 재개에 성공했으면 true.</returns>
+        public bool ResumePatrolFromScriptedSequence()
+        {
+            if (!scriptedSequencePaused || State == EnemyState.Inactive || CurrentRoute == null)
+            {
+                return false;
+            }
+
+            scriptedSequencePaused = false;
+            BeginPatrolling();
+            return Mode == EnemyMode.Patrol;
         }
 
         /// <summary>추격 중인 적의 목표 방을 갱신하고 현재 추격 경로를 다시 계산한다.</summary>
@@ -330,6 +386,7 @@ public sealed class EnemyController : MonoBehaviour
         /// <summary>추격 정보를 지우고 원래 PatrolRoute의 다음 지점으로 복귀한다.</summary>
         public void StopChaseAndResumeRoute()
         {
+            scriptedSequencePaused = false;
             StopTraversal();
             StopMovement();
             chaseTarget = null;
@@ -354,6 +411,7 @@ public sealed class EnemyController : MonoBehaviour
         {
             if (!value)
             {
+                scriptedSequencePaused = false;
                 StopTraversal();
                 StopMovement();
                 currentDestination = null;
@@ -382,6 +440,7 @@ public sealed class EnemyController : MonoBehaviour
             }
 
             SetVisible(true);
+            scriptedSequencePaused = false;
             BeginPatrolling();
         }
 
@@ -416,6 +475,7 @@ public sealed class EnemyController : MonoBehaviour
 
             roomTracker?.ResetAt(spawnPoint);
             SetVisible(true);
+            scriptedSequencePaused = false;
             BeginPatrolling();
         }
 

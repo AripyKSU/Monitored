@@ -67,6 +67,11 @@ namespace HauntedHouse.Progression
             }
 
             ActiveCheckpoint = checkpoint;
+            if (checkpoint.StoryStage != StoryStage.None)
+            {
+                gameSession?.SetStoryStage(checkpoint.StoryStage);
+            }
+
             CheckpointChanged?.Invoke(ActiveCheckpoint);
             return true;
         }

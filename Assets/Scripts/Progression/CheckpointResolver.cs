@@ -56,7 +56,7 @@ namespace HauntedHouse.Progression
 
                 if (!string.IsNullOrWhiteSpace(rule.FlagId))
                 {
-                    gameSession.StoryFlags.Add(rule.FlagId);
+                    gameSession.SetStoryFlag(rule.FlagId);
                 }
 
                 if (rule.Checkpoint != null && checkpointService != null)
