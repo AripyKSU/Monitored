@@ -103,6 +103,14 @@ namespace HauntedHouse.Enemies
                     activeDoorway.NotifyPassageStarted(gameObject, traversal);
                 }
 
+                // 이벤트 구독 시점이나 물리 프레임 순서 때문에 EnemyRoomTracker가 아직 갱신되지
+                // 않았으면 통과 코루틴이 직접 논리 방을 동기화한다. 그래야 DoorTraversal 완료 시
+                // 물리 위치와 EnemyController.CurrentRoom이 어긋나지 않는다.
+                if (roomTracker != null && roomTracker.CurrentRoom != traversal.DestinationRoom)
+                {
+                    roomTracker.SetRoom(traversal.DestinationRoom);
+                }
+
                 // 목적지 EntryPoint에 도착한 직후 문을 닫는다.
                 yield return activeDoorway.Close();
                 doorClosed = true;

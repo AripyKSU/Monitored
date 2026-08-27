@@ -96,6 +96,12 @@ public sealed class EnemyController : MonoBehaviour
         public bool IsTraversing => traversalRoutine != null ||
                                     (doorTraversal != null && doorTraversal.IsTraversing);
 
+        /// <summary>가장 최근 ScriptedSequence 지점 이동이 성공했는지 반환한다.</summary>
+        public bool LastScriptedMoveSucceeded { get; private set; }
+
+        /// <summary>가장 최근 ScriptedSequence Doorway 경로 이동이 성공했는지 반환한다.</summary>
+        public bool LastScriptedPathSucceeded { get; private set; }
+
         /// <summary>상태가 변경될 때 이전 상태와 새 상태를 전달한다.</summary>
         public event Action<EnemyState, EnemyState> StateChanged;
 
@@ -345,6 +351,142 @@ public sealed class EnemyController : MonoBehaviour
             scriptedSequencePaused = false;
             BeginPatrolling();
             return Mode == EnemyMode.Patrol;
+        }
+
+        /// <summary>
+        /// 지정한 스폰 지점에서 적의 순찰을 멈추고 ScriptedSequence 제어권을 시작한다.
+        /// Sector2 강제 숨기 이벤트가 적의 초기 위치와 논리 방을 함께 확정할 때 사용한다.
+        /// </summary>
+        /// <param name="spawnPoint">적을 배치할 순찰 지점.</param>
+        /// <returns>적을 활성화하고 연출 모드로 전환했으면 true.</returns>
+        public bool BeginScriptedSequence(PatrolPoint spawnPoint)
+        {
+            if (spawnPoint == null)
+            {
+                GameLog.LogError($"EnemyController '{name}'의 ScriptedSequence 스폰 지점이 없습니다.", this);
+                return false;
+            }
+
+            // 기존 순찰 경로가 다른 테스트 구역을 가리키더라도 ScriptedSequence은
+            // 지정한 스폰 지점에서 독립적으로 시작해야 하므로 SetActive를 호출하지 않는다.
+            // SetActive는 순찰 목적지를 즉시 계산해 이벤트 시작 전에 잘못된 경로를 실행할 수 있다.
+            StopTraversal();
+            StopMovement();
+            if (!EnableAgentAt(spawnPoint.Position))
+            {
+                return false;
+            }
+            else
+            {
+                roomTracker?.ResetAt(spawnPoint);
+                SetVisible(true);
+                scriptedSequencePaused = false;
+                SetState(EnemyState.Patrolling);
+            }
+
+            return State != EnemyState.Inactive && PauseForScriptedSequence();
+        }
+
+        /// <summary>
+        /// ScriptedSequence 중 적을 같은 방의 명시적 지점까지 NavMesh로 이동시킨다.
+        /// 문을 통과하는 이동은 ExecuteScriptedPath를 사용해 기존 EnemyDoorTraversal을 재사용한다.
+        /// </summary>
+        /// <param name="destination">이동할 지점.</param>
+        /// <returns>이동 코루틴.</returns>
+        public IEnumerator MoveScriptedTo(Transform destination)
+        {
+            LastScriptedMoveSucceeded = false;
+            if (Mode != EnemyMode.ScriptedSequence || destination == null ||
+                agent == null || !agent.enabled || !agent.isOnNavMesh ||
+                !agent.SetDestination(destination.position))
+            {
+                GameLog.LogError($"EnemyController '{name}'의 ScriptedSequence 이동 목적지가 유효하지 않습니다.", this);
+                yield break;
+            }
+
+            agent.isStopped = false;
+            float elapsed = 0f;
+            while (elapsed <= 30f)
+            {
+                if (agent.pathPending)
+                {
+                    elapsed += Time.deltaTime;
+                    yield return null;
+                    continue;
+                }
+
+                if (agent.pathStatus != NavMeshPathStatus.PathComplete)
+                {
+                    GameLog.LogError($"EnemyController '{name}'의 ScriptedSequence 이동 경로가 완성되지 않았습니다.", this);
+                    StopMovement();
+                    yield break;
+                }
+
+                if (HasArrived())
+                {
+                    StopMovement();
+                    LastScriptedMoveSucceeded = true;
+                    yield break;
+                }
+
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            GameLog.LogError($"EnemyController '{name}'의 ScriptedSequence 이동 시간이 초과됐습니다.", this);
+            StopMovement();
+        }
+
+        /// <summary>
+        /// ScriptedSequence 중 RoomGraph 경로의 Doorway를 순서대로 통과한다.
+        /// EnemyDoorTraversal이 문 열기·통과 확정·EnemyRoomTracker 갱신을 담당한다.
+        /// </summary>
+        /// <param name="path">현재 방에서 목표 방까지의 Bake된 경로.</param>
+        /// <returns>문 통과 코루틴.</returns>
+        public IEnumerator ExecuteScriptedPath(IReadOnlyList<RoomGraphStep> path)
+        {
+            LastScriptedPathSucceeded = false;
+            if (Mode != EnemyMode.ScriptedSequence || path == null)
+            {
+                GameLog.LogError($"EnemyController '{name}'의 ScriptedSequence 경로가 유효하지 않습니다.", this);
+                yield break;
+            }
+
+            for (int index = 0; index < path.Count; index++)
+            {
+                if (doorTraversal == null)
+                {
+                    GameLog.LogError($"EnemyController '{name}'에 EnemyDoorTraversal이 없습니다.", this);
+                    yield break;
+                }
+
+                RoomGraphStep step = path[index];
+                yield return doorTraversal.Execute(step);
+                if (!doorTraversal.LastTraversalSucceeded)
+                {
+                    GameLog.LogError(
+                        $"EnemyController '{name}'의 ScriptedSequence 문 통과에 실패했습니다: " +
+                        $"'{step.SourceRoom?.RoomId}' → '{step.DestinationRoom?.RoomId}'.", this);
+                    yield break;
+                }
+            }
+
+            LastScriptedPathSucceeded = true;
+        }
+
+        /// <summary>
+        /// ScriptedSequence을 종료하고 적을 비활성화하거나 기존 순찰로 되돌린다.
+        /// </summary>
+        /// <param name="deactivate">이벤트 종료 후 적을 숨기려면 true.</param>
+        public void EndScriptedSequence(bool deactivate)
+        {
+            if (deactivate)
+            {
+                SetActive(false);
+                return;
+            }
+
+            ResumePatrolFromScriptedSequence();
         }
 
         /// <summary>추격 중인 적의 목표 방을 갱신하고 현재 추격 경로를 다시 계산한다.</summary>
@@ -784,7 +926,9 @@ public sealed class EnemyController : MonoBehaviour
             }
 
             agent.enabled = true;
-            if (!agent.isOnNavMesh || !agent.Warp(position))
+            // 비활성 상태의 기존 위치가 NavMesh 밖일 수 있으므로,
+            // 현재 위치의 isOnNavMesh를 먼저 검사하지 않고 목표 지점으로 Warp한 뒤 확인한다.
+            if (!agent.Warp(position) || !agent.isOnNavMesh)
             {
                 GameLog.LogError($"EnemyController '{name}'를 NavMesh 위치에 배치하지 못했습니다.", this);
                 agent.enabled = false;

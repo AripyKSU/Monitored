@@ -143,6 +143,7 @@ MonoBehaviour:
   closeTrigger: Close
   closedStateName: Closed
   openStateName: Open
+  initiallyOpen: 0
   animationDuration: 0.4
   movingLeafColliders:
   - {fileID: 5332028478759117152}

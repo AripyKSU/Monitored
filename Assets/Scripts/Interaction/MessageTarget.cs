@@ -15,6 +15,11 @@ namespace HauntedHouse.Interaction
         [SerializeField, TextArea] private string message;
         [SerializeField] private string completionId;
 
+        [Header("스토리 진행")]
+        [Tooltip("메시지를 끝까지 읽었을 때 추가할 Story Flag입니다. 비워 두면 기존 메시지 Target처럼 동작합니다.")]
+        [SerializeField] private GameSession gameSession;
+        [SerializeField] private string completionFlagId;
+
         [Header("Audio")]
         [SerializeField] private AudioClip messageInteractionSound;
 
@@ -24,6 +29,7 @@ namespace HauntedHouse.Interaction
         /// <summary>체크포인트에서 사용할 상호작용 완료 ID다.</summary>
         public string CompletionId => string.IsNullOrWhiteSpace(completionId) ? name : completionId;
 
+        /// <summary>메시지를 표시하고 확인된 뒤 완료 상태와 선택적인 Story Flag를 기록한다.</summary>
         public IEnumerator Execute(TargetActionContext context)
         {
             if (messagePanel == null)
@@ -39,19 +45,34 @@ namespace HauntedHouse.Interaction
             }
 
             IsCompleted = true;
+            // 메시지 확인이 끝난 시점에만 Story Flag를 기록해 중도 취소·복원 단계의 오기록을 막는다.
+            if (gameSession != null && !string.IsNullOrWhiteSpace(completionFlagId))
+            {
+                gameSession.SetStoryFlag(completionFlagId);
+            }
+
+            // 한 번 읽은 메시지는 같은 플레이 구간에서 다시 선택되지 않도록 즉시 잠근다.
+            GetComponent<Target>()?.SetSelectable(false);
             context?.MarkCompleted();
         }
 
         /// <summary>체크포인트의 메시지 상호작용 완료 상태를 적용한다.</summary>
         public void RestoreCompletedState(bool completed)
         {
-            IsCompleted = completed;
-            GetComponent<Target>()?.SetSelectable(!completed);
+            // Story Flag는 체크포인트에 저장되는 진행 기준이므로 완료 상태 배열에
+            // 별도 항목이 없어도 flag가 켜진 메시지는 다시 선택할 수 없게 한다.
+            bool completedByFlag = gameSession != null &&
+                                   !string.IsNullOrWhiteSpace(completionFlagId) &&
+                                   gameSession.HasStoryFlag(completionFlagId);
+            IsCompleted = completed || completedByFlag;
+            GetComponent<Target>()?.SetSelectable(!IsCompleted);
         }
 
+        /// <summary>컴포넌트를 처음 추가할 때 공용 UI와 진행 세션을 자동 연결한다.</summary>
         private void Reset()
         {
             messagePanel = FindFirstObjectByType<MessagePanel>();
+            gameSession = FindFirstObjectByType<GameSession>();
             completionId = name;
         }
     }

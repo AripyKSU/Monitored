@@ -124,7 +124,9 @@ public static class HospitalSector1Setup
             dialogueService,
             tracker,
             gameSession);
-        ConfigureCheckpointCompletedStates(introTarget, flashlightPickup);
+        ConfigureCheckpointCompletedStates(
+            introTarget,
+            flashlightPickup.GetComponent<Target>());
 
         EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
         EditorSceneManager.SaveOpenScenes();
@@ -198,6 +200,7 @@ public static class HospitalSector1Setup
         Check(errors, entryEvent != null, "S1_HallwayScareEntry가 없습니다.");
         Check(errors, entryEvent != null && entryEvent.OnEntered != null && entryEvent.OnEntered.GetPersistentEventCount() > 0,
             "S1_HallwayScareEntry의 OnEntered UnityEvent가 비어 있습니다.");
+        ValidateCheckpointDefinitions(errors);
 
         if (errors.Count > 0)
         {
@@ -666,15 +669,21 @@ public static class HospitalSector1Setup
     }
 
     /// <summary>Save2 이후 체크포인트에서 Intro 대화와 손전등 획득 상태를 유지하도록 등록한다.</summary>
-    private static void ConfigureCheckpointCompletedStates(
-        Target introTarget,
-        ItemPickupTarget flashlightPickup)
+    private static void ConfigureCheckpointCompletedStates(params Target[] targets)
     {
         Transform checkpointRoot = FindRequired<GameSession>("GameSession").transform.Find("HospitalCheckpoints");
         if (checkpointRoot == null)
         {
             throw new InvalidOperationException("HospitalCheckpoints가 없습니다. 먼저 Checkpoint Definitions 설정을 실행해야 합니다.");
         }
+
+        // 체크포인트에는 Target 컨테이너가 아니라 실제 완료 상태를 소유한 컴포넌트만 저장한다.
+        // 이렇게 하면 대화·아이템·조사 등 행동 유형이 달라도 ICompletedState 계약만으로 복원 대상을 찾을 수 있다.
+        MonoBehaviour[] participants = targets
+            .Where(target => target != null)
+            .Select(FindCompletedStateParticipant)
+            .Distinct()
+            .ToArray();
 
         for (int index = 2; index <= 5; index++)
         {
@@ -690,11 +699,37 @@ public static class HospitalSector1Setup
                 throw new InvalidOperationException($"Save{index}에 CheckpointDefinition이 없습니다.");
             }
 
-            AddCompletedState(checkpoint, introTarget, flashlightPickup);
+            AddCompletedState(checkpoint, participants);
         }
     }
 
-    /// <summary>체크포인트 완료 상태 배열에 같은 CompletionId가 없을 때만 참가자를 추가한다.</summary>
+    /// <summary>Target에서 체크포인트 복원을 담당할 ICompletedState 구현 컴포넌트를 찾는다.</summary>
+    private static MonoBehaviour FindCompletedStateParticipant(Target target)
+    {
+        if (target == null)
+        {
+            throw new InvalidOperationException("완료 상태 참가자를 찾을 Target이 null입니다.");
+        }
+
+        MonoBehaviour[] candidates = target.GetComponents<MonoBehaviour>()
+            .Where(component => component is ICompletedState)
+            .ToArray();
+        if (candidates.Length == 0)
+        {
+            throw new InvalidOperationException(
+                $"Target '{target.name}'에 ICompletedState를 구현한 완료 상태 컴포넌트가 없습니다.");
+        }
+
+        if (candidates.Length > 1)
+        {
+            throw new InvalidOperationException(
+                $"Target '{target.name}'에 ICompletedState 구현 컴포넌트가 여러 개라 참가자를 결정할 수 없습니다.");
+        }
+
+        return candidates[0];
+    }
+
+    /// <summary>체크포인트 완료 상태 배열에서 유효한 참가자만 유지하고 중복 없이 추가한다.</summary>
     private static void AddCompletedState(
         CheckpointDefinition checkpoint,
         params MonoBehaviour[] participants)
@@ -709,7 +744,8 @@ public static class HospitalSector1Setup
                 .GetArrayElementAtIndex(index)
                 .FindPropertyRelative("participant")
                 .objectReferenceValue;
-            if (participant != null)
+            // 이전 버전이 잘못 저장한 Target 같은 비계약 컴포넌트는 재구성 시 제거한다.
+            if (participant is ICompletedState && !existing.Contains(participant))
             {
                 existing.Add(participant);
             }
@@ -733,6 +769,30 @@ public static class HospitalSector1Setup
 
         serialized.ApplyModifiedPropertiesWithoutUndo();
         EditorUtility.SetDirty(checkpoint);
+    }
+
+    /// <summary>Sector1 진행에 사용하는 Save2~Save5 체크포인트의 복원 정의를 검사한다.</summary>
+    private static void ValidateCheckpointDefinitions(List<string> errors)
+    {
+        GameSession gameSession = UnityEngine.Object.FindFirstObjectByType<GameSession>(FindObjectsInactive.Include);
+        Transform checkpointRoot = gameSession != null
+            ? gameSession.transform.Find("HospitalCheckpoints")
+            : null;
+        Check(errors, checkpointRoot != null, "GameSession/HospitalCheckpoints가 없습니다.");
+        if (checkpointRoot == null)
+        {
+            return;
+        }
+
+        for (int index = 2; index <= 5; index++)
+        {
+            CheckpointDefinition checkpoint = checkpointRoot.Find($"Save{index}")?.GetComponent<CheckpointDefinition>();
+            Check(errors, checkpoint != null, $"Save{index} 체크포인트 정의가 없습니다.");
+            if (checkpoint != null && !checkpoint.TryValidateConfiguration(out string error))
+            {
+                errors.Add($"Save{index} 체크포인트 검증 실패: {error}");
+            }
+        }
     }
 
     /// <summary>이름으로 기존 가구 자식 Transform을 찾는다. Target은 검색하지 않는다.</summary>

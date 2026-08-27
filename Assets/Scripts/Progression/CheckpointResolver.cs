@@ -49,7 +49,10 @@ namespace HauntedHouse.Progression
 
             foreach (StoryCheckpointRule rule in rules)
             {
-                if (!rule.Matches(storyEvent, gameSession.StoryFlags))
+                // 이미 완료 flag가 기록된 규칙은 재진입·재상호작용으로 다시 실행하지 않는다.
+                // Save3처럼 최초 방 진입 시에만 체크포인트를 갱신해야 하는 규칙의 일회성을 보장한다.
+                if (rule.IsCompleted(gameSession.StoryFlags) ||
+                    !rule.Matches(storyEvent, gameSession.StoryFlags))
                 {
                     continue;
                 }
@@ -89,6 +92,14 @@ namespace HauntedHouse.Progression
 
         /// <summary>규칙이 활성화할 체크포인트를 반환한다.</summary>
         public CheckpointDefinition Checkpoint => checkpoint;
+
+        /// <summary>이 규칙이 추가하는 완료 flag가 이미 기록됐는지 반환한다.</summary>
+        public bool IsCompleted(StoryFlagSet flags)
+        {
+            return flags != null &&
+                   !string.IsNullOrWhiteSpace(flagId) &&
+                   flags.Contains(flagId);
+        }
 
         /// <summary>사건 종류·대상·필수 flag가 규칙과 일치하는지 검사한다.</summary>
         public bool Matches(StoryEvent storyEvent, StoryFlagSet flags)

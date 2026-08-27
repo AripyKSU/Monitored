@@ -171,6 +171,41 @@ namespace HauntedHouse.Interaction
                    string.Equals(selectedItem.ItemId, requiredItem.ItemId, StringComparison.Ordinal);
         }
 
+        private void Awake()
+        {
+            inventory ??= FindFirstObjectByType<PlayerInventory>();
+            pauseService ??= FindFirstObjectByType<GamePauseService>();
+            selectionPanel ??= FindFirstObjectByType<ItemSelectionPanel>();
+            messagePanel ??= FindFirstObjectByType<MessagePanel>();
+
+            if (effectComponent is not IItemUseEffect)
+            {
+                foreach (MonoBehaviour behaviour in GetComponents<MonoBehaviour>())
+                {
+                    if (behaviour is IItemUseEffect)
+                    {
+                        effectComponent = behaviour;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void OnValidate()
+        {
+            if (effectComponent is not IItemUseEffect)
+            {
+                foreach (MonoBehaviour behaviour in GetComponents<MonoBehaviour>())
+                {
+                    if (behaviour is IItemUseEffect)
+                    {
+                        effectComponent = behaviour;
+                        break;
+                    }
+                }
+            }
+        }
+
         private void Reset()
         {
             inventory = FindFirstObjectByType<PlayerInventory>();
