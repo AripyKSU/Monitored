@@ -39,6 +39,8 @@ public static class HospitalCheckpointDefinitionSetup
         Room centerB = GetOrCreateCenterHallwayB(centerA);
         SplitCenterHallwayConnections(centerA, centerB);
         Doorway logicalGate = GetOrCreateLogicalGate(centerA, centerB);
+        Room sector1Hallway = FindRoom("S1_Hallway");
+        Doorway sector1Door = FindDoorway("SlideDoor_To_Sector1", centerA, sector1Hallway);
         ConfigureCenterHallwayCameras(centerA, centerB);
         ConfigureAdjacency(centerA, centerB, logicalGate);
 
@@ -59,7 +61,7 @@ public static class HospitalCheckpointDefinitionSetup
         ItemDefinition masterKey = GetOrCreateItem("MasterKey", "master_key", "마스터키", "병원 정문을 열 수 있는 마스터키입니다.");
 
         CheckpointDefinition[] saves = ConfigureCheckpoints(
-            centerA, centerB, logicalGate, flashlight, wardKey, basementKey, masterKey, graph);
+            centerA, centerB, logicalGate, sector1Door, flashlight, wardKey, basementKey, masterKey, graph);
         ConfigureCheckpointService(saves[0]);
         ConfigureResolver(saves);
         ConfigureInitialEnemyState();
@@ -91,6 +93,23 @@ public static class HospitalCheckpointDefinitionSetup
         Room room = UnityEngine.Object.FindObjectsByType<Room>(FindObjectsInactive.Include, FindObjectsSortMode.None)
             .FirstOrDefault(candidate => roomIds.Contains(candidate.RoomId, StringComparer.Ordinal));
         return room != null ? room : throw new InvalidOperationException($"Room을 찾지 못했습니다: {string.Join(", ", roomIds)}");
+    }
+
+    /// <summary>지정한 두 Room을 연결하는 이름의 Doorway를 찾아 반환한다.</summary>
+    private static Doorway FindDoorway(string doorwayName, Room first, Room second)
+    {
+        Doorway doorway = UnityEngine.Object.FindObjectsByType<Doorway>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None)
+            .FirstOrDefault(candidate =>
+                candidate.name == doorwayName &&
+                ((candidate.RoomA == first && candidate.RoomB == second) ||
+                 (candidate.RoomA == second && candidate.RoomB == first)));
+
+        return doorway != null
+            ? doorway
+            : throw new InvalidOperationException(
+                $"Doorway '{doorwayName}'을 두 Room '{first?.RoomId}', '{second?.RoomId}' 사이에서 찾지 못했습니다.");
     }
 
     /// <summary>CenterHallway_A와 같은 계층에 B 논리 방을 생성한다.</summary>
@@ -197,7 +216,75 @@ public static class HospitalCheckpointDefinitionSetup
 
         SetObject(fromA, "ownerRoom", centerB);
         SetObject(fromB, "ownerRoom", centerA);
+        ConfigureLogicalGatePresentation(gate);
         return gate;
+    }
+
+    /// <summary>
+    /// CenterHallway 분할용 Doorway에서 실제 문 메시와 비트리거 충돌만 제거한다.
+    /// Doorway 루트, 방향별 Target, Sensor, 통과 Anchor는 유지해 논리 방 전환과 이동 명령이
+    /// 일반 Doorway와 동일하게 동작하도록 한다.
+    /// </summary>
+    private static void ConfigureLogicalGatePresentation(Doorway gate)
+    {
+        if (gate == null)
+        {
+            return;
+        }
+
+        Transform doorVisual = gate.GetComponentsInChildren<Transform>(true)
+            .FirstOrDefault(transform => transform.name == "DoorVisual");
+        if (doorVisual != null)
+        {
+            // DoorVisual만 끄면 Animator 참조와 DoorController는 살아 있으므로,
+            // Doorway의 Open/Close 호출과 TryValidateConfiguration을 깨뜨리지 않는다.
+            doorVisual.gameObject.SetActive(false);
+            EditorUtility.SetDirty(doorVisual.gameObject);
+        }
+        else
+        {
+            GameLog.LogWarning(
+                $"논리 게이트 '{gate.name}'에서 DoorVisual을 찾지 못했습니다. 시각 메시 없이 계속 구성합니다.",
+                gate);
+        }
+
+        // 복제 원본에 포함된 Door_Frame/벽 Mesh가 남으면 논리 분할이 물리 장벽으로 바뀐다.
+        // Target 클릭 영역과 Sensor의 Collider는 어떤 직렬화 상태에서도 Trigger로 보존하고,
+        // 실제 차단에 관여하는 나머지 Collider만 끈다. 이렇게 해야 선택과 통과가 모두 유지된다.
+        foreach (Collider collider in gate.GetComponentsInChildren<Collider>(true))
+        {
+            if (collider == null)
+            {
+                continue;
+            }
+
+            bool isTraversalTrigger = collider.GetComponentInParent<DoorwaySensor>(true) != null ||
+                                      collider.GetComponentInParent<Target>(true) != null;
+            if (isTraversalTrigger)
+            {
+                collider.isTrigger = true;
+                collider.enabled = true;
+                EditorUtility.SetDirty(collider);
+            }
+            else
+            {
+                collider.enabled = false;
+                EditorUtility.SetDirty(collider);
+            }
+        }
+
+        // DoorVisual 바깥에 남아 있는 프레임/벽 Renderer까지 함께 숨겨 논리 게이트가 화면에
+        // 실제 문처럼 나타나지 않게 한다. Anchor, Target, Sensor에는 Renderer가 없다.
+        foreach (Renderer renderer in gate.GetComponentsInChildren<Renderer>(true))
+        {
+            if (renderer != null)
+            {
+                renderer.enabled = false;
+                EditorUtility.SetDirty(renderer);
+            }
+        }
+
+        EditorUtility.SetDirty(gate.gameObject);
     }
 
     /// <summary>A의 기존 CCTV를 명확히 이름 붙이고 복제본을 B의 기본 CCTV로 연결한다.</summary>
@@ -256,7 +343,7 @@ public static class HospitalCheckpointDefinitionSetup
 
     /// <summary>계획 문서의 누적 진행 상태를 가진 Save1~Save5 정의를 생성한다.</summary>
     private static CheckpointDefinition[] ConfigureCheckpoints(
-        Room centerA, Room centerB, Doorway gate, ItemDefinition flashlight, ItemDefinition wardKey,
+        Room centerA, Room centerB, Doorway gate, Doorway sector1Door, ItemDefinition flashlight, ItemDefinition wardKey,
         ItemDefinition basementKey, ItemDefinition masterKey, RoomGraph graph)
     {
         GameSession session = UnityEngine.Object.FindFirstObjectByType<GameSession>();
@@ -272,7 +359,7 @@ public static class HospitalCheckpointDefinitionSetup
 
         CheckpointDefinition save1 = ConfigureCheckpoint(root, "Save1", start,
             GetSpawn(start, "Save1_StartBedroomPoint", FindExistingInitialPoint(start, new Vector3(10f, 1f, 195f))),
-            StoryStage.Sector1, Array.Empty<ItemDefinition>(), Array.Empty<string>(), graph, gate, true);
+            StoryStage.Sector1, Array.Empty<ItemDefinition>(), Array.Empty<string>(), graph, gate, true, sector1Door, true);
 
         string[] save2Flags =
         {
@@ -282,7 +369,7 @@ public static class HospitalCheckpointDefinitionSetup
         };
         CheckpointDefinition save2 = ConfigureCheckpoint(root, "Save2", centerA,
             GetSpawn(centerA, "Save2_CenterHallway_A_Point", new Vector3(191.8f, 1f, 125f)),
-            StoryStage.Sector2, new[] { flashlight, wardKey }, save2Flags, graph, gate, true);
+            StoryStage.Sector2, new[] { flashlight, wardKey }, save2Flags, graph, gate, true, sector1Door, false);
 
         string[] save3Flags = save2Flags.Concat(new[]
         {
@@ -292,7 +379,7 @@ public static class HospitalCheckpointDefinitionSetup
         }).ToArray();
         CheckpointDefinition save3 = ConfigureCheckpoint(root, "Save3", centerB,
             GetSpawn(centerB, "Save3_CenterHallway_B_Point", new Vector3(191.8f, 1f, 265f)),
-            StoryStage.Sector3, new[] { flashlight, wardKey }, save3Flags, graph, gate, false);
+            StoryStage.Sector3, new[] { flashlight, wardKey }, save3Flags, graph, gate, false, sector1Door, false);
 
         string[] save4Flags = save3Flags.Concat(new[]
         {
@@ -301,7 +388,7 @@ public static class HospitalCheckpointDefinitionSetup
         }).ToArray();
         CheckpointDefinition save4 = ConfigureCheckpoint(root, "Save4", basement,
             GetSpawn(basement, "Save4_BasementCorridor_Point", new Vector3(347.8f, -54f, 311.2f)),
-            StoryStage.Sector4, new[] { flashlight, wardKey, basementKey }, save4Flags, graph, gate, false);
+            StoryStage.Sector4, new[] { flashlight, wardKey, basementKey }, save4Flags, graph, gate, false, sector1Door, false);
 
         string[] save5Flags = save4Flags.Concat(new[]
         {
@@ -309,7 +396,7 @@ public static class HospitalCheckpointDefinitionSetup
         }).ToArray();
         CheckpointDefinition save5 = ConfigureCheckpoint(root, "Save5", morgue2,
             GetSpawn(morgue2, "Save5_MorgueRoom2_MasterKeyPoint", new Vector3(270f, -54f, 384.5f)),
-            StoryStage.Sector5Ready, new[] { flashlight, wardKey, basementKey, masterKey }, save5Flags, graph, gate, false);
+            StoryStage.Sector5Ready, new[] { flashlight, wardKey, basementKey, masterKey }, save5Flags, graph, gate, false, sector1Door, false);
 
         return new[] { save1, save2, save3, save4, save5 };
     }
@@ -317,7 +404,7 @@ public static class HospitalCheckpointDefinitionSetup
     /// <summary>체크포인트 오브젝트의 공통 필드를 직렬화한다.</summary>
     private static CheckpointDefinition ConfigureCheckpoint(
         Transform root, string id, Room room, Transform point, StoryStage stage, ItemDefinition[] items,
-        string[] flags, RoomGraph graph, Doorway gate, bool gateLocked)
+        string[] flags, RoomGraph graph, Doorway gate, bool gateLocked, Doorway sector1Door, bool sector1DoorLocked)
     {
         Transform child = GetOrCreateChild(root, id);
         CheckpointDefinition checkpoint = child.GetComponent<CheckpointDefinition>() ?? child.gameObject.AddComponent<CheckpointDefinition>();
@@ -329,12 +416,16 @@ public static class HospitalCheckpointDefinitionSetup
         serialized.FindProperty("roomGraph").objectReferenceValue = graph;
         SetArray(serialized.FindProperty("inventoryItems"), items.Cast<UnityEngine.Object>());
         SetStrings(serialized.FindProperty("progressFlags"), flags);
-        SetArray(serialized.FindProperty("completedStates"), Array.Empty<UnityEngine.Object>());
         SetArray(serialized.FindProperty("enemyStates"), Array.Empty<UnityEngine.Object>());
         SerializedProperty doors = serialized.FindProperty("doorwayStates");
-        doors.arraySize = 1;
+        doors.arraySize = sector1Door != null ? 2 : 1;
         doors.GetArrayElementAtIndex(0).FindPropertyRelative("doorway").objectReferenceValue = gate;
         doors.GetArrayElementAtIndex(0).FindPropertyRelative("locked").boolValue = gateLocked;
+        if (sector1Door != null)
+        {
+            doors.GetArrayElementAtIndex(1).FindPropertyRelative("doorway").objectReferenceValue = sector1Door;
+            doors.GetArrayElementAtIndex(1).FindPropertyRelative("locked").boolValue = sector1DoorLocked;
+        }
         serialized.ApplyModifiedPropertiesWithoutUndo();
         return checkpoint;
     }
@@ -355,11 +446,13 @@ public static class HospitalCheckpointDefinitionSetup
 
         SerializedObject serialized = new SerializedObject(resolver);
         SerializedProperty rules = serialized.FindProperty("rules");
-        rules.arraySize = 4;
-        ConfigureRule(rules.GetArrayElementAtIndex(0), StoryEventType.RoomEntered, "CenterHallway_A", StoryProgressFlags.WardHallKeyAcquired, StoryProgressFlags.CenterHallFirstEntered, saves[1]);
-        ConfigureRule(rules.GetArrayElementAtIndex(1), StoryEventType.RoomEntered, "CenterHallway_B", StoryProgressFlags.Sector2HideEncounterCompleted, StoryProgressFlags.CenterHallSecondEntered, saves[2]);
-        ConfigureRule(rules.GetArrayElementAtIndex(2), StoryEventType.RoomEntered, "S4_BasementCorridor", StoryProgressFlags.BasementKeyAcquired, StoryProgressFlags.BasementEntered, saves[3]);
-        ConfigureRule(rules.GetArrayElementAtIndex(3), StoryEventType.PuzzleCompleted, StoryCheckpointEventIds.MasterKeyDialogueCompleted, StoryProgressFlags.MasterKeyAcquired, string.Empty, saves[4]);
+        rules.arraySize = 6;
+        ConfigureRule(rules.GetArrayElementAtIndex(0), StoryEventType.InteractionCompleted, "S1_IntroRadioTarget", string.Empty, StoryProgressFlags.IntroDialogueCompleted, null);
+        ConfigureRule(rules.GetArrayElementAtIndex(1), StoryEventType.ItemAcquired, "flashlight", string.Empty, StoryProgressFlags.FlashlightAcquired, null);
+        ConfigureRule(rules.GetArrayElementAtIndex(2), StoryEventType.RoomEntered, "CenterHallway_A", StoryProgressFlags.WardHallKeyAcquired, StoryProgressFlags.CenterHallFirstEntered, saves[1]);
+        ConfigureRule(rules.GetArrayElementAtIndex(3), StoryEventType.RoomEntered, "CenterHallway_B", StoryProgressFlags.Sector2HideEncounterCompleted, StoryProgressFlags.CenterHallSecondEntered, saves[2]);
+        ConfigureRule(rules.GetArrayElementAtIndex(4), StoryEventType.RoomEntered, "S4_BasementCorridor", StoryProgressFlags.BasementKeyAcquired, StoryProgressFlags.BasementEntered, saves[3]);
+        ConfigureRule(rules.GetArrayElementAtIndex(5), StoryEventType.PuzzleCompleted, StoryCheckpointEventIds.MasterKeyDialogueCompleted, StoryProgressFlags.MasterKeyAcquired, string.Empty, saves[4]);
         serialized.ApplyModifiedPropertiesWithoutUndo();
     }
 

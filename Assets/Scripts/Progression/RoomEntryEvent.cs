@@ -14,6 +14,8 @@ namespace HauntedHouse.Progression
         [SerializeField] private Room targetRoom;
         [Tooltip("비워 두면 복원 주기마다 다시 실행할 수 있습니다. 입력하면 해당 flag가 복원된 경우 실행을 건너뜁니다.")]
         [SerializeField] private string completionFlagId;
+        [Tooltip("UnityEvent 연출이 끝난 뒤 별도 컴포넌트가 MarkCompleted를 호출할 때만 completion flag를 기록합니다.")]
+        [SerializeField] private bool markCompletionAfterEvent;
 
         [Header("공용 진행 상태")]
         [SerializeField] private PlayerRoomTracker playerRoomTracker;
@@ -31,6 +33,21 @@ namespace HauntedHouse.Progression
         public bool IsCompletedByFlag => gameSession != null &&
                                          !string.IsNullOrWhiteSpace(completionFlagId) &&
                                          gameSession.HasStoryFlag(completionFlagId);
+
+        /// <summary>방 진입 시 실행할 UnityEvent를 에디터 설정 도구가 구성할 수 있도록 노출한다.</summary>
+        public UnityEvent OnEntered => onEntered;
+
+        /// <summary>
+        /// 진입 연출이 성공적으로 끝났음을 알리고 설정된 completion flag를 기록한다.
+        /// 기본 이벤트는 진입 즉시 기록하고, 긴 연출이 필요한 이벤트만 이 메서드를 사용한다.
+        /// </summary>
+        public void MarkCompleted()
+        {
+            if (gameSession != null && !string.IsNullOrWhiteSpace(completionFlagId))
+            {
+                gameSession.SetStoryFlag(completionFlagId);
+            }
+        }
 
         /// <summary>플레이어 방 변경과 체크포인트 복원 완료 이벤트를 구독한다.</summary>
         private void OnEnable()
@@ -84,11 +101,11 @@ namespace HauntedHouse.Progression
             }
 
             hasRun = true;
-            if (gameSession != null && !string.IsNullOrWhiteSpace(completionFlagId))
+            if (!markCompletionAfterEvent)
             {
                 // Room 진입 자체가 완료 조건인 이벤트는 같은 flag를 직접 기록해
                 // 별도의 전체 순회 없이 다음 진입부터 즉시 건너뛸 수 있게 한다.
-                gameSession.SetStoryFlag(completionFlagId);
+                MarkCompleted();
             }
 
             onEntered?.Invoke();

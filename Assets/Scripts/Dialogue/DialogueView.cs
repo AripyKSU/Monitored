@@ -25,12 +25,44 @@ namespace HauntedHouse.Dialogue
 
         private void Awake()
         {
-            root ??= transform.Find("Dialogue UI")?.gameObject;
-            radioRoot ??= transform.Find("Dialogue UI/Radio")?.gameObject;
-            bubbleImage ??= transform.Find("Dialogue UI/BubbleArea/Bubble")?.GetComponent<Image>();
-            dialogueLabel ??= transform.Find("Dialogue UI/BubbleArea/DialogueText")?.GetComponent<TMP_Text>();
-
+            ResolveReferences();
             Hide();
+        }
+
+        /// <summary>
+        /// Inspector 참조가 비어 있거나 패널 활성화 순서가 달라도 현재 Dialogue UI 계층에서 표현 요소를 다시 찾는다.
+        /// </summary>
+        private void ResolveReferences()
+        {
+            if (root == null)
+            {
+                Transform rootTransform = transform.Find("Dialogue UI");
+                if (rootTransform != null)
+                {
+                    root = rootTransform.gameObject;
+                }
+            }
+
+            if (radioRoot == null)
+            {
+                Transform radioTransform = transform.Find("Dialogue UI/Radio");
+                if (radioTransform != null)
+                {
+                    radioRoot = radioTransform.gameObject;
+                }
+            }
+
+            if (bubbleImage == null)
+            {
+                Transform bubbleTransform = transform.Find("Dialogue UI/BubbleArea/Bubble");
+                bubbleImage = bubbleTransform != null ? bubbleTransform.GetComponent<Image>() : null;
+            }
+
+            if (dialogueLabel == null)
+            {
+                Transform labelTransform = transform.Find("Dialogue UI/BubbleArea/DialogueText");
+                dialogueLabel = labelTransform != null ? labelTransform.GetComponent<TMP_Text>() : null;
+            }
         }
 
         public void Show()
@@ -66,6 +98,8 @@ namespace HauntedHouse.Dialogue
 
             if (bubbleImage != null)
             {
+                // Bubble Image만 좌우반전한다. DialogueText는 BubbleArea의 형제이므로
+                // Text Transform이나 부모를 뒤집지 않아 글자가 거꾸로 보이지 않는다.
                 Vector3 scale = bubbleImage.rectTransform.localScale;
                 scale.x = isRadio ? radioBubbleScaleX : playerBubbleScaleX;
                 bubbleImage.rectTransform.localScale = scale;
@@ -104,6 +138,8 @@ namespace HauntedHouse.Dialogue
 
         public bool IsValid()
         {
+            // DialogueService가 다른 오브젝트의 Awake에서 먼저 검증하더라도 참조를 지연 보완한다.
+            ResolveReferences();
             return root != null && bubbleImage != null && dialogueLabel != null;
         }
     }

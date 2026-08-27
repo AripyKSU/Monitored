@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using HauntedHouse.Commands;
+using HauntedHouse.UI;
 using HauntedHouse.World;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ namespace HauntedHouse.Interaction
         [SerializeField] private PlayerRoomTracker playerRoomTracker;
         [SerializeField] private CameraDirector cameraDirector;
         [SerializeField] private ItemUseTarget lockedItemUseTarget;
+        [SerializeField] private MessagePanel lockedMessagePanel;
+        [SerializeField, TextArea] private string lockedMessage = "잠겨있다.";
 
         /// <summary>
         /// 이 방향의 문 앞에서 Actor가 멈춰야 하는 접근 지점을 반환한다.
@@ -42,9 +45,20 @@ namespace HauntedHouse.Interaction
 
             if (doorway.IsLocked)
             {
-                if (lockedItemUseTarget == null)
+                if (lockedItemUseTarget == null || !lockedItemUseTarget.HasRequiredItem)
                 {
-                    GameLog.LogError($"잠긴 DoorTarget '{name}'에 ItemUseTarget이 연결되지 않았습니다.", this);
+                    if (lockedMessagePanel == null)
+                    {
+                        GameLog.LogError(
+                            $"잠긴 DoorTarget '{name}'에 열쇠 선택 Target 또는 잠금 메시지 UI가 연결되지 않았습니다.",
+                            this);
+                    }
+                    else
+                    {
+                        // 열쇠를 아직 보유하지 않은 경우에는 기존 단순 Message UI만 보여 주고 이동을 막는다.
+                        yield return lockedMessagePanel.Show(lockedMessage);
+                    }
+
                     yield break;
                 }
 
@@ -222,6 +236,14 @@ namespace HauntedHouse.Interaction
             }
 
             return true;
+        }
+
+        /// <summary>컴포넌트가 처음 추가될 때 현재 씬의 공용 문·이동·메시지 참조를 보완한다.</summary>
+        private void Reset()
+        {
+            playerRoomTracker = FindFirstObjectByType<PlayerRoomTracker>();
+            cameraDirector = FindFirstObjectByType<CameraDirector>();
+            lockedMessagePanel = FindFirstObjectByType<MessagePanel>();
         }
     }
 }

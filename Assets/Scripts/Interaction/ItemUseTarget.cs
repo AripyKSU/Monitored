@@ -38,6 +38,14 @@ namespace HauntedHouse.Interaction
         /// <summary>아이템 사용 결과가 확정될 때 결과와 선택 아이템을 전달한다.</summary>
         public event Action<ItemUseResult, ItemDefinition> ResultResolved;
 
+        /// <summary>
+        /// 현재 인벤토리에 이 대상이 요구하는 아이템이 있는지 반환한다.
+        /// 잠긴 문은 아이템 선택 UI를 열기 전에 이 값을 사용해 열쇠가 없는 경우 단순 메시지만 표시한다.
+        /// </summary>
+        public bool HasRequiredItem => inventory != null &&
+                                       requiredItem != null &&
+                                       inventory.Contains(requiredItem);
+
         public IEnumerator Execute(TargetActionContext context)
         {
             LastResult = ItemUseResult.None;
@@ -169,6 +177,18 @@ namespace HauntedHouse.Interaction
             pauseService = FindFirstObjectByType<GamePauseService>();
             selectionPanel = FindFirstObjectByType<ItemSelectionPanel>();
             messagePanel = FindFirstObjectByType<MessagePanel>();
+
+        if (effectComponent is not IItemUseEffect)
+        {
+            foreach (MonoBehaviour behaviour in GetComponents<MonoBehaviour>())
+            {
+                if (behaviour is IItemUseEffect)
+                {
+                    effectComponent = behaviour;
+                    break;
+                }
+            }
+        }
         }
 
         /// <summary>대상 실행이 중단되는 경우에도 아이템 선택이 보유한 일시정지를 해제한다.</summary>

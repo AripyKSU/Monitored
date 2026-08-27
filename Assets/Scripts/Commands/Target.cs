@@ -113,6 +113,15 @@ namespace HauntedHouse.Commands
         {
             approachPoint = transform.Find("ApproachPoint");
             ownerRoom = GetComponentInParent<Room>();
+
+        foreach (MonoBehaviour behaviour in GetComponents<MonoBehaviour>())
+        {
+            if (behaviour is ITargetAction)
+            {
+                actionComponent = behaviour;
+                break;
+            }
+        }
         }
     }
 }

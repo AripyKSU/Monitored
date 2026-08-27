@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using HauntedHouse.Core;
 using HauntedHouse.Progression;
 using HauntedHouse.Stealth;
 using HauntedHouse.UI;
@@ -19,6 +20,7 @@ namespace HauntedHouse.Commands
         [SerializeField] private PlayerRoomTracker playerRoomTracker;
         [SerializeField] private StealthHideSystem stealthHideSystem;
         [SerializeField] private GameSession gameSession;
+        [SerializeField] private GamePauseService pauseService;
 
         [Header("선택 입력과 마커")]
         [SerializeField] private TargetPresenter[] presenters;
@@ -52,6 +54,7 @@ namespace HauntedHouse.Commands
             playerRoomTracker ??= FindFirstObjectByType<PlayerRoomTracker>();
             stealthHideSystem ??= FindFirstObjectByType<StealthHideSystem>();
             gameSession ??= FindFirstObjectByType<GameSession>();
+            pauseService ??= FindFirstObjectByType<GamePauseService>();
 
             // 씬 설정 후 Target이 추가됐더라도 직렬화된 이전 목록에 누락되지 않도록
             // 현재 씬의 전체 Presenter를 시작 시점에 다시 수집한다.
@@ -77,6 +80,12 @@ namespace HauntedHouse.Commands
                 gameSession.PhaseChanged += HandleGameSessionPhaseChanged;
             }
 
+            if (pauseService != null)
+            {
+                pauseService.PauseStateChanged -= HandlePauseStateChanged;
+                pauseService.PauseStateChanged += HandlePauseStateChanged;
+            }
+
             SubscribePresenters();
             SetPresentersEnabled(State == TargetCommandState.Idle);
         }
@@ -94,6 +103,11 @@ namespace HauntedHouse.Commands
             if (gameSession != null)
             {
                 gameSession.PhaseChanged -= HandleGameSessionPhaseChanged;
+            }
+
+            if (pauseService != null)
+            {
+                pauseService.PauseStateChanged -= HandlePauseStateChanged;
             }
 
             UnsubscribePresenters();
@@ -116,7 +130,9 @@ namespace HauntedHouse.Commands
         /// <returns>명령을 정상적으로 접수했으면 true.</returns>
         public bool TryExecute(Target target)
         {
-            if (IsBusy || (gameSession != null && !gameSession.IsGameplayInputEnabled))
+            if (IsBusy ||
+                (gameSession != null && !gameSession.IsGameplayInputEnabled) ||
+                (pauseService != null && pauseService.IsPaused))
             {
                 // 이번 단계에서는 명령 예약을 지원하지 않으므로 실행 중 요청은 단순히 거부한다.
                 return false;
@@ -264,7 +280,8 @@ namespace HauntedHouse.Commands
             // ExecuteTarget의 finally가 명령 종료 후 UI를 다시 켜도 은신 중에는 계속 잠근다.
             value = value &&
                     (gameSession == null || gameSession.IsGameplayInputEnabled) &&
-                    (stealthHideSystem == null || !stealthHideSystem.IsHidden);
+                    (stealthHideSystem == null || !stealthHideSystem.IsHidden) &&
+                    (pauseService == null || !pauseService.IsPaused);
 
             if (presenters == null)
             {
@@ -297,6 +314,15 @@ namespace HauntedHouse.Commands
             }
 
             SetPresentersEnabled(phase == GameSessionPhase.Playing && State == TargetCommandState.Idle);
+        }
+
+        /// <summary>
+        /// 대화나 아이템 선택처럼 공용 일시정지가 시작·종료될 때 Target 입력과 마커를 갱신한다.
+        /// </summary>
+        /// <param name="isPaused">현재 공용 게임 일시정지 상태.</param>
+        private void HandlePauseStateChanged(bool isPaused)
+        {
+            SetPresentersEnabled(!isPaused && State == TargetCommandState.Idle);
         }
 
         /// <summary>
@@ -340,6 +366,7 @@ namespace HauntedHouse.Commands
             playerRoomTracker = FindFirstObjectByType<PlayerRoomTracker>();
             stealthHideSystem = FindFirstObjectByType<StealthHideSystem>();
             gameSession = FindFirstObjectByType<GameSession>();
+            pauseService = FindFirstObjectByType<GamePauseService>();
         }
     }
 }

@@ -21,6 +21,8 @@ namespace HauntedHouse.World
         [SerializeField] private string closedStateName = "Closed";
         [Tooltip("열린 상태의 Animator State 이름입니다.")]
         [SerializeField] private string openStateName = "Open";
+        [Tooltip("씬 시작 시 문을 열린 포즈로 둘지 결정합니다. 방 진입 공포 연출처럼 닫힘을 보여줄 문에 사용합니다.")]
+        [SerializeField] private bool initiallyOpen;
         [SerializeField, Min(0f)] private float animationDuration = 0.25f;
         [Tooltip("열린 동안 통로를 막지 않도록 비활성화할 실제 문짝 Collider입니다.")]
         [SerializeField] private Collider[] movingLeafColliders = System.Array.Empty<Collider>();
@@ -46,6 +48,11 @@ namespace HauntedHouse.World
 
             IsOpen = false;
             SetMovingLeafCollision(true);
+
+            if (initiallyOpen)
+            {
+                SetOpenImmediately();
+            }
         }
 
         /// <summary>
@@ -115,7 +122,8 @@ namespace HauntedHouse.World
         /// </summary>
         public void ForceClosed()
         {
-            if (animator != null)
+            // 체크포인트 복원 중 비활성 문 Animator에도 호출될 수 있으므로 Unity가 경고를 내는 호출은 건너뛴다.
+            if (animator != null && animator.isActiveAndEnabled && animator.runtimeAnimatorController != null)
             {
                 // 진행 중인 Trigger와 전이를 모두 초기화한 뒤 닫힌 포즈를 즉시 적용한다.
                 animator.ResetTrigger(openTrigger);
@@ -127,6 +135,24 @@ namespace HauntedHouse.World
             // 실패 복구 시에도 이미 문 경계에 들어간 Actor를 Collider로 가두지 않는다.
             SetMovingLeafCollision(false);
             IsOpen = false;
+        }
+
+        /// <summary>
+        /// 씬 초기화 시 문을 열린 Animator 포즈와 통행 가능한 충돌 상태로 즉시 설정한다.
+        /// </summary>
+        public void SetOpenImmediately()
+        {
+            if (animator == null || !animator.isActiveAndEnabled || animator.runtimeAnimatorController == null)
+            {
+                return;
+            }
+
+            animator.ResetTrigger(openTrigger);
+            animator.ResetTrigger(closeTrigger);
+            animator.Play(openStateName, 0, 1f);
+            animator.Update(0f);
+            SetMovingLeafCollision(false);
+            IsOpen = true;
         }
 
         /// <summary>실제로 애니메이션되는 문짝 Collider만 일괄 활성화하거나 비활성화한다.</summary>
