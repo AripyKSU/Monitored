@@ -23,6 +23,9 @@ namespace HauntedHouse.World
         /// <summary>Impulse 송신기와 Main Camera 수신기가 모두 연결됐는지 반환한다.</summary>
         public bool IsConfigured => impulseSource != null && impulseListener != null;
 
+        /// <summary>Inspector에 설정된 기본 화면 흔들림 지속시간을 반환한다.</summary>
+        public float DefaultDuration => Mathf.Max(0.01f, defaultDuration);
+
         /// <summary>Inspector 기본 강도와 지속시간으로 화면을 흔든다.</summary>
         public void Shake()
         {

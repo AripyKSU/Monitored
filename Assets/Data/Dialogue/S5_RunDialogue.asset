@@ -15,5 +15,7 @@ MonoBehaviour:
   pauseGame: 1
   autoAdvanceDelay: 0
   lines:
+  - speaker: 1
+    text: "\uB098\uB97C \uBD24\uC5B4\uC694!"
   - speaker: 0
-    text: "[\uB3C4\uB9DD\uCCD0]"
+    text: "\uBE68\uB9AC \uC815\uBB38\uAE4C\uC9C0 \uB2EC\uB824!"

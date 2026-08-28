@@ -76,6 +76,7 @@ public sealed class HospitalMachineRoomPlayModeVerificationRunner : MonoBehaviou
     private const string MachineTargetName = "S2_MachineRoom_Tank_1";
     private const string ToolCaseTargetName = "S2_MachineRoom_ToolCase";
     private const string DefaultNoPowerMessage = "파워가 들어오지 않는다.";
+    private const string DefaultGateOpenedMessage = "무언가가 열리는 소리가 들렸다.";
     private const float StartupTimeout = 10f;
     private const float ActionTimeout = 6f;
     private const float PlayerCommandTimeout = 35f;
@@ -360,6 +361,9 @@ public sealed class HospitalMachineRoomPlayModeVerificationRunner : MonoBehaviou
         TargetActionContext context = new TargetActionContext(machineTarget, player);
         actionFinished = false;
         StartCoroutine(RunMachineAction(context));
+        yield return WaitForMessageAndDismiss(
+            GetSerializedString(machineAction, "gateOpenedMessage", DefaultGateOpenedMessage),
+            "전원 성공");
         yield return WaitForActionFinished();
 
         Check(actionFinished, "전원 성공 분기 코루틴이 제한 시간 안에 종료되지 않았습니다.");
@@ -400,6 +404,7 @@ public sealed class HospitalMachineRoomPlayModeVerificationRunner : MonoBehaviou
         float elapsed = 0f;
         while (targetCommandRunner.IsBusy && elapsed < PlayerCommandTimeout)
         {
+            DismissMessageIfVisible();
             elapsed += Time.unscaledDeltaTime;
             yield return null;
         }
@@ -466,6 +471,42 @@ public sealed class HospitalMachineRoomPlayModeVerificationRunner : MonoBehaviou
         {
             elapsed += Time.unscaledDeltaTime;
             yield return null;
+        }
+    }
+
+    /// <summary>예상한 메시지가 표시될 때까지 기다린 뒤 검증을 계속하도록 자동으로 닫는다.</summary>
+    private IEnumerator WaitForMessageAndDismiss(string expectedMessage, string branchName)
+    {
+        Text messageLabel = GetObjectReference<Text>(messagePanel, "messageLabel");
+        GameObject panelRoot = GetObjectReference<GameObject>(messagePanel, "panelRoot");
+        bool messageDisplayed = false;
+        float elapsed = 0f;
+
+        while (!messageDisplayed && elapsed < ActionTimeout)
+        {
+            messageDisplayed = panelRoot != null && panelRoot.activeSelf &&
+                messageLabel != null && messageLabel.text == expectedMessage;
+            if (!messageDisplayed)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                yield return null;
+            }
+        }
+
+        Check(messageDisplayed, $"{branchName} 메시지가 표시되지 않았습니다. 기대값: {expectedMessage}");
+        if (messageDisplayed)
+        {
+            messagePanel.Dismiss();
+        }
+    }
+
+    /// <summary>런너 검증 중 표시된 결과 메시지를 닫아 명령이 마무리되게 한다.</summary>
+    private void DismissMessageIfVisible()
+    {
+        GameObject panelRoot = GetObjectReference<GameObject>(messagePanel, "panelRoot");
+        if (panelRoot != null && panelRoot.activeSelf)
+        {
+            messagePanel.Dismiss();
         }
     }
 

@@ -132,8 +132,8 @@ public sealed class HospitalDiningRoomVerificationRunner : MonoBehaviour
 
             gameSession.SetStoryFlag(StoryProgressFlags.FreezerHintRead);
             freezerMessage.RestoreCompletedState(false);
-            Check(freezerMessage.IsCompleted && !freezerTarget.IsSelectable,
-                "FreezerHintRead 복원 시 힌트보드가 완료 처리됩니다.");
+            Check(freezerMessage.IsCompleted && freezerTarget.IsSelectable,
+                "FreezerHintRead 복원 후에도 힌트보드를 다시 선택할 수 있습니다.");
         }
     }
 

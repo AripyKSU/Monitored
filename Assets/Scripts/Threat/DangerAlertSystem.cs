@@ -174,7 +174,9 @@ namespace HauntedHouse.Threat
                         playerRoom,
                         enemy.CurrentRoom,
                         enemy.NextDestinationRoom,
-                        enemy.isActiveAndEnabled && enemy.State != EnemyState.Inactive);
+                        enemy.isActiveAndEnabled && enemy.State != EnemyState.Inactive,
+                        enemy.IsChasing,
+                        enemy.Mode == EnemyMode.ScriptedSequence);
 
                     DangerAlertLevel enemyLevel = DangerAlertEvaluator.Evaluate(state);
                     if (enemyLevel > calculatedLevel)

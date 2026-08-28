@@ -30,8 +30,6 @@ namespace HauntedHouse.Stealth
             new Dictionary<EnemyController, Coroutine>();
         private readonly Dictionary<EnemyController, Action<Room, Room>> roomChangedHandlers =
             new Dictionary<EnemyController, Action<Room, Room>>();
-        private readonly HashSet<EnemyController> pendingRoomChases =
-            new HashSet<EnemyController>();
 
         /// <summary>숨은 방에 도착한 적이 대기할 시간을 초 단위로 반환한다.</summary>
         public float HiddenRoomWaitDuration => hiddenRoomWaitDuration;
@@ -104,7 +102,6 @@ namespace HauntedHouse.Stealth
 
             UnsubscribeEnemies();
             StopAllWaitRoutines();
-            pendingRoomChases.Clear();
         }
 
         /// <summary>적 Start 이후 현재 플레이어 방을 기준으로 첫 추격 상태를 계산한다.</summary>
@@ -447,40 +444,10 @@ namespace HauntedHouse.Stealth
                 return;
             }
 
-            // RoomChanged는 Doorway Sensor 통과 시점에 먼저 발생할 수 있으므로
-            // 실제 문 통과 코루틴이 끝난 다음에만 BeginChase를 호출한다.
-            if (pendingRoomChases.Add(enemy))
-            {
-                StartCoroutine(BeginChaseAfterTraversal(enemy, currentRoom));
-            }
-        }
-
-        /// <summary>적의 문 통과가 끝난 뒤에도 플레이어 방에 있으면 추격을 시작한다.</summary>
-        /// <param name="enemy">방에 진입한 적.</param>
-        /// <param name="enteredRoom">적이 진입한 방.</param>
-        private IEnumerator BeginChaseAfterTraversal(EnemyController enemy, Room enteredRoom)
-        {
-            while (enemy != null && enemy.IsTraversing)
-            {
-                yield return null;
-            }
-
-            pendingRoomChases.Remove(enemy);
-            if (gameSession != null && !gameSession.IsGameplaySimulationEnabled)
-            {
-                yield break;
-            }
-
-            if (enemy == null || player == null || playerRoomTracker == null ||
-                (!IsFinalChaseActive && stealthHideSystem != null && stealthHideSystem.IsHidden) ||
-                enemy.CurrentRoom != enteredRoom || playerRoomTracker.CurrentRoom != enteredRoom ||
-                !enemy.isActiveAndEnabled || enemy.State == EnemyState.Inactive ||
-                enemy.Mode == EnemyMode.ScriptedSequence)
-            {
-                yield break;
-            }
-
-            enemy.BeginChase(player.transform, enteredRoom);
+            // RoomChanged는 적이 Doorway Sensor를 실제 통과해 새 방에 들어온 순간 발생한다.
+            // 문 여러 개를 연속 통과하는 경로에서는 전체 경로 종료까지 기다리면 중간 방을 이미
+            // 빠져나가므로, 현재 방이 플레이어 방으로 확정되는 즉시 순찰을 중단하고 추격한다.
+            enemy.BeginChase(player.transform, currentRoom);
         }
 
         /// <summary>특정 적의 은신 방 대기 코루틴을 중단한다.</summary>

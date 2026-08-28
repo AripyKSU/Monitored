@@ -20,6 +20,12 @@ namespace HauntedHouse.Threat
         /// <summary>적이 현재 경보 계산 대상인지 반환한다.</summary>
         public bool IsEnemyActive { get; }
 
+        /// <summary>적이 현재 플레이어를 추격 중인지 반환한다.</summary>
+        public bool IsEnemyChasing { get; }
+
+        /// <summary>적이 플레이어에게 위협을 주는 스토리 연출 중인지 반환한다.</summary>
+        public bool IsEnemyInScriptedSequence { get; }
+
         /// <summary>
         /// 위험경보 계산에 필요한 플레이어·적 상태를 생성한다.
         /// </summary>
@@ -27,12 +33,16 @@ namespace HauntedHouse.Threat
             Room playerRoom,
             Room enemyRoom,
             Room nextDestinationRoom,
-            bool isEnemyActive)
+            bool isEnemyActive,
+            bool isEnemyChasing,
+            bool isEnemyInScriptedSequence)
         {
             PlayerRoom = playerRoom;
             EnemyRoom = enemyRoom;
             NextDestinationRoom = nextDestinationRoom;
             IsEnemyActive = isEnemyActive;
+            IsEnemyChasing = isEnemyChasing;
+            IsEnemyInScriptedSequence = isEnemyInScriptedSequence;
         }
     }
 }

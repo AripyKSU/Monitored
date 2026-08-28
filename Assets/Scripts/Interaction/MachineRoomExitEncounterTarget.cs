@@ -24,7 +24,16 @@ namespace HauntedHouse.Interaction
         {
             if (encounterController != null && encounterController.ShouldStartEncounter)
             {
-                yield return encounterController.Execute(context);
+                // 먼저 기존 문 통과를 끝내 플레이어와 CCTV가 복도에 있는 상태에서
+                // 살인마 등장 연출을 시작한다.
+                yield return normalExitDoor.Execute(context);
+                if (!encounterController.HasPlayerExitedMachineRoom)
+                {
+                    GameLog.LogError("기계실 퇴실이 완료되지 않아 강제 은신 이벤트를 시작하지 않습니다.", this);
+                    yield break;
+                }
+
+                yield return encounterController.Execute(context, normalExitDoor);
                 yield break;
             }
 

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HauntedHouse.Inventory.ItemDefinition
   itemId: fuse
   displayName: "\uD4E8\uC988"
-  description: "\uBC1C\uC804\uAE30\uC5D0 \uC0AC\uC6A9\uD560 \uC218 \uC788\uB294 \uD4E8\uC988."
-  icon: {fileID: 0}
+  description: "\uBC1C\uC804\uAE30\uC5D0 \uC0AC\uC6A9\uD560 \uC218 \uC788\uB294 \uD4E8\uC988\uC785\uB2C8\uB2E4."
+  icon: {fileID: 21300000, guid: 01044f9866f54db42a62e4356dd2f651, type: 3}

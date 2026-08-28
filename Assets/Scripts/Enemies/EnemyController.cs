@@ -31,6 +31,10 @@ public sealed class EnemyController : MonoBehaviour
         [Header("도착 판정")]
         [SerializeField, Min(0f)] private float arrivalTolerance = 0.05f;
 
+        [Header("이동 속도")]
+        [SerializeField, Min(0f)] private float patrolSpeed = 10f;
+        [SerializeField, Min(0f)] private float sameRoomChaseSpeed = 25f;
+
         private Renderer[] renderers;
         private bool[] rendererInitialVisibility;
         private Collider[] colliders;
@@ -132,6 +136,7 @@ public sealed class EnemyController : MonoBehaviour
             roomGraph ??= FindFirstObjectByType<RoomGraph>();
             gameSession ??= FindFirstObjectByType<GameSession>();
             contactRigidbody = GetComponent<Rigidbody>();
+            ApplyMovementSpeed();
             ConfigureContactRigidbody();
             renderers = GetComponentsInChildren<Renderer>(true);
             rendererInitialVisibility = new bool[renderers.Length];
@@ -966,6 +971,10 @@ public sealed class EnemyController : MonoBehaviour
         /// <summary>실제 상태가 달라질 때만 상태를 저장하고 이벤트를 발생시킨다.</summary>
         private void SetState(EnemyState value)
         {
+            // 같은 Chasing 상태에서도 목표 방이나 현재 방이 달라질 수 있으므로
+            // 이벤트 발생 여부와 관계없이 현재 상황에 맞는 속도를 먼저 반영한다.
+            ApplyMovementSpeed();
+
             if (State == value)
             {
                 return;
@@ -973,7 +982,25 @@ public sealed class EnemyController : MonoBehaviour
 
             EnemyState previous = State;
             State = value;
+            ApplyMovementSpeed();
             StateChanged?.Invoke(previous, State);
+        }
+
+        /// <summary>
+        /// 평상시와 방 사이 추적 이동에는 기본 속도를 적용하고,
+        /// 추격 중 플레이어와 같은 방에 들어온 동안에만 추격 속도를 적용한다.
+        /// </summary>
+        private void ApplyMovementSpeed()
+        {
+            if (agent == null)
+            {
+                return;
+            }
+
+            bool isSameRoomChase = State == EnemyState.Chasing &&
+                                   CurrentRoom != null &&
+                                   CurrentRoom == chaseTargetRoom;
+            agent.speed = isSameRoomChase ? sameRoomChaseSpeed : patrolSpeed;
         }
 
         /// <summary>
@@ -981,6 +1008,9 @@ public sealed class EnemyController : MonoBehaviour
         /// </summary>
         private void HandleRoomChanged(Room previousRoom, Room currentRoom)
         {
+            // Doorway Sensor가 현재 방을 확정한 즉시 같은 방 추격 속도로 전환하거나,
+            // 플레이어가 있는 방을 벗어난 경우 기본 속도로 되돌린다.
+            ApplyMovementSpeed();
             RoomChanged?.Invoke(previousRoom, currentRoom);
         }
 

@@ -16,7 +16,4 @@ MonoBehaviour:
   autoAdvanceDelay: 0
   lines:
   - speaker: 0
-    text: "[\uBE68\uB9AC \uC228\uC5B4\uC57C \uD55C\uB2E4]"
-  - speaker: 0
-    text: "\uC0B4\uC778\uB9C8\uAC00 \uB3CC\uC544\uB2E4\uB2C8\uACE0 \uC788\uC73C\uB2C8
-      \uC870\uC2EC\uD574\uC57C \uD55C\uB2E4"
+    text: "\uC774\uBD10. \uBE68\uB9AC \uBC29\uC5D0 \uB4E4\uC5B4\uAC00\uC11C \uC228\uC5B4!"

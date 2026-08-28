@@ -6,7 +6,7 @@ namespace HauntedHouse.UI
 {
     /// <summary>
     /// 엔딩 결과와 제작 정보를 표시하고 기존 타이틀 씬으로 돌아가는 Credits UI를 관리한다.
-    /// 34·35번 엔딩 흐름과의 연결은 외부에서 Show 메서드를 호출하는 방식으로 분리한다.
+    /// 34·35번 EndingController는 프레젠테이션 완료 시 Show 메서드를 호출한다.
     /// </summary>
     public sealed class EndingCreditsView : MonoBehaviour
     {
@@ -29,6 +29,7 @@ namespace HauntedHouse.UI
         private void Awake()
         {
             uiDocument ??= GetComponent<UIDocument>();
+            uiDocument ??= FindFirstObjectByType<UIDocument>(FindObjectsInactive.Include);
             if (uiDocument == null)
             {
                 uiDocument = gameObject.AddComponent<UIDocument>();
@@ -44,11 +45,7 @@ namespace HauntedHouse.UI
         private void OnEnable()
         {
             EnsureUi();
-            if (returnToTitleButton != null)
-            {
-                returnToTitleButton.clicked -= HandleReturnToTitleClicked;
-                returnToTitleButton.clicked += HandleReturnToTitleClicked;
-            }
+            BindReturnToTitleButton();
 
             Hide();
         }
@@ -82,6 +79,7 @@ namespace HauntedHouse.UI
         public void Show(string endingName, string productionInfo)
         {
             EnsureUi();
+            BindReturnToTitleButton();
             if (!isUiReady)
             {
                 return;
@@ -128,10 +126,28 @@ namespace HauntedHouse.UI
         /// <summary>연결된 UI 문서에서 필수 요소를 찾고, 템플릿이 없으면 런타임 대체 UI를 만든다.</summary>
         private void EnsureUi()
         {
-            if (isUiReady || uiDocument == null)
+            if (uiDocument == null)
             {
                 return;
             }
+
+            // UIDocument가 다른 VisualTree를 다시 빌드하면 이전 참조가 분리될 수 있으므로
+            // 다음 Show 호출에서 현재 트리를 다시 조회한다.
+            if (isUiReady && creditsRoot != null && creditsRoot.parent != null)
+            {
+                return;
+            }
+
+            if (isUiReady && returnToTitleButton != null)
+            {
+                returnToTitleButton.clicked -= HandleReturnToTitleClicked;
+            }
+
+            isUiReady = false;
+            creditsRoot = null;
+            endingNameLabel = null;
+            productionInfoLabel = null;
+            returnToTitleButton = null;
 
             VisualElement root = uiDocument.rootVisualElement;
             if (root == null)
@@ -145,9 +161,10 @@ namespace HauntedHouse.UI
             productionInfoLabel = root.Q<Label>("ProductionInfo");
             returnToTitleButton = root.Q<Button>("ReturnToTitleButton");
 
-            // UXML을 아직 지정하지 않은 테스트 씬에서도 컴포넌트가 동작하도록
-            // 최소한의 런타임 UI를 생성한다. 정식 화면은 creditsTemplate으로 지정한다.
-            if (creditsRoot == null && uiDocument.visualTreeAsset == null)
+            // UXML이 아직 지정되지 않았거나 기존 UI 문서에 Credits 요소가 없는 씬에서도
+            // 컴포넌트가 동작하도록 최소한의 런타임 UI를 생성한다.
+            if (creditsRoot == null && endingNameLabel == null && productionInfoLabel == null &&
+                returnToTitleButton == null)
             {
                 BuildFallbackUi(root);
             }
@@ -163,6 +180,18 @@ namespace HauntedHouse.UI
             }
 
             isUiReady = true;
+        }
+
+        /// <summary>UI 트리가 늦게 생성되는 경우에도 타이틀 복귀 버튼을 한 번만 구독한다.</summary>
+        private void BindReturnToTitleButton()
+        {
+            if (returnToTitleButton == null)
+            {
+                return;
+            }
+
+            returnToTitleButton.clicked -= HandleReturnToTitleClicked;
+            returnToTitleButton.clicked += HandleReturnToTitleClicked;
         }
 
         /// <summary>UXML이 없는 임시 검증 환경을 위해 동일한 이름의 기본 UI를 구성한다.</summary>

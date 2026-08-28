@@ -16,4 +16,4 @@ MonoBehaviour:
   displayName: "\uBCD1\uC2E4 \uBCF5\uB3C4 \uC5F4\uC1E0"
   description: "\uBCD1\uC2E4 \uAD6C\uC5ED\uACFC \uC911\uC559 \uBCF5\uB3C4\uB97C \uC787\uB294
     \uC5F4\uC1E0\uC785\uB2C8\uB2E4."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 9b87c7d49eb3fb14b8d4439efe36f278, type: 3}

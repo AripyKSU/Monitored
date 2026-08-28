@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using HauntedHouse.Commands;
 using HauntedHouse.Dialogue;
 using HauntedHouse.Enemies;
+using HauntedHouse.Interaction;
 using HauntedHouse.Stealth;
 using HauntedHouse.World;
 using UnityEngine;
@@ -48,7 +49,6 @@ namespace HauntedHouse.Progression
         [SerializeField] private Transform enemyExitPoint;
 
         [Header("플레이어 연출")]
-        [SerializeField] private Transform forcedReturnPoint;
         [SerializeField] private DialogueService dialogueService;
         [SerializeField] private DialogueSequence warningDialogue;
         [SerializeField] private StealthHideSystem stealthHideSystem;
@@ -69,6 +69,11 @@ namespace HauntedHouse.Progression
                                             gameSession != null &&
                                             gameSession.HasStoryFlag(StoryProgressFlags.GateActivated) &&
                                             !gameSession.HasStoryFlag(StoryProgressFlags.Sector2HideEncounterCompleted);
+
+        /// <summary>플레이어가 기계실 문을 실제로 통과해 복도에 나온 상태인지 반환한다.</summary>
+        public bool HasPlayerExitedMachineRoom => playerRoomTracker != null &&
+                                                   playerRoomTracker.CurrentRoom != null &&
+                                                   playerRoomTracker.CurrentRoom != machineRoom;
 
         /// <summary>초기화된 이벤트 상태를 반환한다.</summary>
         public string StateName => state.ToString();
@@ -99,11 +104,17 @@ namespace HauntedHouse.Progression
         /// 플레이어를 기계실로 되돌리고 경고 대화를 보여준 뒤 살인마 연출을 백그라운드에서 이어간다.
         /// </summary>
         /// <param name="context">현재 출구 Target과 플레이어 문맥.</param>
-        public IEnumerator Execute(TargetActionContext context)
+        /// <param name="machineRoomDoor">복도에서 기계실로 역방향 통과할 기존 문 행동.</param>
+        public IEnumerator Execute(TargetActionContext context, DoorTarget machineRoomDoor)
         {
             string error = string.Empty;
-            if (!ShouldStartEncounter || !TryValidateConfiguration(out error))
+            if (!ShouldStartEncounter || machineRoomDoor == null || !TryValidateConfiguration(out error))
             {
+                if (machineRoomDoor == null)
+                {
+                    error = $"Sector2HideEncounterController '{name}'이 역방향 복귀에 사용할 기계실 DoorTarget을 받지 못했습니다.";
+                }
+
                 if (!string.IsNullOrEmpty(error))
                 {
                     GameLog.LogError(error, this);
@@ -113,7 +124,7 @@ namespace HauntedHouse.Progression
             }
 
             // TargetCommandRunner가 이 코루틴을 실행하는 동안 일반 입력을 점유한다.
-            encounterRoutine = StartCoroutine(RunEncounter(context));
+            encounterRoutine = StartCoroutine(RunEncounter(context, machineRoomDoor));
             yield return encounterRoutine;
         }
 
@@ -126,7 +137,7 @@ namespace HauntedHouse.Progression
         public bool TryValidateConfiguration(out string error)
         {
             if (gameSession == null || player == null || playerRoomTracker == null || roomGraph == null ||
-                machineRoom == null || enemy == null || enemySpawnPoint == null || forcedReturnPoint == null ||
+                machineRoom == null || enemy == null || enemySpawnPoint == null ||
                 dialogueService == null || warningDialogue == null || stealthHideSystem == null ||
                 enemyRevealPoint == null || enemySearchPoint == null || enemyExitPoint == null ||
                 enemyRevealRoom == null || enemySearchRoom == null || enemyExitRoom == null)
@@ -161,10 +172,16 @@ namespace HauntedHouse.Progression
         /// 현재 이벤트를 순서대로 실행하고 실패 시 살인마·Target 상태를 정리한다.
         /// </summary>
         /// <param name="context">출구 Target 실행 문맥.</param>
-        private IEnumerator RunEncounter(TargetActionContext context)
+        /// <param name="machineRoomDoor">플레이어 복귀 시 사용할 양방향 DoorTarget.</param>
+        private IEnumerator RunEncounter(TargetActionContext context, DoorTarget machineRoomDoor)
         {
+            if (!HasPlayerExitedMachineRoom)
+            {
+                FailEncounter("플레이어가 기계실 문을 통과해 복도에 나온 후에만 강제 은신 이벤트를 시작할 수 있습니다.");
+                yield break;
+            }
+
             state = EncounterState.KillerAppearing;
-            SetToolCaseSelectable(false);
 
             bool scriptedStarted = enemy.BeginScriptedSequence(enemySpawnPoint);
             if (!scriptedStarted)
@@ -195,21 +212,15 @@ namespace HauntedHouse.Progression
             }
 
             state = EncounterState.ReturningPlayer;
-            yield return player.MoveTo(forcedReturnPoint);
-            if (!player.LastMoveSucceeded)
-            {
-                FailEncounter($"플레이어 강제 복귀에 실패했습니다: {player.LastMoveFailureReason}");
-                yield break;
-            }
+            // 임의 좌표로 이동시키지 않고 기존 DoorTarget을 역방향으로 실행해
+            // 문 열기, 경계 통과, CCTV 전환과 CurrentRoom 갱신을 같은 흐름으로 처리한다.
+            yield return machineRoomDoor.Execute(context);
 
-            // 강제 이동 완료 후 논리 방을 반드시 검사해 적 추격 기준과 물리 위치를 일치시킨다.
+            // 문 통과 완료 후 논리 방을 반드시 검사해 적 추격 기준과 물리 위치를 일치시킨다.
             if (playerRoomTracker.CurrentRoom != machineRoom)
             {
-                if (!playerRoomTracker.EnterRoom(machineRoom) || playerRoomTracker.CurrentRoom != machineRoom)
-                {
-                    FailEncounter("플레이어 강제 복귀 후 CurrentRoom이 MachineRoom이 아닙니다.");
-                    yield break;
-                }
+                FailEncounter("플레이어가 기계실 문을 통해 복귀한 후 CurrentRoom이 MachineRoom이 아닙니다.");
+                yield break;
             }
 
             state = EncounterState.ShowingWarning;
@@ -225,8 +236,6 @@ namespace HauntedHouse.Progression
                 FailEncounter("플레이어 세션이 종료되어 강제 숨기 이벤트를 중단했습니다.");
                 yield break;
             }
-
-            SetToolCaseSelectable(true);
 
             // 여기서 출구 Target 코루틴을 끝내 플레이어가 ToolCase를 선택할 수 있게 한다.
             // 살인마의 진입·검색·퇴장은 별도 코루틴으로 계속 실행한다.
@@ -312,7 +321,6 @@ namespace HauntedHouse.Progression
 
             enemy.EndScriptedSequence(true);
             gameSession.SetStoryFlag(StoryProgressFlags.Sector2HideEncounterCompleted);
-            SetToolCaseSelectable(false);
             state = EncounterState.Completed;
             encounterRoutine = null;
         }
@@ -364,18 +372,11 @@ namespace HauntedHouse.Progression
             }
         }
 
-        /// <summary>은신 Target의 표시 가능 여부를 이벤트 단계에 맞춰 변경한다.</summary>
-        private void SetToolCaseSelectable(bool value)
-        {
-            toolCaseTarget?.SetSelectable(value);
-        }
-
         /// <summary>이벤트 실패 시 적을 비활성화하고 재실행 가능한 실패 상태로 남긴다.</summary>
         private void FailEncounter(string reason)
         {
             GameLog.LogError(reason, this);
             enemy?.EndScriptedSequence(true);
-            SetToolCaseSelectable(false);
             state = EncounterState.Failed;
             encounterRoutine = null;
         }
@@ -403,7 +404,9 @@ namespace HauntedHouse.Progression
                     gameSession.HasStoryFlag(StoryProgressFlags.Sector2HideEncounterCompleted)
                 ? EncounterState.Completed
                 : EncounterState.Idle;
-            SetToolCaseSelectable(false);
+
+            // ToolCase는 이벤트 진행과 관계없이 기계실의 항상 사용 가능한 은신처로 유지한다.
+            toolCaseTarget?.SetSelectable(true);
         }
 
         /// <summary>씬 비활성화·Restart 시 진행 중인 이벤트와 임시 Target 상태를 정리한다.</summary>
@@ -425,7 +428,6 @@ namespace HauntedHouse.Progression
                 enemy.EndScriptedSequence(true);
             }
 
-            SetToolCaseSelectable(false);
             if (state != EncounterState.Completed)
             {
                 state = EncounterState.Idle;

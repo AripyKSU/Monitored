@@ -26,10 +26,10 @@ namespace HauntedHouse.Enemies
         {
             CurrentRoom = initialRoom;
 
-            if (doorways == null || doorways.Length == 0)
-            {
-                doorways = FindObjectsByType<Doorway>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            }
+            // Inspector에 초기 샌드박스 Doorway 목록이 남아 있으면 병원 맵에서 나중에 추가된 문을
+            // 구독하지 못한다. 방 변경 이벤트는 모든 실제 문에서 받아야 하므로 실행 시 현재 씬의
+            // 전체 Doorway 목록으로 갱신해 중간 경유 방 진입도 빠짐없이 추적한다.
+            doorways = FindObjectsByType<Doorway>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
             if (CurrentRoom == null)
             {

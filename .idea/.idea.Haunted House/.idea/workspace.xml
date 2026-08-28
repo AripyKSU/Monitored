@@ -12,11 +12,53 @@
   <component name="ChangeListManager">
     <list default="true" id="e2a3f308-b6e8-45cd-b24c-71dff15c9f26" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S1_Diary1Dialogue.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S1_Diary1Dialogue.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S1_HallwayDoorScareDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S1_HallwayDoorScareDialogue.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S1_IntroRadioDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S1_IntroRadioDialogue.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S2_CenterHallwayGateDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S2_CenterHallwayGateDialogue.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S2_HideWarningDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S2_HideWarningDialogue.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S3_ExitDoorHintDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S3_ExitDoorHintDialogue.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S4_MasterKeyRadioDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S4_MasterKeyRadioDialogue.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S5_EntranceDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S5_EntranceDialogue.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S5_RunDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S5_RunDialogue.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Items/BasementKey.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Items/BasementKey.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Items/Flashlight.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Items/Flashlight.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Items/Fuse.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Items/Fuse.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Items/MasterKey.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Items/MasterKey.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Items/WardHallKey.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Items/WardHallKey.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/CoreSandboxDoorSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/CoreSandboxDoorSetup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalDiningRoomPlayModeVerifier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalDiningRoomPlayModeVerifier.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalDiningRoomSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalDiningRoomSetup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalMachineRoomPlayModeVerifier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalMachineRoomPlayModeVerifier.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalMachineRoomSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalMachineRoomSetup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalSector2HideEncounterSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalSector2HideEncounterSetup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Mabinogi_Classic_OTF SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Mabinogi_Classic_OTF SDF.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/GameSession.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/GameSession.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/GameSessionPhase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/GameSessionPhase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/PlayerMover.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/PlayerMover.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/DoorTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/DoorTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/MachineRoomExitEncounterTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/MachineRoomExitEncounterTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/MachineRoomTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/MachineRoomTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/MessageTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/MessageTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/NursingRoomForcedExitPoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/NursingRoomForcedExitPoint.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/NursingRoomStoryController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/NursingRoomStoryController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/CheckpointService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/CheckpointService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/EndingController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/EndingController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/Sector2HideEncounterController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/Sector2HideEncounterController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Stealth/EnemyChaseSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Stealth/EnemyChaseSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Stealth/StealthHideTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Stealth/StealthHideTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Threat/DangerAlertEvaluator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Threat/DangerAlertEvaluator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Threat/DangerAlertState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Threat/DangerAlertState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Threat/DangerAlertSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Threat/DangerAlertSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/DangerAlertView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/DangerAlertView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/EndingCreditsView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/EndingCreditsView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/World/CctvPosePatrol.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/World/CctvPosePatrol.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/World/Doorway.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/World/Doorway.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/World/ScreenShake.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/World/ScreenShake.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Oswald Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Oswald Bold SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Art/PostProcessing/Scary Volume Profile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_3DStealthGame/Art/PostProcessing/Scary Volume Profile.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wiki/todolist.md" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/todolist.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,61 +83,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0000000241399847" />
-      <entry key="S2" value="1.0124647693720161" />
-      <entry key="S5" value="1.1730906859319215" />
-      <entry key="S10" value="1.4160416877332382" />
-      <entry key="S30" value="1.746527166416671" />
-      <entry key="S60" value="1.8640180359325216" />
-      <entry key="M2" value="1.9295259515127534" />
-      <entry key="M5" value="1.981484723205858" />
-      <entry key="M10" value="3.1660135059359855" />
-      <entry key="M15" value="8.83722708304894" />
-      <entry key="M30" value="43.629086461758796" />
-      <entry key="H1" value="106.33560886285294" />
-      <entry key="H2" value="170.23724051868896" />
-      <entry key="H4" value="220.53697392918014" />
-      <entry key="D1" value="283.3680917257034" />
-      <entry key="W1" value="297.509618164786" />
+      <entry key="MS100" value="1.0000000145944998" />
+      <entry key="MS500" value="1.0270931715965037" />
+      <entry key="S2" value="1.4615720014306037" />
+      <entry key="S5" value="2.1753412286336964" />
+      <entry key="S10" value="2.8885546534208406" />
+      <entry key="S30" value="5.329943595058144" />
+      <entry key="S60" value="8.742302037761084" />
+      <entry key="M2" value="12.637284976232271" />
+      <entry key="M5" value="16.47376945150571" />
+      <entry key="M10" value="19.111030123782072" />
+      <entry key="M15" value="24.82739294252802" />
+      <entry key="M30" value="58.67837947402423" />
+      <entry key="H1" value="121.08437533571771" />
+      <entry key="H2" value="185.69927947489555" />
+      <entry key="H4" value="236.90766284561752" />
+      <entry key="D1" value="301.0214331177117" />
+      <entry key="W1" value="315.4576800394238" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
       <entry key="S2" value="0.0" />
-      <entry key="S5" value="2.2771130582341495E-266" />
-      <entry key="S10" value="1.7642593493064552E-133" />
-      <entry key="S30" value="1.508633328127836E-44" />
-      <entry key="S60" value="3.861013592230083E-22" />
-      <entry key="M2" value="7.711185317568094E-11" />
-      <entry key="M5" value="6.305807638911902E-4" />
-      <entry key="M10" value="0.14272825269950218" />
-      <entry key="M15" value="0.8850752255377033" />
-      <entry key="M30" value="5.540599585402074" />
-      <entry key="H1" value="13.965528131089432" />
-      <entry key="H2" value="22.513318260389347" />
-      <entry key="H4" value="29.11283580609799" />
-      <entry key="D1" value="36.99925286087854" />
-      <entry key="W1" value="38.70288914095742" />
+      <entry key="S5" value="2.9941754814553156E-275" />
+      <entry key="S10" value="6.397477328814015E-138" />
+      <entry key="S30" value="4.99343200370225E-46" />
+      <entry key="S60" value="7.024397049955298E-23" />
+      <entry key="M2" value="3.289084272109743E-11" />
+      <entry key="M5" value="4.4845850267689256E-4" />
+      <entry key="M10" value="0.12036513887686476" />
+      <entry key="M15" value="0.7900247537115913" />
+      <entry key="M30" value="5.234642448005387" />
+      <entry key="H1" value="13.574457828742256" />
+      <entry key="H2" value="22.195865024557925" />
+      <entry key="H4" value="28.906851617692343" />
+      <entry key="D1" value="36.95549308661319" />
+      <entry key="W1" value="38.6963465810884" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9138314502294005" />
-      <entry key="MS500" value="0.9821396190710339" />
-      <entry key="S2" value="1.0079263222166948" />
-      <entry key="S5" value="1.171050337823734" />
-      <entry key="S10" value="1.4148527240576976" />
-      <entry key="S30" value="1.7460543832675521" />
-      <entry key="S60" value="1.8637680558078769" />
-      <entry key="M2" value="1.929397173474204" />
-      <entry key="M5" value="1.9820566046525343" />
-      <entry key="M10" value="3.3079845801855985" />
-      <entry key="M15" value="9.719185649532998" />
-      <entry key="M30" value="49.15969671520344" />
-      <entry key="H1" value="120.28824145306109" />
-      <entry key="H2" value="192.73972464419637" />
-      <entry key="H4" value="249.64245223967836" />
-      <entry key="D1" value="320.36567218920044" />
-      <entry key="W1" value="336.21225341098517" />
+      <entry key="MS100" value="0.9395227631172868" />
+      <entry key="MS500" value="1.0144323936954938" />
+      <entry key="S2" value="1.457361406520035" />
+      <entry key="S5" value="2.173024149636662" />
+      <entry key="S10" value="2.8870803381468915" />
+      <entry key="S30" value="5.328809206791741" />
+      <entry key="S60" value="8.740907909710833" />
+      <entry key="M2" value="12.635982194757334" />
+      <entry key="M5" value="16.473422705555205" />
+      <entry key="M10" value="19.230322138512264" />
+      <entry key="M15" value="25.614331724688203" />
+      <entry key="M30" value="63.9034246587415" />
+      <entry key="H1" value="134.6462169927051" />
+      <entry key="H2" value="207.88442176317304" />
+      <entry key="H4" value="265.8071882132222" />
+      <entry key="D1" value="337.9752522986647" />
+      <entry key="W1" value="354.15377227020286" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -180,6 +222,7 @@
       <workItem from="1787646939627" duration="1474000" />
       <workItem from="1787715911412" duration="6620000" />
       <workItem from="1787790801274" duration="20139000" />
+      <workItem from="1787881759635" duration="5206000" />
     </task>
     <servers />
   </component>

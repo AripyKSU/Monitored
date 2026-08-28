@@ -18,6 +18,7 @@ namespace HauntedHouse.Progression
  [SerializeField] private GameSession gameSession;
  [SerializeField] private EnemyController enemy;
  [SerializeField] private MessagePanel messagePanel;
+ [SerializeField] private EndingCreditsView endingCreditsView;
 
  [Header("선택적 Timeline")]
  [SerializeField] private PlayableDirector badEndingDirector;
@@ -51,10 +52,28 @@ namespace HauntedHouse.Progression
  gameSession ??= FindFirstObjectByType<GameSession>();
  enemy ??= FindFirstObjectByType<EnemyController>();
  messagePanel ??= FindFirstObjectByType<MessagePanel>();
+ endingCreditsView ??= FindFirstObjectByType<EndingCreditsView>(FindObjectsInactive.Include);
+ if (endingCreditsView == null)
+ {
+ // 씬 직렬화가 아직 갱신되지 않은 경우에도 엔딩 완료 화면이 누락되지 않도록
+ // 기존 UI Document를 재사용하는 Credits View를 런타임에 보완한다.
+ GameObject creditsObject = new GameObject("EndingCreditsView");
+ creditsObject.transform.SetParent(transform, false);
+ endingCreditsView = creditsObject.AddComponent<EndingCreditsView>();
+ }
+ }
+
+ /// <summary>엔딩 프레젠테이션 완료 이벤트를 Credits 화면 표시로 변환한다.</summary>
+ private void OnEnable()
+ {
+ EndingPresentationCompleted -= HandleEndingPresentationCompleted;
+ EndingPresentationCompleted += HandleEndingPresentationCompleted;
  }
 
  private void OnDisable()
  {
+ EndingPresentationCompleted -= HandleEndingPresentationCompleted;
+
  if (presentationRoutine != null)
  {
  StopCoroutine(presentationRoutine);
@@ -62,6 +81,26 @@ namespace HauntedHouse.Progression
  }
 
  UnsubscribeDirector();
+ }
+
+ /// <summary>Bad/Happy 엔딩 결과에 맞는 Credits 문구를 표시한다.</summary>
+ /// <param name="endingType">프레젠테이션이 완료된 엔딩 종류다.</param>
+ private void HandleEndingPresentationCompleted(EndingType endingType)
+ {
+ if (endingCreditsView == null)
+ {
+ GameLog.LogError("EndingController의 EndingCreditsView 참조가 없어 Credits를 표시할 수 없습니다.", this);
+ return;
+ }
+
+ if (endingType == EndingType.Happy)
+ {
+ endingCreditsView.ShowHappyEnding();
+ }
+ else
+ {
+ endingCreditsView.ShowBadEnding();
+ }
  }
 
  /// <summary>필수 런타임 참조가 구성되었는지 검사한다.</summary>
@@ -82,6 +121,12 @@ namespace HauntedHouse.Progression
  if (messagePanel == null && !HasPlayable(badEndingDirector) && !HasPlayable(happyEndingDirector))
  {
  error = $"EndingController '{name}'에 Timeline도 MessagePanel도 없어 엔딩 화면을 표시할 수 없습니다.";
+ return false;
+ }
+
+ if (endingCreditsView == null)
+ {
+ error = $"EndingController '{name}'에 EndingCreditsView 참조가 없습니다.";
  return false;
  }
 
@@ -198,6 +243,7 @@ namespace HauntedHouse.Progression
  gameSession = FindFirstObjectByType<GameSession>();
  enemy = FindFirstObjectByType<EnemyController>();
  messagePanel = FindFirstObjectByType<MessagePanel>();
+ endingCreditsView = FindFirstObjectByType<EndingCreditsView>(FindObjectsInactive.Include);
  }
  }
 }

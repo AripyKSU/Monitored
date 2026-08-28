@@ -21,8 +21,11 @@ namespace HauntedHouse.Threat
                 return DangerAlertLevel.None;
             }
 
-            // 적이 이미 플레이어 방에 있거나 플레이어 방으로 이동을 결정한 순간은 긴급이다.
-            if (state.EnemyRoom == state.PlayerRoom || state.NextDestinationRoom == state.PlayerRoom)
+            // 추격 또는 강제 은신 연출이 시작된 뒤에는 여러 방을 이동하는 동안에도 열린 눈 경보를 유지한다.
+            // 적이 이미 플레이어 방에 있거나 플레이어 방으로 이동을 결정한 순간도 긴급이다.
+            if (state.IsEnemyChasing || state.IsEnemyInScriptedSequence ||
+                state.EnemyRoom == state.PlayerRoom ||
+                state.NextDestinationRoom == state.PlayerRoom)
             {
                 return DangerAlertLevel.Emergency;
             }

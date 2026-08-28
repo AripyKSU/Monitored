@@ -30,6 +30,7 @@ namespace HauntedHouse.Interaction
 
         [Header("메시지")]
         [SerializeField, TextArea] private string noPowerMessage = "파워가 들어오지 않는다.";
+        [SerializeField, TextArea] private string gateOpenedMessage = "무언가가 열리는 소리가 들렸다.";
 
         [Header("체크포인트")]
         [SerializeField] private string completionId = DefaultCompletionId;
@@ -102,6 +103,10 @@ namespace HauntedHouse.Interaction
                         this);
                     yield break;
                 }
+
+                // 화면 흔들림이 끝난 뒤 먼 곳의 철창이 열렸음을 플레이어가 인지할 수 있게 결과 메시지를 표시한다.
+                yield return new WaitForSecondsRealtime(screenShake.DefaultDuration);
+                yield return messagePanel.Show(gateOpenedMessage);
 
                 CompleteInteraction(context);
             }

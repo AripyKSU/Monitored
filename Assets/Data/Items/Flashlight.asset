@@ -15,4 +15,4 @@ MonoBehaviour:
   itemId: flashlight
   displayName: "\uC190\uC804\uB4F1"
   description: "\uC5B4\uB450\uC6B4 \uBCD1\uC2E4\uC744 \uBC1D\uD788\uB294 \uC190\uC804\uB4F1\uC785\uB2C8\uB2E4."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 46bb7e6a28f1e534085c648c33e4bd5c, type: 3}

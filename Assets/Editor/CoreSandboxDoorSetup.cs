@@ -1232,24 +1232,9 @@ public static class CoreSandboxDoorSetup
     /// </summary>
     private static Vector3 GetRoomCenter(Room room)
     {
-        if (room == null)
-        {
-            return Vector3.zero;
-        }
-
-        Renderer[] renderers = room.GetComponentsInChildren<Renderer>(true);
-        if (renderers.Length == 0)
-        {
-            return room.transform.position;
-        }
-
-        Bounds bounds = renderers[0].bounds;
-        for (int index = 1; index < renderers.Length; index++)
-        {
-            bounds.Encapsulate(renderers[index].bounds);
-        }
-
-        return bounds.center;
+        // Room 하위에 다른 구역의 메시나 대형 장식물이 포함돼도 방향 판정이 오염되지 않도록
+        // RoomGraph와 동일한 명시적 기준 위치를 사용한다.
+        return room != null ? room.GraphPosition : Vector3.zero;
     }
 
     /// <summary>

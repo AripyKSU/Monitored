@@ -271,6 +271,7 @@ public static class HospitalMachineRoomSetup
         SetObject(machine, "messagePanel", messagePanel);
         SetString(machine, "completionId", MachineTargetName);
         SetString(machine, "noPowerMessage", "파워가 들어오지 않는다.");
+        SetString(machine, "gateOpenedMessage", "무언가가 열리는 소리가 들렸다.");
         SetObject(target, "actionComponent", machine);
         target.SetSelectable(true);
         EditorUtility.SetDirty(machine);

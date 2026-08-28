@@ -200,6 +200,7 @@ public static class HospitalDiningRoomSetup
         SetString(messageTarget, "completionId", completionId);
         SetObject(messageTarget, "gameSession", gameSession);
         SetString(messageTarget, "completionFlagId", completionFlagId);
+        SetBool(messageTarget, "allowRepeatedInteraction", targetName == FreezerHintTargetName);
         SetObject(target, "actionComponent", messageTarget);
         target.SetSelectable(true);
         EditorUtility.SetDirty(targetTransform.gameObject);
@@ -375,6 +376,7 @@ public static class HospitalDiningRoomSetup
         string actualMessage = serialized.FindProperty("message")?.stringValue;
         string actualCompletionId = serialized.FindProperty("completionId")?.stringValue;
         string actualFlag = serialized.FindProperty("completionFlagId")?.stringValue;
+        bool allowsRepeatedInteraction = serialized.FindProperty("allowRepeatedInteraction")?.boolValue ?? false;
         UnityEngine.Object actualPanel = serialized.FindProperty("messagePanel")?.objectReferenceValue;
         UnityEngine.Object actualSession = serialized.FindProperty("gameSession")?.objectReferenceValue;
         Check(errors, actualPanel == messagePanel, $"{targetName}의 MessagePanel 참조가 잘못됐습니다.");
@@ -382,6 +384,10 @@ public static class HospitalDiningRoomSetup
         Check(errors, actualMessage == expectedMessage, $"{targetName}의 메시지가 계획 문구와 다릅니다.");
         Check(errors, actualCompletionId == targetName, $"{targetName}의 completionId가 잘못됐습니다.");
         Check(errors, actualFlag == expectedFlag, $"{targetName}의 완료 Story Flag가 잘못됐습니다.");
+        bool repeatsAfterCompletion = allowsRepeatedInteraction ||
+                                      actualFlag == StoryProgressFlags.FreezerHintRead;
+        Check(errors, repeatsAfterCompletion == (targetName == FreezerHintTargetName),
+            $"{targetName}의 반복 상호작용 설정이 올바르지 않습니다.");
     }
 
     /// <summary>RoomId로 Room을 찾고 누락 시 예외를 발생시킨다.</summary>

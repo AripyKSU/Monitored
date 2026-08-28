@@ -15,6 +15,12 @@ namespace HauntedHouse.Progression
         [SerializeField] private CheckpointDefinition initialCheckpoint;
         [SerializeField] private RespawnCoordinator respawnCoordinator;
 
+#if UNITY_EDITOR
+        [Header("개발용 시작 지점")]
+        [Tooltip("실험할 때 시작할 세이브 지점이다. Scene Default는 Initial Checkpoint를 그대로 사용하며, 빌드에는 적용되지 않는다.")]
+        [SerializeField] private DevelopmentStartCheckpoint developmentStartCheckpoint;
+#endif
+
         private bool isRestoring;
 
         /// <summary>현재 활성화된 체크포인트 정의다.</summary>
@@ -44,13 +50,47 @@ namespace HauntedHouse.Progression
         {
             yield return null;
 
-            if (!ActivateCheckpoint(initialCheckpoint))
+            CheckpointDefinition startCheckpoint = ResolveStartCheckpoint();
+            if (!ActivateCheckpoint(startCheckpoint))
             {
                 GameLog.LogError("초기 CheckpointDefinition을 활성화하지 못했습니다.", this);
                 yield break;
             }
 
             RestoreActiveCheckpoint();
+        }
+
+        /// <summary>
+        /// Editor 실험 설정이 있으면 해당 세이브 지점을 찾고, 그 외에는 씬의 기본 시작 체크포인트를 반환한다.
+        /// 개발용 선택값이 빌드의 정상 시작 흐름에 영향을 주지 않도록 Editor에서만 덮어쓴다.
+        /// </summary>
+        private CheckpointDefinition ResolveStartCheckpoint()
+        {
+#if UNITY_EDITOR
+            if (developmentStartCheckpoint != DevelopmentStartCheckpoint.SceneDefault)
+            {
+                string checkpointId = developmentStartCheckpoint.ToString();
+                CheckpointDefinition[] checkpoints = FindObjectsByType<CheckpointDefinition>(
+                    FindObjectsInactive.Include,
+                    FindObjectsSortMode.None);
+
+                // 씬에 배치된 체크포인트 중 Inspector에서 선택한 고유 ID와 일치하는 정의를 사용한다.
+                foreach (CheckpointDefinition checkpoint in checkpoints)
+                {
+                    if (checkpoint != null &&
+                        string.Equals(checkpoint.CheckpointId, checkpointId, StringComparison.Ordinal))
+                    {
+                        return checkpoint;
+                    }
+                }
+
+                GameLog.LogWarning(
+                    $"개발용 시작 지점 '{checkpointId}'을 씬에서 찾지 못해 Initial Checkpoint를 사용합니다.",
+                    this);
+            }
+#endif
+
+            return initialCheckpoint;
         }
 
         /// <summary>
@@ -105,4 +145,19 @@ namespace HauntedHouse.Progression
             respawnCoordinator = FindFirstObjectByType<RespawnCoordinator>();
         }
     }
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// Unity Editor에서 특정 세이브 상태부터 플레이하기 위한 개발 전용 시작 지점 선택값이다.
+    /// </summary>
+    public enum DevelopmentStartCheckpoint
+    {
+        SceneDefault,
+        Save1,
+        Save2,
+        Save3,
+        Save4,
+        Save5
+    }
+#endif
 }

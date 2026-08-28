@@ -34,6 +34,12 @@ namespace HauntedHouse.Interaction
         }
 
         /// <summary>
+        /// 스토리 연출처럼 일반 Target 명령 밖에서 같은 문 연결 정보를 사용해야 할 때 Doorway를 제공한다.
+        /// 문 통과 규칙 자체는 계속 Doorway가 소유하며 외부에서는 연결 정보만 읽는다.
+        /// </summary>
+        public Doorway Doorway => doorway;
+
+        /// <summary>
         /// 현재 방에서 Doorway 반대편 방으로 플레이어를 통과시키고 문을 자동으로 닫는다.
         /// </summary>
         public IEnumerator Execute(TargetActionContext context)

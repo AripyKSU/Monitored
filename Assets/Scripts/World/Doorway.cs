@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using HauntedHouse.Commands;
 using HauntedHouse.Interaction;
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace HauntedHouse.World
 {
@@ -54,9 +56,88 @@ namespace HauntedHouse.World
         /// </summary>
         private void Awake()
         {
+            NormalizeDirectionalPoints();
             CacheApproachPoints();
+            AlignNavMeshLinkToPassagePoints();
             sensorEnteringA?.Configure(this, roomA);
             sensorEnteringB?.Configure(this, roomB);
+        }
+
+        /// <summary>
+        /// Room 그래프 위치를 기준으로 방향별 접근점과 통과점이 실제 방의 양쪽에 놓였는지 확인하고 뒤집힌 구성을 교정한다.
+        /// 복잡한 Room 계층의 Renderer Bounds로 방향을 잘못 추정해 입장과 퇴장 Target이 반대로 배치된 씬도 런타임에 복구한다.
+        /// </summary>
+        private void NormalizeDirectionalPoints()
+        {
+            Transform targetApproachA = doorTargetFromA != null ? doorTargetFromA.ApproachPoint : null;
+            Transform targetApproachB = doorTargetFromB != null ? doorTargetFromB.ApproachPoint : null;
+            if (roomA == null || roomB == null || targetApproachA == null || targetApproachB == null)
+            {
+                return;
+            }
+
+            Vector3 midpoint = (targetApproachA.position + targetApproachB.position) * 0.5f;
+            Vector3 directionToA = Vector3.ProjectOnPlane(roomA.GraphPosition - midpoint, Vector3.up);
+            if (directionToA.sqrMagnitude <= 0.01f)
+            {
+                directionToA = Vector3.ProjectOnPlane(midpoint - roomB.GraphPosition, Vector3.up);
+            }
+
+            if (directionToA.sqrMagnitude <= 0.01f)
+            {
+                return;
+            }
+
+            // RoomA Target은 RoomA 쪽에 있어야 한다. 반대로 놓였다면 각 Target이 참조하는 Transform의 Pose를 교환한다.
+            float approachSideA = Vector3.Dot(targetApproachA.position - midpoint, directionToA);
+            float approachSideB = Vector3.Dot(targetApproachB.position - midpoint, directionToA);
+            if (approachSideA < approachSideB)
+            {
+                Vector3 positionA = targetApproachA.position;
+                Quaternion rotationA = targetApproachA.rotation;
+                targetApproachA.SetPositionAndRotation(targetApproachB.position, targetApproachB.rotation);
+                targetApproachB.SetPositionAndRotation(positionA, rotationA);
+            }
+
+            if (passageStartFromA == null || passageStartFromB == null)
+            {
+                return;
+            }
+
+            // RoomA에서 출발할 때의 통과점은 문 반대편인 RoomB 쪽이어야 한다.
+            float passageSideA = Vector3.Dot(passageStartFromA.position - midpoint, directionToA);
+            float passageSideB = Vector3.Dot(passageStartFromB.position - midpoint, directionToA);
+            if (passageSideA > passageSideB)
+            {
+                (passageStartFromA, passageStartFromB) = (passageStartFromB, passageStartFromA);
+            }
+        }
+
+        /// <summary>
+        /// NavMesh 재베이크 이후에도 문 Link가 현재 통과 지점과 같은 축을 사용하도록 양 끝점을 다시 맞춘다.
+        /// 씬에 저장된 오래된 Link 좌표 때문에 Actor가 문 옆으로 우회하는 현상을 방지한다.
+        /// </summary>
+        private void AlignNavMeshLinkToPassagePoints()
+        {
+            NavMeshLink link = GetComponent<NavMeshLink>();
+            if (link == null || passageStartFromA == null || passageStartFromB == null)
+            {
+                return;
+            }
+
+            // 통과 지점은 캐릭터 피벗 높이에 있으므로 현재 NavMesh 바닥으로 투영한 좌표를 Link에 사용한다.
+            if (!NavMesh.SamplePosition(passageStartFromA.position, out NavMeshHit startHit, 4f, NavMesh.AllAreas) ||
+                !NavMesh.SamplePosition(passageStartFromB.position, out NavMeshHit endHit, 4f, NavMesh.AllAreas))
+            {
+                GameLog.LogWarning($"Doorway '{name}'의 통과 지점 주변에서 NavMeshLink 끝점을 찾지 못했습니다.", this);
+                return;
+            }
+
+            link.startTransform = null;
+            link.endTransform = null;
+            link.startPoint = transform.InverseTransformPoint(startHit.position);
+            link.endPoint = transform.InverseTransformPoint(endHit.position);
+            link.UpdateLink();
         }
 
         /// <summary>

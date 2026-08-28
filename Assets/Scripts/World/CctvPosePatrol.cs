@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using HauntedHouse.World;
 using UnityEngine;
 
 /// <summary>
-/// ServiceHallway의 실제 CCTV를 두 개의 직렬화된 Pose 사이에서 왕복 이동시킨다.
+/// 방의 실제 CCTV를 두 개의 직렬화된 Pose 사이에서 왕복 이동시킨다.
 /// 방 전환은 PlayerRoomTracker에 위임하고, 이 컴포넌트는 현재 방에 머무는 동안의 시점 연출만 담당한다.
 /// </summary>
 [DisallowMultipleComponent]
@@ -39,6 +40,14 @@ public sealed class CctvPosePatrol : MonoBehaviour
     [SerializeField] private Room kitchenRoom;
     [SerializeField] private Room centerHallwayBRoom;
 
+    [Header("범용 방 진입 규칙")]
+    [Tooltip("CCTV가 왕복 이동할 대상 방입니다. 비어 있으면 기존 ServiceHallway 참조를 사용합니다.")]
+    [SerializeField] private Room patrolRoom;
+    [Tooltip("이 방들에서 진입하면 Pose A에서 시작합니다.")]
+    [SerializeField] private Room[] poseAStartRooms = Array.Empty<Room>();
+    [Tooltip("이 방들에서 진입하면 Pose B에서 시작합니다.")]
+    [SerializeField] private Room[] poseBStartRooms = Array.Empty<Room>();
+
     [Header("CCTV Pose")]
     [SerializeField] private PoseData poseA;
     [SerializeField] private PoseData poseB;
@@ -69,6 +78,15 @@ public sealed class CctvPosePatrol : MonoBehaviour
     /// <summary>CenterHallway_B 진입 방향 판정에 사용하는 Room 참조를 반환한다.</summary>
     public Room CenterHallwayBRoom => centerHallwayBRoom;
 
+    /// <summary>현재 순찰 대상 Room을 반환한다.</summary>
+    public Room PatrolRoom => ResolvePatrolRoom();
+
+    /// <summary>Pose A에서 시작하도록 등록된 이전 Room 목록을 반환한다.</summary>
+    public IReadOnlyList<Room> PoseAStartRooms => poseAStartRooms;
+
+    /// <summary>Pose B에서 시작하도록 등록된 이전 Room 목록을 반환한다.</summary>
+    public IReadOnlyList<Room> PoseBStartRooms => poseBStartRooms;
+
     /// <summary>순찰 대상 플레이어 방 추적기 참조를 반환한다.</summary>
     public PlayerRoomTracker PlayerRoomTracker => playerRoomTracker;
 
@@ -98,7 +116,7 @@ public sealed class CctvPosePatrol : MonoBehaviour
         }
 
         // RestoreRoom은 이벤트를 발생시키지 않으므로 Start에서 현재 방을 한 번 직접 동기화한다.
-        if (playerRoomTracker.CurrentRoom == serviceHallwayRoom)
+        if (playerRoomTracker.CurrentRoom == ResolvePatrolRoom())
         {
             BeginPatrol(poseA, poseB);
         }
@@ -124,7 +142,8 @@ public sealed class CctvPosePatrol : MonoBehaviour
     /// <param name="enteredRoom">진입 후 논리 방.</param>
     private void HandleRoomEntered(Room previousRoom, Room enteredRoom)
     {
-        if (enteredRoom != serviceHallwayRoom)
+        Room targetRoom = ResolvePatrolRoom();
+        if (enteredRoom != targetRoom)
         {
             // ServiceHallway를 벗어난 즉시 더 이상 CCTV Transform을 갱신하지 않는다.
             isInsideServiceHallway = false;
@@ -137,17 +156,25 @@ public sealed class CctvPosePatrol : MonoBehaviour
             return;
         }
 
-        bool enteredFromKitchen = previousRoom == kitchenRoom;
-        bool enteredFromCenterHallway = previousRoom == centerHallwayBRoom;
-        if (!enteredFromKitchen && !enteredFromCenterHallway && previousRoom != null)
+        bool startsAtPoseA = ContainsRoom(poseAStartRooms, previousRoom);
+        bool startsAtPoseB = ContainsRoom(poseBStartRooms, previousRoom);
+
+        // 기존 ServiceHallway 직렬화 데이터는 별도의 Scene 재저장 없이 같은 동작을 유지한다.
+        if (!HasConfiguredEntryRules())
+        {
+            startsAtPoseA = previousRoom == kitchenRoom;
+            startsAtPoseB = previousRoom == centerHallwayBRoom;
+        }
+
+        if (!startsAtPoseA && !startsAtPoseB && previousRoom != null)
         {
             GameLog.LogWarning(
                 $"CctvPosePatrol '{name}'가 예상하지 않은 Room '{previousRoom.RoomId}'에서 진입했습니다. Pose A를 사용합니다.",
                 this);
         }
 
-        PoseData startPose = enteredFromCenterHallway ? poseB : poseA;
-        PoseData nextPose = enteredFromCenterHallway ? poseA : poseB;
+        PoseData startPose = startsAtPoseB ? poseB : poseA;
+        PoseData nextPose = startsAtPoseB ? poseA : poseB;
         BeginPatrol(startPose, nextPose);
     }
 
@@ -228,7 +255,7 @@ public sealed class CctvPosePatrol : MonoBehaviour
     /// <summary>PlayerRoomTracker의 현재 방이 ServiceHallway인지 확인한다.</summary>
     private bool IsPlayerInServiceHallway()
     {
-        return playerRoomTracker != null && playerRoomTracker.CurrentRoom == serviceHallwayRoom;
+        return playerRoomTracker != null && playerRoomTracker.CurrentRoom == ResolvePatrolRoom();
     }
 
     /// <summary>기존 순찰 Coroutine을 중지하고 순찰 상태를 초기화한다.</summary>
@@ -244,10 +271,15 @@ public sealed class CctvPosePatrol : MonoBehaviour
     /// <summary>Editor 설정이 제공하는 참조가 모두 유효한지 확인한다.</summary>
     private bool TryValidateConfiguration()
     {
-        if (playerRoomTracker == null || serviceHallwayRoom == null ||
-            kitchenRoom == null || centerHallwayBRoom == null)
+        if (playerRoomTracker == null || ResolvePatrolRoom() == null)
         {
             GameLog.LogError($"CctvPosePatrol '{name}'의 방 또는 PlayerRoomTracker 참조가 비어 있습니다.", this);
+            return false;
+        }
+
+        if (patrolRoom == null && (kitchenRoom == null || centerHallwayBRoom == null))
+        {
+            GameLog.LogError($"CctvPosePatrol '{name}'의 기존 ServiceHallway 진입 방 참조가 비어 있습니다.", this);
             return false;
         }
 
@@ -267,6 +299,22 @@ public sealed class CctvPosePatrol : MonoBehaviour
         serviceHallwayRoom = serviceHallway;
         kitchenRoom = kitchen;
         centerHallwayBRoom = centerHallwayB;
+        patrolRoom = serviceHallway;
+        poseAStartRooms = new[] { kitchen };
+        poseBStartRooms = new[] { centerHallwayB };
+    }
+
+    /// <summary>범용 CCTV 순찰 대상과 진입 방향별 시작 Pose 규칙을 설정한다.</summary>
+    public void ConfigureEntryRules(
+        PlayerRoomTracker tracker,
+        Room targetRoom,
+        Room[] newPoseAStartRooms,
+        Room[] newPoseBStartRooms)
+    {
+        playerRoomTracker = tracker;
+        patrolRoom = targetRoom;
+        poseAStartRooms = newPoseAStartRooms ?? Array.Empty<Room>();
+        poseBStartRooms = newPoseBStartRooms ?? Array.Empty<Room>();
     }
 
     /// <summary>
@@ -292,5 +340,37 @@ public sealed class CctvPosePatrol : MonoBehaviour
     private void Reset()
     {
         playerRoomTracker = FindFirstObjectByType<PlayerRoomTracker>();
+    }
+
+    /// <summary>범용 설정이 없을 때 기존 ServiceHallway 참조를 순찰 방으로 사용한다.</summary>
+    private Room ResolvePatrolRoom()
+    {
+        return patrolRoom != null ? patrolRoom : serviceHallwayRoom;
+    }
+
+    /// <summary>Room 배열에 지정한 참조가 포함되어 있는지 검사한다.</summary>
+    private static bool ContainsRoom(Room[] rooms, Room room)
+    {
+        if (room == null || rooms == null)
+        {
+            return false;
+        }
+
+        foreach (Room candidate in rooms)
+        {
+            if (candidate == room)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>범용 진입 방향 배열 중 하나라도 명시적으로 설정되어 있는지 확인한다.</summary>
+    private bool HasConfiguredEntryRules()
+    {
+        return (poseAStartRooms != null && poseAStartRooms.Length > 0) ||
+               (poseBStartRooms != null && poseBStartRooms.Length > 0);
     }
 }

@@ -29,7 +29,6 @@ public static class HospitalSector2HideEncounterSetup
     private const string PointRootName = "Sector2HideEncounterPoints";
     private const string SpawnPointName = "EnemySpawnPoint";
     private const string RevealPointName = "EnemyRevealPoint";
-    private const string ReturnPointName = "MachineRoomForcedReturnPoint";
     private const string SearchPointName = "MachineRoomSearchPoint";
     private const string ExitPointName = "EnemyExitPoint";
     private const string ExitTargetName = "From_A_Target";
@@ -80,12 +79,6 @@ public static class HospitalSector2HideEncounterSetup
         // 이벤트 전에는 initiallyActive=false로 Renderer·Collider가 숨겨져 화면에는 나타나지 않는다.
         enemy.transform.SetPositionAndRotation(spawnPoint.transform.position, spawnPoint.transform.rotation);
         Transform revealPoint = ConfigurePoint(pointRoot, RevealPointName, hallway, new Vector3(270f, 1.1f, 116.5f));
-        // ToolCase 접근 지점은 실제로 검증된 MachineRoom NavMesh 위에 있으므로
-        // 강제 복귀가 고립된 임시 좌표를 선택하지 않게 이를 기준으로 사용한다.
-        Vector3 toolCaseApproach = toolCaseTarget.ApproachPoint != null
-            ? toolCaseTarget.ApproachPoint.position
-            : new Vector3(355.3f, 0.16f, 169.3f);
-        Transform returnPoint = ConfigurePoint(pointRoot, ReturnPointName, machineRoom, toolCaseApproach);
         Transform searchPoint = ConfigurePoint(pointRoot, SearchPointName, machineRoom, new Vector3(350f, 1.1f, 165f));
         Transform exitPoint = ConfigurePoint(pointRoot, ExitPointName, hallway, new Vector3(343.9f, 1.1f, 116.47f));
 
@@ -104,7 +97,6 @@ public static class HospitalSector2HideEncounterSetup
         SetObject(controller, "enemySearchPoint", searchPoint);
         SetObject(controller, "enemyExitRoom", hallway);
         SetObject(controller, "enemyExitPoint", exitPoint);
-        SetObject(controller, "forcedReturnPoint", returnPoint);
         SetObject(controller, "dialogueService", dialogueService);
         SetObject(controller, "warningDialogue", warningDialogue);
         SetObject(controller, "stealthHideSystem", stealthHideSystem);
@@ -118,9 +110,8 @@ public static class HospitalSector2HideEncounterSetup
         SetObject(exitTarget, "actionComponent", wrapper);
         exitTarget.SetSelectable(true);
 
-        // ToolCase는 이벤트 Controller가 경고 대화 종료 시점에만 활성화하므로
-        // 씬을 저장할 때는 기본적으로 선택 불가능 상태로 둔다.
-        toolCaseTarget.SetSelectable(false);
+        // ToolCase는 강제 은신 이벤트 전·중·후 모두 사용 가능한 기계실 기본 은신처로 유지한다.
+        toolCaseTarget.SetSelectable(true);
         EditorUtility.SetDirty(controller);
         EditorUtility.SetDirty(wrapper);
         EditorUtility.SetDirty(exitTarget);

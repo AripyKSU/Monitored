@@ -19,6 +19,8 @@ namespace HauntedHouse.Interaction
         [Tooltip("메시지를 끝까지 읽었을 때 추가할 Story Flag입니다. 비워 두면 기존 메시지 Target처럼 동작합니다.")]
         [SerializeField] private GameSession gameSession;
         [SerializeField] private string completionFlagId;
+        [Tooltip("완료 후에도 Target을 다시 선택할 수 있게 유지합니다.")]
+        [SerializeField] private bool allowRepeatedInteraction;
 
         [Header("Audio")]
         [SerializeField] private AudioClip messageInteractionSound;
@@ -51,9 +53,13 @@ namespace HauntedHouse.Interaction
                 gameSession.SetStoryFlag(completionFlagId);
             }
 
-            // 한 번 읽은 메시지는 같은 플레이 구간에서 다시 선택되지 않도록 즉시 잠근다.
-            GetComponent<Target>()?.SetSelectable(false);
-            context?.MarkCompleted();
+            // 반복 조사 대상은 첫 확인에서 진행 상태만 기록하고 Target 자체는 계속 선택 가능하게 유지한다.
+            bool remainsSelectable = AllowsRepeatedInteraction;
+            GetComponent<Target>()?.SetSelectable(remainsSelectable);
+            if (!remainsSelectable)
+            {
+                context?.MarkCompleted();
+            }
         }
 
         /// <summary>체크포인트의 메시지 상호작용 완료 상태를 적용한다.</summary>
@@ -65,8 +71,12 @@ namespace HauntedHouse.Interaction
                                    !string.IsNullOrWhiteSpace(completionFlagId) &&
                                    gameSession.HasStoryFlag(completionFlagId);
             IsCompleted = completed || completedByFlag;
-            GetComponent<Target>()?.SetSelectable(!IsCompleted);
+            GetComponent<Target>()?.SetSelectable(AllowsRepeatedInteraction || !IsCompleted);
         }
+
+        /// <summary>완료 후에도 메시지를 다시 조사할 수 있는 대상인지 반환한다.</summary>
+        private bool AllowsRepeatedInteraction =>
+            allowRepeatedInteraction || completionFlagId == StoryProgressFlags.FreezerHintRead;
 
         /// <summary>컴포넌트를 처음 추가할 때 공용 UI와 진행 세션을 자동 연결한다.</summary>
         private void Reset()
