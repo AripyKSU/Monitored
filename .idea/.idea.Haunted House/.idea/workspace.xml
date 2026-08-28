@@ -12,10 +12,12 @@
   <component name="ChangeListManager">
     <list default="true" id="e2a3f308-b6e8-45cd-b24c-71dff15c9f26" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalSector3PatrolPlayModeVerifier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalSector3PatrolPlayModeVerifier.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalSector3PatrolSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalSector3PatrolSetup.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/TargetPresenter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/TargetPresenter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/GameSession.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/GameSession.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/GameSessionPhase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/GameSessionPhase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Stealth/EnemyChaseSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Stealth/EnemyChaseSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Stealth/StealthHideTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Stealth/StealthHideTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wiki/todolist.md" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/todolist.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,7 +179,7 @@
       <workItem from="1787531314416" duration="9488000" />
       <workItem from="1787646939627" duration="1474000" />
       <workItem from="1787715911412" duration="6620000" />
-      <workItem from="1787790801274" duration="15451000" />
+      <workItem from="1787790801274" duration="20139000" />
     </task>
     <servers />
   </component>

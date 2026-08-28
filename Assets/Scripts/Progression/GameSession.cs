@@ -191,6 +191,12 @@ namespace HauntedHouse.Progression
         public void MarkDead()
         {
             SetPhase(GameSessionPhase.Dead);
+ }
+
+ /// <summary>엔딩 진입이 확정된 뒤 일반 입력과 월드 시뮬레이션을 잠근다.</summary>
+ public void MarkEnding()
+ {
+ SetPhase(GameSessionPhase.Ending);
         }
 
         /// <summary>세션 단계가 달라질 때만 저장하고 외부 시스템에 알린다.</summary>

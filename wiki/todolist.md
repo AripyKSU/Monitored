@@ -75,3 +75,26 @@
 ## Sector2 MachineRoom - 작업 16
 
 - [ ] 철창 해제용 SFX 에셋을 선정하고 `MachineRoomTarget.gateActivationSound`에 연결
+- [ ] 철창 최종 모델 에셋을 선정하고 `GateController`의 Gate Root 표현에 연결
+- [ ] 선정한 철창의 최종 Open 상태를 확인하고 필요 시 Animation 적용 여부를 결정해 연결
+
+## 별도 항목
+
+현재 개발 범위 이후 진행할 후속 폴리싱 및 연출 작업이다.
+
+### 조명 폴리싱
+
+- [ ] 각 방의 기본 조명과 병원 전체의 어두운 분위기를 최종 조정
+- [ ] Sector별 Light를 최종 튜닝
+
+### Decal
+
+- [ ] 병원 전체 오염 Decal을 배치하고 최종 조정
+- [ ] Sector4의 피 Decal과 Workshop / Morgue 집중 연출용 Decal을 배치
+
+### 엔딩 실제 연출
+
+- [ ] MonitoringRoom 카메라 연출과 문 닫힘 연출 구성
+- [ ] Cafe Map 및 주인공 Animation 연출 구성
+- [ ] CCTV Zoom 연출 구성
+- [ ] Bad Ending / Happy Ending의 실제 Ending Timeline을 구성하고 연결

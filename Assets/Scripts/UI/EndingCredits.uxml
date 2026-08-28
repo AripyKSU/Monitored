@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/UI/EndingCredits.uss?fileID=7433441132597879392&amp;guid=4e4a8aa2e4c34dcf8c0f8fdfb3b8dc01&amp;type=3#EndingCredits" />
+    <ui:VisualElement name="EndingCreditsRoot" class="endingCreditsRoot">
+        <ui:VisualElement name="CreditsCard" class="creditsCard">
+            <ui:Label name="EndingHeading" text="ENDING" class="endingHeading" />
+            <ui:Label name="EndingName" text="Ending" class="endingName" />
+            <ui:VisualElement name="Divider" class="creditsDivider" />
+            <ui:Label name="ProductionInfo" text="Haunted House 제작팀&#10;감사합니다." class="productionInfo" />
+            <ui:Button name="ReturnToTitleButton" text="타이틀로 돌아가기" class="returnToTitleButton" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

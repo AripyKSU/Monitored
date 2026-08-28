@@ -36,6 +36,13 @@ namespace HauntedHouse.Stealth
         /// <summary>숨은 방에 도착한 적이 대기할 시간을 초 단위로 반환한다.</summary>
         public float HiddenRoomWaitDuration => hiddenRoomWaitDuration;
 
+        /// <summary>
+        /// 현재 세션이 최종 추격 상태인지 반환한다.
+        /// 최종 추격 시작 연출은 별도 컨트롤러가 소유하고, 이후의 추격 정책만 이 시스템이 flag로 판정한다.
+        /// </summary>
+        private bool IsFinalChaseActive => gameSession != null &&
+                                           gameSession.HasStoryFlag(StoryProgressFlags.FinalChaseStarted);
+
         /// <summary>기본 참조와 씬의 적 목록을 보완한다.</summary>
         private void Awake()
         {
@@ -161,7 +168,7 @@ namespace HauntedHouse.Stealth
                 return;
             }
 
-            if (stealthHideSystem != null && stealthHideSystem.IsHidden)
+            if (!IsFinalChaseActive && stealthHideSystem != null && stealthHideSystem.IsHidden)
             {
                 return;
             }
@@ -180,7 +187,7 @@ namespace HauntedHouse.Stealth
                 return;
             }
 
-            if (hidingRoom == null || enemies == null)
+            if (IsFinalChaseActive || hidingRoom == null || enemies == null)
             {
                 return;
             }
@@ -214,7 +221,7 @@ namespace HauntedHouse.Stealth
             }
 
             if (player == null || playerRoomTracker == null || enemies == null ||
-                (stealthHideSystem != null && stealthHideSystem.IsHidden))
+                (!IsFinalChaseActive && stealthHideSystem != null && stealthHideSystem.IsHidden))
             {
                 return;
             }
@@ -230,6 +237,14 @@ namespace HauntedHouse.Stealth
                 if (enemy == null || !enemy.isActiveAndEnabled || enemy.State == EnemyState.Inactive ||
                     enemy.Mode == EnemyMode.ScriptedSequence)
                 {
+                    continue;
+                }
+
+                if (IsFinalChaseActive)
+                {
+                    // 30번 시작 연출 이후에는 적이 Patrol로 남아 있더라도 다시 추격 상태를 확정한다.
+                    // BeginChase는 같은 방·다른 방 모두 기존 RoomGraph/문 통과 경로를 재사용한다.
+                    enemy.BeginChase(player.transform, playerRoom);
                     continue;
                 }
 
@@ -304,7 +319,7 @@ namespace HauntedHouse.Stealth
                 return;
             }
 
-            if (stealthHideSystem == null || !stealthHideSystem.IsHidden)
+            if (IsFinalChaseActive || stealthHideSystem == null || !stealthHideSystem.IsHidden)
             {
                 // 보이는 플레이어를 쫓던 적이 같은 방에 도착한 경우에도
                 // DoorTraversal이 완전히 끝난 시점에서 플레이어 위치 추격으로 전환한다.
@@ -326,8 +341,24 @@ namespace HauntedHouse.Stealth
             }
 
             waitRoutines.Remove(enemy);
-            if (enemy != null && enemy.IsChasing &&
-                stealthHideSystem != null && stealthHideSystem.IsHidden)
+            if (enemy == null || !enemy.IsChasing)
+            {
+                yield break;
+            }
+
+            if (IsFinalChaseActive)
+            {
+                // 최종 추격이 대기 중 시작되는 경계 상황에서도 정지 플래그를 해제하고
+                // 현재 플레이어 방을 새 목표로 지정해 즉시 추격을 이어 간다.
+                if (player != null && playerRoomTracker != null && playerRoomTracker.CurrentRoom != null)
+                {
+                    enemy.BeginChase(player.transform, playerRoomTracker.CurrentRoom);
+                }
+
+                yield break;
+            }
+
+            if (stealthHideSystem != null && stealthHideSystem.IsHidden)
             {
                 enemy.StopChaseAndResumeRoute();
             }
@@ -407,10 +438,11 @@ namespace HauntedHouse.Stealth
             }
 
             if (enemy == null || currentRoom == null || player == null || playerRoomTracker == null ||
-                (stealthHideSystem != null && stealthHideSystem.IsHidden) ||
+                (!IsFinalChaseActive && stealthHideSystem != null && stealthHideSystem.IsHidden) ||
                 currentRoom != playerRoomTracker.CurrentRoom ||
                 !enemy.isActiveAndEnabled || enemy.State == EnemyState.Inactive ||
-                enemy.Mode == EnemyMode.ScriptedSequence || enemy.IsChasing)
+                enemy.Mode == EnemyMode.ScriptedSequence ||
+                (!IsFinalChaseActive && enemy.IsChasing))
             {
                 return;
             }
@@ -440,7 +472,7 @@ namespace HauntedHouse.Stealth
             }
 
             if (enemy == null || player == null || playerRoomTracker == null ||
-                (stealthHideSystem != null && stealthHideSystem.IsHidden) ||
+                (!IsFinalChaseActive && stealthHideSystem != null && stealthHideSystem.IsHidden) ||
                 enemy.CurrentRoom != enteredRoom || playerRoomTracker.CurrentRoom != enteredRoom ||
                 !enemy.isActiveAndEnabled || enemy.State == EnemyState.Inactive ||
                 enemy.Mode == EnemyMode.ScriptedSequence)

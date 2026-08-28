@@ -13,6 +13,9 @@ namespace HauntedHouse.Progression
         Playing,
 
         /// <summary>사망 후 Restart 입력만 허용하는 단계다.</summary>
+        Ending,
+
+        /// <summary>사망 후 Restart 입력만 허용하는 단계다.</summary>
         Dead
     }
 }
