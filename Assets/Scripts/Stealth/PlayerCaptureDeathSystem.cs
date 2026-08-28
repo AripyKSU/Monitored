@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using HauntedHouse.Commands;
 using HauntedHouse.Enemies;
 using UnityEngine;
 
@@ -12,6 +14,12 @@ namespace HauntedHouse.Stealth
     {
         [SerializeField] private StealthHideSystem stealthHideSystem;
         [SerializeField] private EnemyChaseSystem enemyChaseSystem;
+        [SerializeField] private PlayerAnimationController playerAnimationController;
+        [SerializeField, Min(1f)] private float captureAnimationTimeout = 10f;
+
+        private Coroutine captureAnimationRoutine;
+        private EnemyController capturedAttacker;
+        private EnemyAnimationController capturedEnemyAnimation;
 
         /// <summary>현재 포획·사망 진행 상태를 반환한다.</summary>
         public PlayerCaptureState State { get; private set; } = PlayerCaptureState.Alive;
@@ -33,6 +41,7 @@ namespace HauntedHouse.Stealth
         {
             stealthHideSystem ??= FindFirstObjectByType<StealthHideSystem>();
             enemyChaseSystem ??= FindFirstObjectByType<EnemyChaseSystem>();
+            playerAnimationController ??= FindFirstObjectByType<PlayerAnimationController>();
             GameLog.Log(
                 $"PlayerCaptureDeathSystem 초기화. StealthHideSystem={stealthHideSystem?.name ?? "null"}, " +
                 $"EnemyChaseSystem={enemyChaseSystem?.name ?? "null"}.",
@@ -57,13 +66,68 @@ namespace HauntedHouse.Stealth
 
             State = PlayerCaptureState.Captured;
             enemyChaseSystem?.StopAllChases();
+
+            capturedAttacker = attacker;
+            if (capturedAttacker != null && !capturedAttacker.PauseForScriptedSequence())
+            {
+                GameLog.LogWarning("포획 공격자를 ScriptedSequence 정지 상태로 전환하지 못했습니다.", capturedAttacker);
+            }
+
+            capturedEnemyAnimation = capturedAttacker != null
+                ? capturedAttacker.GetComponent<EnemyAnimationController>()
+                : null;
+
+            bool playerAnimationStarted = playerAnimationController != null &&
+                                          playerAnimationController.PlayCaptureDeath();
+            if (capturedEnemyAnimation != null && !capturedEnemyAnimation.PlayCaptureAttack())
+            {
+                GameLog.LogWarning("포획 공격 애니메이션을 시작하지 못했습니다.", capturedEnemyAnimation);
+            }
+
             CaptureStarted?.Invoke(attacker);
 
-            // 현재 단계에는 별도의 포획 애니메이션 재생기가 없으므로
-            // 충돌 포획 직후 사망을 확정해 GameSession과 Restart UI에 즉시 전달한다.
-            // 추후 애니메이션 재생기가 연결되면 이 호출을 해당 재생기의 완료 콜백으로 이동한다.
-            NotifyDeathAnimationFinished();
+            if (captureAnimationRoutine != null)
+            {
+                StopCoroutine(captureAnimationRoutine);
+            }
+
+            if (playerAnimationStarted)
+            {
+                captureAnimationRoutine = StartCoroutine(WaitForCaptureDeathAnimation());
+            }
+            else
+            {
+                GameLog.LogWarning("플레이어 포획 사망 애니메이션을 시작하지 못해 사망을 즉시 확정합니다.", this);
+                NotifyDeathAnimationFinished();
+            }
+
             return true;
+        }
+
+        /// <summary>플레이어 사망 애니메이션이 마지막 프레임에 도달할 때까지 기다린다.</summary>
+        private IEnumerator WaitForCaptureDeathAnimation()
+        {
+            float elapsed = 0f;
+            while (State == PlayerCaptureState.Captured && elapsed < captureAnimationTimeout)
+            {
+                if (playerAnimationController != null &&
+                    playerAnimationController.IsCaptureDeathAnimationFinished())
+                {
+                    captureAnimationRoutine = null;
+                    NotifyDeathAnimationFinished();
+                    yield break;
+                }
+
+                elapsed += Time.unscaledDeltaTime;
+                yield return null;
+            }
+
+            captureAnimationRoutine = null;
+            if (State == PlayerCaptureState.Captured)
+            {
+                GameLog.LogWarning("포획 사망 애니메이션 완료 대기가 시간 초과되어 사망을 확정합니다.", this);
+                NotifyDeathAnimationFinished();
+            }
         }
 
         /// <summary>
@@ -72,6 +136,7 @@ namespace HauntedHouse.Stealth
         /// </summary>
         public void NotifyDeathAnimationFinished()
         {
+            captureAnimationRoutine = null;
             if (State != PlayerCaptureState.Captured)
             {
                 return;
@@ -88,6 +153,22 @@ namespace HauntedHouse.Stealth
         /// </summary>
         public void ResetAfterRetry()
         {
+            if (captureAnimationRoutine != null)
+            {
+                StopCoroutine(captureAnimationRoutine);
+                captureAnimationRoutine = null;
+            }
+
+            playerAnimationController?.ResetCapturePresentation();
+
+            if (capturedAttacker != null)
+            {
+                capturedAttacker.ResumePatrolFromScriptedSequence();
+            }
+
+            capturedEnemyAnimation?.ResetCapturePresentation();
+            capturedAttacker = null;
+            capturedEnemyAnimation = null;
             State = PlayerCaptureState.Alive;
             stealthHideSystem?.RestorePresentation();
         }
@@ -97,6 +178,7 @@ namespace HauntedHouse.Stealth
         {
             stealthHideSystem = FindFirstObjectByType<StealthHideSystem>();
             enemyChaseSystem = FindFirstObjectByType<EnemyChaseSystem>();
+            playerAnimationController = FindFirstObjectByType<PlayerAnimationController>();
         }
     }
 }

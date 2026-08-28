@@ -1,0 +1,8 @@
+sandbox_mode = "workspace-write"
+approval_policy = "never"
+
+[sandbox_workspace_write]
+network_access = true
+
+[projects.'C:\UnityProject\Haunted House']
+trust_level = "trusted"

@@ -8,6 +8,7 @@ namespace HauntedHouse.Progression
     public sealed class GameStartDialogueController : MonoBehaviour
     {
         [SerializeField] private GameSession gameSession;
+        [SerializeField] private CheckpointService checkpointService;
         [SerializeField] private DialogueService dialogueService;
         [SerializeField] private DialogueSequence sequence;
 
@@ -16,6 +17,7 @@ namespace HauntedHouse.Progression
         private void OnEnable()
         {
             gameSession ??= FindFirstObjectByType<GameSession>();
+            checkpointService ??= FindFirstObjectByType<CheckpointService>();
             dialogueService ??= FindFirstObjectByType<DialogueService>();
             if (gameSession != null)
             {
@@ -34,7 +36,10 @@ namespace HauntedHouse.Progression
 
         private void HandleGameplayStarted()
         {
-            if (!played)
+            // 개발용 Save2~5 시작은 새 게임이 아니므로 Save1 전용 도입 대화를 재생하지 않는다.
+            bool startsFromSave1 = checkpointService?.ActiveCheckpoint != null &&
+                                   checkpointService.ActiveCheckpoint.CheckpointId == "Save1";
+            if (!played && startsFromSave1)
             {
                 StartCoroutine(PlayAfterRestore());
             }

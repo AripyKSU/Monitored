@@ -11,54 +11,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e2a3f308-b6e8-45cd-b24c-71dff15c9f26" name="변경" comment="">
+      <change afterPath="$PROJECT_DIR$/.codex/config.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Haunted House/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S1_Diary1Dialogue.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S1_Diary1Dialogue.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S1_HallwayDoorScareDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S1_HallwayDoorScareDialogue.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S1_IntroRadioDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S1_IntroRadioDialogue.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S2_CenterHallwayGateDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S2_CenterHallwayGateDialogue.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Arts/Animations/Enemies/Killer_Enemy.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Arts/Animations/Enemies/Killer_Enemy.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Arts/Animations/Player.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Arts/Animations/Player.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Arts/Animations/PrefabDoors/Door_V3.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Arts/Animations/PrefabDoors/Door_V3.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Arts/Animations/PrefabDoors/SlideDoor.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Arts/Animations/PrefabDoors/SlideDoor.controller" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S2_HideWarningDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S2_HideWarningDialogue.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S3_ExitDoorHintDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S3_ExitDoorHintDialogue.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S4_MasterKeyRadioDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S4_MasterKeyRadioDialogue.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S5_EntranceDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S5_EntranceDialogue.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Dialogue/S5_RunDialogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Dialogue/S5_RunDialogue.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Items/BasementKey.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Items/BasementKey.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Items/Flashlight.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Items/Flashlight.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Items/Fuse.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Items/Fuse.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Items/MasterKey.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Items/MasterKey.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Items/WardHallKey.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Items/WardHallKey.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/CoreSandboxDoorSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/CoreSandboxDoorSetup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalDiningRoomPlayModeVerifier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalDiningRoomPlayModeVerifier.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalDiningRoomSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalDiningRoomSetup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalMachineRoomPlayModeVerifier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalMachineRoomPlayModeVerifier.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalMachineRoomSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalMachineRoomSetup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/HospitalSector2HideEncounterSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/HospitalSector2HideEncounterSetup.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Mabinogi_Classic_OTF SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Mabinogi_Classic_OTF SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Mabinogi_Classic_OTF SDF.asset.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Mabinogi_Classic_OTF SDF.asset.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemies/Killer_Enemy.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemies/Killer_Enemy.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/CoreSandbox.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/PlayerMover.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/PlayerMover.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/DoorTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/DoorTarget.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/MachineRoomExitEncounterTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/MachineRoomExitEncounterTarget.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/MachineRoomTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/MachineRoomTarget.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/MessageTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/MessageTarget.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/NursingRoomForcedExitPoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/NursingRoomForcedExitPoint.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/NursingRoomStoryController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/NursingRoomStoryController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/CheckpointService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/CheckpointService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/EndingController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/EndingController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Progression/Sector2HideEncounterController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Progression/Sector2HideEncounterController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Stealth/EnemyChaseSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Stealth/EnemyChaseSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Threat/DangerAlertEvaluator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Threat/DangerAlertEvaluator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Threat/DangerAlertState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Threat/DangerAlertState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Threat/DangerAlertSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Threat/DangerAlertSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/PlayerAnimationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/PlayerAnimationController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Enemies/EnemyAnimationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Enemies/EnemyAnimationController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Enemies/EnemyController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Enemies/EnemyController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interaction/ExitDoorHintTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interaction/ExitDoorHintTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Stealth/PlayerCaptureDeathSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Stealth/PlayerCaptureDeathSystem.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/DangerAlertView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/DangerAlertView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/EndingCreditsView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/EndingCreditsView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/World/CctvPosePatrol.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/World/CctvPosePatrol.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/World/Doorway.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/World/Doorway.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/World/ScreenShake.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/World/ScreenShake.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Oswald Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Oswald Bold SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_3DStealthGame/Art/PostProcessing/Scary Volume Profile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_3DStealthGame/Art/PostProcessing/Scary Volume Profile.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wiki/todolist.md" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/todolist.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -222,7 +191,7 @@
       <workItem from="1787646939627" duration="1474000" />
       <workItem from="1787715911412" duration="6620000" />
       <workItem from="1787790801274" duration="20139000" />
-      <workItem from="1787881759635" duration="5206000" />
+      <workItem from="1787881759635" duration="11160000" />
     </task>
     <servers />
   </component>

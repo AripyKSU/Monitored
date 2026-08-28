@@ -917,8 +917,8 @@ public sealed class EnemyController : MonoBehaviour
                 return;
             }
 
-            agent.isStopped = true;
             agent.ResetPath();
+            agent.isStopped = true;
         }
 
         /// <summary>Agent를 지정 위치에 배치하고 활성화한다.</summary>
@@ -932,8 +932,9 @@ public sealed class EnemyController : MonoBehaviour
 
             agent.enabled = true;
             // 비활성 상태의 기존 위치가 NavMesh 밖일 수 있으므로,
-            // 현재 위치의 isOnNavMesh를 먼저 검사하지 않고 목표 지점으로 Warp한 뒤 확인한다.
-            if (!agent.Warp(position) || !agent.isOnNavMesh)
+            // 재베이크로 바닥 높이가 조금 달라져도 Agent와 같은 Area의 실제 폴리곤에 먼저 투영한다.
+            if (!NavMesh.SamplePosition(position, out NavMeshHit spawnHit, 2f, agent.areaMask) ||
+                !agent.Warp(spawnHit.position) || !agent.isOnNavMesh)
             {
                 GameLog.LogError($"EnemyController '{name}'를 NavMesh 위치에 배치하지 못했습니다.", this);
                 agent.enabled = false;

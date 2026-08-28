@@ -9,6 +9,8 @@ namespace HauntedHouse.Progression
     /// </summary>
     public sealed class Sector4PatrolActivator : MonoBehaviour
     {
+        private const float DepartureDelaySeconds = 4f;
+
         [Header("진행 참조")]
         [SerializeField] private GameSession gameSession;
 
@@ -107,10 +109,19 @@ namespace HauntedHouse.Progression
                 return;
             }
 
+            ConfigureDepartureDelay();
             enemy.SetActive(true, firstPoint);
             GameLog.Log(
                 $"Sector4 살인마 Patrol을 '{firstPoint.Room?.RoomId ?? "null"}' 첫 지점에서 시작했습니다.",
                 this);
+        }
+
+        /// <summary>목적지 경고가 표시된 뒤 Sector4 적이 4초 후 출발하도록 런타임 제어기를 구성한다.</summary>
+        private void ConfigureDepartureDelay()
+        {
+            EnemyPatrolDepartureDelay delay = enemy.GetComponent<EnemyPatrolDepartureDelay>() ??
+                                              enemy.gameObject.AddComponent<EnemyPatrolDepartureDelay>();
+            delay.Configure(enemy, DepartureDelaySeconds);
         }
 
         /// <summary>컴포넌트 추가 시 씬의 공용 진행·적 참조를 자동 보완한다.</summary>

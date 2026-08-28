@@ -21,11 +21,11 @@ public static class HospitalSector5FinalChaseSetup
 {
     private const string ScenePath = "Assets/Scenes/CoreSandbox.unity";
     private const string ControllerObjectName = "Sector5FinalChaseController";
-    private const string ServiceRoomId = "S3_HallwayB";
+    private const string BasementRoomId = "S4_BasementCorridor";
     private const string StairwellRoomId = "S4_Stairwell";
-    private const string ControlRoomId = "S4_ControlRoom";
-    private const string StairDoorName = "SlideDoor_ServiceHallwayToStair";
-    private const string SpawnPointName = "Patrol_S4_ControlRoom";
+    private const string StorageRoomId = "S4_Storage";
+    private const string StairDoorName = "SlideDoor_BasementStair";
+    private const string SpawnPointName = "Patrol_S4_Storage";
     private const string DialogueAssetPath = "Assets/Data/Dialogue/S5_RunDialogue.asset";
 
     /// <summary>현재 열린 CoreSandbox에 최종 추격 시작 Controller를 멱등적으로 구성한다.</summary>
@@ -34,12 +34,12 @@ public static class HospitalSector5FinalChaseSetup
     {
         EnsureEditModeAndScene();
 
-        Room serviceRoom = FindRequiredRoom(ServiceRoomId);
+        Room basementRoom = FindRequiredRoom(BasementRoomId);
         Room stairwellRoom = FindRequiredRoom(StairwellRoomId);
-        Room controlRoom = FindRequiredRoom(ControlRoomId);
-        Target stairwellTarget = FindStairwellArrivalTarget(serviceRoom, stairwellRoom);
+        Room storageRoom = FindRequiredRoom(StorageRoomId);
+        Target stairwellTarget = FindStairwellArrivalTarget(basementRoom, stairwellRoom);
         EnemyController enemy = FindRequiredEnemy();
-        PatrolPoint spawnPoint = FindRequiredSpawnPoint(controlRoom);
+        PatrolPoint spawnPoint = FindRequiredSpawnPoint(storageRoom);
         GameSession gameSession = FindRequired<GameSession>("GameSession");
         Player player = FindRequired<Player>("Player");
         PlayerRoomTracker roomTracker = FindRequired<PlayerRoomTracker>("PlayerRoomTracker");
@@ -135,12 +135,12 @@ public static class HospitalSector5FinalChaseSetup
     public static bool ValidateConfiguration(out string report)
     {
         List<string> errors = new();
-        Room serviceRoom = FindRoom(ServiceRoomId, errors);
+        Room basementRoom = FindRoom(BasementRoomId, errors);
         Room stairwellRoom = FindRoom(StairwellRoomId, errors);
-        Room controlRoom = FindRoom(ControlRoomId, errors);
-        Target stairwellTarget = FindStairwellArrivalTarget(serviceRoom, stairwellRoom, errors);
+        Room storageRoom = FindRoom(StorageRoomId, errors);
+        Target stairwellTarget = FindStairwellArrivalTarget(basementRoom, stairwellRoom, errors);
         EnemyController enemy = FindEnemy(errors);
-        PatrolPoint spawnPoint = FindSpawnPoint(controlRoom, errors);
+        PatrolPoint spawnPoint = FindSpawnPoint(storageRoom, errors);
         DialogueSequence dialogue = AssetDatabase.LoadAssetAtPath<DialogueSequence>(DialogueAssetPath);
         Sector5FinalChaseController controller = FindController(errors);
 
@@ -182,7 +182,7 @@ public static class HospitalSector5FinalChaseSetup
             return false;
         }
 
-        report = "Sector5 최종 추격 시작 Controller, Stairwell 도착 Target, ControlRoom 등장 지점과 Dialogue 구성이 유효합니다.";
+        report = "Sector5 최종 추격 시작 Controller, 지하 상행 Stairwell 도착 Target, Storage 등장 지점과 Dialogue 구성이 유효합니다.";
         return true;
     }
 
@@ -215,19 +215,19 @@ public static class HospitalSector5FinalChaseSetup
 
     /// <summary>계단 도착 방향의 Target을 Doorway 통과 목적지로 식별한다.</summary>
     private static Target FindStairwellArrivalTarget(
-        Room serviceRoom, Room stairwellRoom, List<string> errors = null)
+        Room basementRoom, Room stairwellRoom, List<string> errors = null)
     {
         Doorway[] doorwayCandidates = UnityEngine.Object.FindObjectsByType<Doorway>(
                 FindObjectsInactive.Include, FindObjectsSortMode.None)
             .Where(doorway => doorway != null && doorway.name == StairDoorName &&
-                             ((doorway.RoomA == serviceRoom && doorway.RoomB == stairwellRoom) ||
-                              (doorway.RoomA == stairwellRoom && doorway.RoomB == serviceRoom)))
+                             ((doorway.RoomA == basementRoom && doorway.RoomB == stairwellRoom) ||
+                              (doorway.RoomA == stairwellRoom && doorway.RoomB == basementRoom)))
             .ToArray();
 
         if (doorwayCandidates.Length != 1)
         {
             errors?.Add(doorwayCandidates.Length == 0
-                ? $"'{StairDoorName}' Doorway가 {ServiceRoomId} ↔ {StairwellRoomId} 연결로 구성되지 않았습니다."
+                ? $"'{StairDoorName}' Doorway가 {BasementRoomId} ↔ {StairwellRoomId} 연결로 구성되지 않았습니다."
                 : $"'{StairDoorName}' Doorway 후보가 여러 개입니다.");
             return null;
         }
@@ -235,7 +235,7 @@ public static class HospitalSector5FinalChaseSetup
         Doorway stairDoorway = doorwayCandidates[0];
         List<Target> candidates = stairDoorway.GetComponentsInChildren<DoorTarget>(true)
             .Select(doorTarget => doorTarget != null ? doorTarget.GetComponent<Target>() : null)
-            .Where(target => target != null && target.OwnerRoom == serviceRoom &&
+            .Where(target => target != null && target.OwnerRoom == basementRoom &&
                              stairDoorway.TryGetTraversal(target.OwnerRoom, out DoorTraversal traversal) &&
                              traversal.DestinationRoom == stairwellRoom)
             .ToList();
@@ -258,18 +258,18 @@ public static class HospitalSector5FinalChaseSetup
         return null;
     }
 
-    /// <summary>Sector4 ControlRoom PatrolPoint를 이름과 Room으로 식별한다.</summary>
-    private static PatrolPoint FindSpawnPoint(Room controlRoom, List<string> errors = null)
+    /// <summary>Sector4 Storage PatrolPoint를 이름과 Room으로 식별한다.</summary>
+    private static PatrolPoint FindSpawnPoint(Room storageRoom, List<string> errors = null)
     {
         PatrolPoint[] points = UnityEngine.Object.FindObjectsByType<PatrolPoint>(
             FindObjectsInactive.Include, FindObjectsSortMode.None);
         PatrolPoint point = points.FirstOrDefault(candidate => candidate != null &&
                                                                candidate.name == SpawnPointName &&
-                                                               candidate.Room == controlRoom) ??
-                            points.FirstOrDefault(candidate => candidate != null && candidate.Room == controlRoom);
+                                                               candidate.Room == storageRoom) ??
+                            points.FirstOrDefault(candidate => candidate != null && candidate.Room == storageRoom);
         if (point == null)
         {
-            errors?.Add($"{ControlRoomId}의 최종 추격 등장 PatrolPoint를 찾지 못했습니다.");
+            errors?.Add($"{StorageRoomId}의 최종 추격 등장 PatrolPoint를 찾지 못했습니다.");
         }
 
         return point;
@@ -338,10 +338,10 @@ public static class HospitalSector5FinalChaseSetup
     }
 
     /// <summary>필수 등장 지점을 찾고 누락 시 설정을 중단한다.</summary>
-    private static PatrolPoint FindRequiredSpawnPoint(Room controlRoom)
+    private static PatrolPoint FindRequiredSpawnPoint(Room storageRoom)
     {
-        return FindSpawnPoint(controlRoom) ??
-               throw new InvalidOperationException("Sector5 최종 추격 ControlRoom 등장 PatrolPoint를 찾지 못했습니다.");
+        return FindSpawnPoint(storageRoom) ??
+               throw new InvalidOperationException("Sector5 최종 추격 Storage 등장 PatrolPoint를 찾지 못했습니다.");
     }
 
     /// <summary>씬에서 지정 타입의 필수 단일 참조를 찾는다.</summary>

@@ -28,6 +28,8 @@ namespace HauntedHouse.UI
         private readonly List<InventoryItemView> spawnedViews = new();
         private GamePauseService.PauseHandle pauseHandle;
 
+        private const int MaxItemsPerRow = 3;
+
         public bool IsOpen => panelRoot != null && panelRoot.activeSelf;
 
         private void Awake()
@@ -36,9 +38,51 @@ namespace HauntedHouse.UI
             pauseService ??= FindFirstObjectByType<GamePauseService>();
             gameSession ??= FindFirstObjectByType<GameSession>();
 
+            ConfigureItemGrid();
+
             if (panelRoot != null)
             {
                 panelRoot.SetActive(false);
+            }
+        }
+
+        /// <summary>인벤토리 아이템을 한 줄에 최대 세 개씩 배치하도록 컨테이너의 Grid 설정을 보장한다.</summary>
+        private void ConfigureItemGrid()
+        {
+            if (itemContainer == null)
+            {
+                return;
+            }
+
+            // 기존 한 줄 전용 HorizontalLayoutGroup은 Grid와 동시에 자식을 배치할 수 없으므로 런타임에서 교체한다.
+            HorizontalLayoutGroup horizontal = itemContainer.GetComponent<HorizontalLayoutGroup>();
+            if (horizontal != null)
+            {
+                // LayoutGroup에는 중복 방지 특성이 있어 지연 Destroy 상태에서는 Grid 추가가 거부된다.
+                DestroyImmediate(horizontal);
+            }
+
+            GridLayoutGroup grid = itemContainer.GetComponent<GridLayoutGroup>();
+            if (grid == null)
+            {
+                grid = itemContainer.gameObject.AddComponent<GridLayoutGroup>();
+            }
+
+            RectTransform itemRect = itemViewPrefab != null ? itemViewPrefab.GetComponent<RectTransform>() : null;
+            if (itemRect != null)
+            {
+                grid.cellSize = itemRect.rect.size;
+            }
+
+            grid.spacing = new Vector2(12f, 12f);
+            grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            grid.constraintCount = MaxItemsPerRow;
+
+            // 두 번째 줄이 기존 130px 컨테이너에 잘리지 않도록 실제 셀 높이를 기준으로 세로 공간을 확보한다.
+            if (itemContainer is RectTransform containerRect)
+            {
+                float twoRowHeight = grid.cellSize.y * 2f + grid.spacing.y;
+                containerRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, twoRowHeight);
             }
         }
 

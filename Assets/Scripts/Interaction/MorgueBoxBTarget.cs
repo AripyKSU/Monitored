@@ -66,8 +66,9 @@ namespace HauntedHouse.Interaction
             // 아래에서 대화만 재시도할 수 있도록 IsCompleted와 분리해 둔다.
             if (IsCompleted)
             {
-                target.SetSelectable(false);
-                context?.MarkCompleted();
+                // 마스터키는 다시 지급하지 않되 다른 안치함과 동일하게 조사 메시지는 반복 확인할 수 있다.
+                yield return messagePanel.Show(openedMessage);
+                target.SetSelectable(true);
                 yield break;
             }
 
@@ -132,8 +133,17 @@ namespace HauntedHouse.Interaction
                 // CheckpointResolver가 이 사건을 받아 MasterKeyAcquired flag를 기록하고
                 // Save5를 활성화하므로 B가 flag를 직접 중복 기록하지 않는다.
                 IsCompleted = true;
-                target.SetSelectable(false);
+                target.SetSelectable(true);
                 gameSession.PublishPuzzleCompleted(StoryCheckpointEventIds.MasterKeyDialogueCompleted);
+
+                // Save5 사건을 먼저 발행한 뒤 기존 추격을 정리하고 Storage 연출 위치를 고정한다.
+                Sector5FinalChaseController finalChase =
+                    FindFirstObjectByType<Sector5FinalChaseController>(FindObjectsInactive.Include);
+                if (finalChase == null || !finalChase.PrepareEnemyForFinalChase())
+                {
+                    GameLog.LogError("마스터키 획득 후 살인마를 Storage 최종 추격 준비 위치로 옮기지 못했습니다.", this);
+                }
+
                 context?.MarkCompleted();
             }
             finally
@@ -153,7 +163,8 @@ namespace HauntedHouse.Interaction
             IsCompleted = completed || restoredByStory || restoredByInventory;
 
             target ??= GetComponent<Target>();
-            target?.SetSelectable(!IsCompleted);
+            // 획득 완료 뒤에도 열린 안치함 메시지를 다시 확인할 수 있도록 선택 상태를 유지한다.
+            target?.SetSelectable(true);
         }
 
         /// <summary>마스터키 Target의 필수 참조와 메시지·대화 설정이 유효한지 검사한다.</summary>

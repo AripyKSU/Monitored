@@ -125,10 +125,14 @@ namespace HauntedHouse.Enemies
             }
             finally
             {
-                activeDoorway.PassageStarted -= HandlePassageStarted;
-                if (!doorClosed && activeDoorway != null)
+                // 체크포인트 복원이 Abort로 activeDoorway를 먼저 정리한 경우에도 종료 구간이 null을 역참조하지 않는다.
+                if (activeDoorway != null)
                 {
-                    activeDoorway.ForceClosed();
+                    activeDoorway.PassageStarted -= HandlePassageStarted;
+                    if (!doorClosed)
+                    {
+                        activeDoorway.ForceClosed();
+                    }
                 }
 
                 activeDoorway = null;

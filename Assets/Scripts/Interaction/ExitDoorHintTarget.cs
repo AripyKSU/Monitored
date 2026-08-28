@@ -137,12 +137,33 @@ namespace HauntedHouse.Interaction
         }
 
         /// <summary>컴포넌트가 처음 추가될 때 같은 오브젝트의 기존 문과 공용 시스템을 연결한다.</summary>
+        private void Awake()
+        {
+            EnsureTargetActionBinding();
+        }
+
+        private void OnValidate()
+        {
+            EnsureTargetActionBinding();
+        }
+
+        /// <summary>ExitDoorHintTarget이 붙은 Target의 실제 실행 Action을 항상 이 Wrapper로 유지한다.</summary>
+        private void EnsureTargetActionBinding()
+        {
+            Target target = GetComponent<Target>();
+            if (target != null && !object.ReferenceEquals(target.Action, this))
+            {
+                target.SetAction(this);
+            }
+        }
+
         private void Reset()
         {
             normalExitDoor = GetComponent<DoorTarget>();
             gameSession = FindFirstObjectByType<GameSession>();
             messagePanel = FindFirstObjectByType<MessagePanel>();
             dialogueService = FindFirstObjectByType<DialogueService>();
+            EnsureTargetActionBinding();
         }
     }
 }

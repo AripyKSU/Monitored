@@ -76,7 +76,9 @@ namespace HauntedHouse.Interaction
 
         /// <summary>완료 후에도 메시지를 다시 조사할 수 있는 대상인지 반환한다.</summary>
         private bool AllowsRepeatedInteraction =>
-            allowRepeatedInteraction || completionFlagId == StoryProgressFlags.FreezerHintRead;
+            allowRepeatedInteraction ||
+            completionFlagId == StoryProgressFlags.FreezerHintRead ||
+            CompletionId is "MorgueBoxA" or "Morgue1_Box_C" or "Morgue1_Box_D";
 
         /// <summary>컴포넌트를 처음 추가할 때 공용 UI와 진행 세션을 자동 연결한다.</summary>
         private void Reset()

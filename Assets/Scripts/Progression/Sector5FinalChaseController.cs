@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using HauntedHouse.Commands;
 using HauntedHouse.Core;
 using HauntedHouse.Dialogue;
@@ -15,6 +16,11 @@ namespace HauntedHouse.Progression
     /// </summary>
     public sealed class Sector5FinalChaseController : MonoBehaviour
     {
+        private const string BasementRoomId = "S4_BasementCorridor";
+        private const string StairwellRoomId = "S4_Stairwell";
+        private const string StairDoorName = "SlideDoor_BasementStair";
+        private const string StorageSpawnPointName = "Patrol_S4_Storage";
+
         [Header("진행 참조")]
         [SerializeField] private GameSession gameSession;
         [SerializeField] private Player player;
@@ -57,9 +63,9 @@ namespace HauntedHouse.Progression
                 return false;
             }
 
-            if (enemySpawnPoint.Room == null || enemySpawnPoint.Room.RoomId != "S4_ControlRoom")
+            if (enemySpawnPoint.Room == null || enemySpawnPoint.Room.RoomId != "S4_Storage")
             {
-                error = $"Sector5FinalChaseController '{name}'의 EnemySpawnPoint가 S4_ControlRoom에 속하지 않습니다.";
+                error = $"Sector5FinalChaseController '{name}'의 EnemySpawnPoint가 S4_Storage에 속하지 않습니다.";
                 return false;
             }
 
@@ -100,6 +106,48 @@ namespace HauntedHouse.Progression
             targetCommandRunner ??= FindFirstObjectByType<TargetCommandRunner>();
             pauseService ??= FindFirstObjectByType<GamePauseService>();
             dialogueService ??= FindFirstObjectByType<DialogueService>();
+            ResolveRuntimeTriggerAndSpawn();
+        }
+
+        /// <summary>
+        /// 마스터키 획득 직후 기존 추격을 제거하고 살인마를 Storage 시작 위치에 대기시킨다.
+        /// 최종 추격 시작 전까지 ScriptedSequence가 순찰 재개를 막아 연출 위치가 유지된다.
+        /// </summary>
+        /// <returns>살인마를 최종 추격 준비 상태로 배치했으면 true.</returns>
+        public bool PrepareEnemyForFinalChase()
+        {
+            ResolveRuntimeTriggerAndSpawn();
+            if (enemy == null || enemySpawnPoint == null)
+            {
+                GameLog.LogError("최종 추격 준비에 필요한 Enemy 또는 Storage SpawnPoint가 없습니다.", this);
+                return false;
+            }
+
+            return enemy.BeginScriptedSequence(enemySpawnPoint);
+        }
+
+        /// <summary>
+        /// 이전 씬 설정에 남은 하행 Target과 ControlRoom Spawn 참조를 현재 명세의 상행 Target·Storage 지점으로 보정한다.
+        /// </summary>
+        private void ResolveRuntimeTriggerAndSpawn()
+        {
+            Room basementRoom = FindObjectsByType<Room>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+                .FirstOrDefault(room => room != null && room.RoomId == BasementRoomId);
+            stairwellRoom = FindObjectsByType<Room>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+                .FirstOrDefault(room => room != null && room.RoomId == StairwellRoomId) ?? stairwellRoom;
+
+            Doorway stairDoor = FindObjectsByType<Doorway>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+                .FirstOrDefault(doorway => doorway != null && doorway.name == StairDoorName);
+            Target upwardTarget = stairDoor?.GetComponentsInChildren<Target>(true)
+                .FirstOrDefault(target => target != null && target.OwnerRoom == basementRoom &&
+                    stairDoor.TryGetTraversal(target.OwnerRoom, out DoorTraversal traversal) &&
+                    traversal.DestinationRoom == stairwellRoom);
+            stairwellArrivalTarget = upwardTarget ?? stairwellArrivalTarget;
+
+            PatrolPoint storagePoint = FindObjectsByType<PatrolPoint>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+                .FirstOrDefault(point => point != null && point.name == StorageSpawnPointName &&
+                                         point.Room != null && point.Room.RoomId == "S4_Storage");
+            enemySpawnPoint = storagePoint ?? enemySpawnPoint;
         }
 
         /// <summary>Target 명령 완료를 구독해 실제 Stairwell 도착 시점을 감시한다.</summary>
@@ -176,7 +224,7 @@ namespace HauntedHouse.Progression
 
                 if (!enemy.BeginScriptedSequence(enemySpawnPoint))
                 {
-                    GameLog.LogError("최종 추격 시작을 위한 ControlRoom 살인마 등장에 실패했습니다.", this);
+                    GameLog.LogError("최종 추격 시작을 위한 Storage 살인마 등장에 실패했습니다.", this);
                     yield break;
                 }
 

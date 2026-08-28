@@ -12,6 +12,8 @@ namespace HauntedHouse.Commands
     public sealed class PlayerAnimationController : MonoBehaviour
     {
         private static readonly int IsMovingParameter = Animator.StringToHash("IsMoving");
+        private static readonly int CaptureDeathParameter = Animator.StringToHash("CaptureDeath");
+        private const string CaptureDeathStateName = "CaptureDeath";
 
         [Header("애니메이션 구성")]
         [SerializeField] private Animator animator;
@@ -19,6 +21,8 @@ namespace HauntedHouse.Commands
         [SerializeField, Min(0f)] private float movementThreshold = 0.05f;
 
         private bool hasIsMovingParameter;
+        private bool hasCaptureDeathParameter;
+        private bool captureLocked;
 
         /// <summary>
         /// Animator와 NavMeshAgent를 자동으로 찾고 컨트롤러 파라미터를 검증한다.
@@ -45,6 +49,14 @@ namespace HauntedHouse.Commands
                     animator);
             }
 
+            hasCaptureDeathParameter = HasParameter(animator, CaptureDeathParameter, AnimatorControllerParameterType.Trigger);
+            if (!hasCaptureDeathParameter)
+            {
+                GameLog.LogWarning(
+                    $"Player Animator '{animator.name}'에 trigger 파라미터 'CaptureDeath'가 없습니다.",
+                    animator);
+            }
+
             // Generic 이동 애니메이션이 캐릭터 루트를 직접 움직이지 않고 NavMeshAgent 위치를 따르도록 한다.
             animator.applyRootMotion = false;
         }
@@ -54,6 +66,16 @@ namespace HauntedHouse.Commands
         /// </summary>
         private void Update()
         {
+            if (captureLocked)
+            {
+                if (hasIsMovingParameter)
+                {
+                    animator.SetBool(IsMovingParameter, false);
+                }
+
+                return;
+            }
+
             if (!hasIsMovingParameter || navMeshAgent == null)
             {
                 return;
@@ -67,6 +89,60 @@ namespace HauntedHouse.Commands
                             && velocity.sqrMagnitude > movementThreshold * movementThreshold;
 
             animator.SetBool(IsMovingParameter, isMoving);
+        }
+
+        /// <summary>포획 사망 애니메이션을 시작하고 플레이어 이동 표현을 잠근다.</summary>
+        public bool PlayCaptureDeath()
+        {
+            if (animator == null || !hasCaptureDeathParameter)
+            {
+                return false;
+            }
+
+            captureLocked = true;
+            if (hasIsMovingParameter)
+            {
+                animator.SetBool(IsMovingParameter, false);
+            }
+
+            if (navMeshAgent != null && navMeshAgent.enabled && navMeshAgent.isOnNavMesh)
+            {
+                navMeshAgent.isStopped = true;
+                navMeshAgent.ResetPath();
+            }
+
+            animator.ResetTrigger(CaptureDeathParameter);
+            animator.SetTrigger(CaptureDeathParameter);
+            return true;
+        }
+
+        /// <summary>포획 사망 상태가 마지막 프레임까지 재생됐는지 반환한다.</summary>
+        public bool IsCaptureDeathAnimationFinished()
+        {
+            if (!captureLocked || animator == null || animator.IsInTransition(0))
+            {
+                return false;
+            }
+
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            return stateInfo.IsName(CaptureDeathStateName) && stateInfo.normalizedTime >= 1f;
+        }
+
+        /// <summary>다시하기 후 포획 애니메이션 잠금을 해제하고 기본 상태로 복원한다.</summary>
+        public void ResetCapturePresentation()
+        {
+            captureLocked = false;
+            if (animator != null)
+            {
+                animator.ResetTrigger(CaptureDeathParameter);
+                animator.Rebind();
+                animator.Update(0f);
+            }
+
+            if (navMeshAgent != null && navMeshAgent.enabled && navMeshAgent.isOnNavMesh)
+            {
+                navMeshAgent.isStopped = false;
+            }
         }
 
         /// <summary>
@@ -85,9 +161,17 @@ namespace HauntedHouse.Commands
         /// </summary>
         private static bool HasIsMovingParameter(Animator targetAnimator)
         {
+            return HasParameter(targetAnimator, IsMovingParameter, AnimatorControllerParameterType.Bool);
+        }
+
+        private static bool HasParameter(
+            Animator targetAnimator,
+            int nameHash,
+            AnimatorControllerParameterType parameterType)
+        {
             foreach (AnimatorControllerParameter parameter in targetAnimator.parameters)
             {
-                if (parameter.nameHash == IsMovingParameter && parameter.type == AnimatorControllerParameterType.Bool)
+                if (parameter.nameHash == nameHash && parameter.type == parameterType)
                 {
                     return true;
                 }

@@ -22,11 +22,14 @@ namespace HauntedHouse.Enemies
         [SerializeField] private string startWalkingTrigger = "StartWalking";
         [SerializeField] private string stopWalkingTrigger = "StopWalking";
         [SerializeField] private string lookAroundTrigger = "LookAround";
+        [SerializeField] private string captureAttackTrigger = "CaptureAttack";
 
         [Header("이동 판정")]
         [SerializeField, Min(0f)] private float movementThreshold = 0.01f;
 
         private bool walking;
+        private bool captureLocked;
+        private bool hasCaptureAttackTrigger;
 
         /// <summary>현재 걷기 애니메이션 상태인지 반환한다.</summary>
         public bool IsWalking => walking;
@@ -43,6 +46,15 @@ namespace HauntedHouse.Enemies
                 GameLog.LogError(
                     $"EnemyAnimationController '{name}'에 Animator 참조가 없습니다.",
                     this);
+                return;
+            }
+
+            hasCaptureAttackTrigger = HasTrigger(animator, captureAttackTrigger);
+            if (!hasCaptureAttackTrigger)
+            {
+                GameLog.LogWarning(
+                    $"Enemy Animator '{animator.name}'에 trigger 파라미터 '{captureAttackTrigger}'가 없습니다.",
+                    animator);
             }
         }
 
@@ -73,7 +85,7 @@ namespace HauntedHouse.Enemies
         /// </summary>
         private void Update()
         {
-            if (enemyController == null || animator == null)
+            if (captureLocked || enemyController == null || animator == null)
             {
                 return;
             }
@@ -90,6 +102,11 @@ namespace HauntedHouse.Enemies
         /// <param name="currentState">변경 후 상태.</param>
         private void HandleStateChanged(EnemyState previousState, EnemyState currentState)
         {
+            if (captureLocked)
+            {
+                return;
+            }
+
             if (currentState == EnemyState.Inactive || currentState == EnemyState.Waiting)
             {
                 SetWalking(false, true);
@@ -129,6 +146,51 @@ namespace HauntedHouse.Enemies
         private void RefreshAnimation(bool force)
         {
             SetWalking(ShouldPlayWalking(), force);
+        }
+
+        /// <summary>포획한 플레이어를 공격하는 애니메이션을 시작하고 이동 애니메이션 갱신을 잠근다.</summary>
+        public bool PlayCaptureAttack()
+        {
+            if (animator == null || !hasCaptureAttackTrigger)
+            {
+                return false;
+            }
+
+            captureLocked = true;
+            walking = false;
+            animator.ResetTrigger(startWalkingTrigger);
+            animator.ResetTrigger(stopWalkingTrigger);
+            animator.ResetTrigger(lookAroundTrigger);
+            animator.ResetTrigger(captureAttackTrigger);
+            animator.SetTrigger(captureAttackTrigger);
+            return true;
+        }
+
+        /// <summary>다시하기 후 포획 공격 잠금을 해제하고 현재 AI 이동 상태에 맞춰 애니메이션을 복원한다.</summary>
+        public void ResetCapturePresentation()
+        {
+            captureLocked = false;
+            if (animator == null)
+            {
+                return;
+            }
+
+            animator.ResetTrigger(captureAttackTrigger);
+            RefreshAnimation(true);
+        }
+
+        private static bool HasTrigger(Animator targetAnimator, string triggerName)
+        {
+            int triggerHash = Animator.StringToHash(triggerName);
+            foreach (AnimatorControllerParameter parameter in targetAnimator.parameters)
+            {
+                if (parameter.nameHash == triggerHash && parameter.type == AnimatorControllerParameterType.Trigger)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

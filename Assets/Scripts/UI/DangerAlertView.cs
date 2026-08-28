@@ -18,6 +18,7 @@ namespace HauntedHouse.UI
         [Header("상단 중앙 배치")]
         [SerializeField] private bool forceTopCenterLayout = true;
         [SerializeField] private Vector2 topCenterOffset = new Vector2(0f, -48f);
+        [SerializeField] private Vector2 alertSize = new Vector2(160f, 80f);
 
         [Header("경보 시스템")]
         [SerializeField] private DangerAlertSystem alertSystem;
@@ -97,36 +98,33 @@ namespace HauntedHouse.UI
                 return;
             }
 
-            // 눈동자의 앵커는 직계 부모를 기준으로 계산된다. Gameplay HUD처럼 부모가
-            // 작은 고정 Rect로 저장되어 있으면 (0, -48)도 화면 밖 좌표가 되므로,
-            // 전용 HUD 부모를 먼저 Canvas 전체 영역으로 확장한다.
-            StretchParentToCanvas();
+            // 다른 HUD 부모의 작은 RectTransform 또는 CanvasGroup 영향을 받지 않도록
+            // 실제 Canvas 바로 아래로 이동시켜 화면 좌표를 기준으로 배치한다.
+            MoveToCanvasRoot();
 
             RectTransform rectTransform = alertImage.rectTransform;
             rectTransform.anchorMin = new Vector2(0.5f, 1f);
             rectTransform.anchorMax = new Vector2(0.5f, 1f);
             rectTransform.pivot = new Vector2(0.5f, 1f);
             rectTransform.anchoredPosition = topCenterOffset;
+            rectTransform.sizeDelta = alertSize;
+            rectTransform.localScale = Vector3.one;
+            rectTransform.localRotation = Quaternion.identity;
+            rectTransform.SetAsLastSibling();
         }
 
         /// <summary>
-        /// 눈동자 전용 부모 RectTransform을 가장 가까운 Canvas의 전체 화면 영역으로 확장한다.
-        /// 해상도와 Canvas Scaler 배율이 바뀌어도 자식의 상단 중앙 앵커가 화면을 기준으로 유지된다.
+        /// 눈동자를 가장 가까운 Canvas 바로 아래로 이동해 다른 HUD 레이아웃과 투명도의 영향을 차단한다.
         /// </summary>
-        private void StretchParentToCanvas()
+        private void MoveToCanvasRoot()
         {
-            RectTransform parentRect = alertImage.rectTransform.parent as RectTransform;
             Canvas canvas = alertImage.canvas;
-            if (parentRect == null || canvas == null || parentRect == canvas.transform)
+            if (canvas == null || alertImage.transform.parent == canvas.transform)
             {
                 return;
             }
 
-            parentRect.anchorMin = Vector2.zero;
-            parentRect.anchorMax = Vector2.one;
-            parentRect.pivot = new Vector2(0.5f, 0.5f);
-            parentRect.anchoredPosition = Vector2.zero;
-            parentRect.sizeDelta = Vector2.zero;
+            alertImage.transform.SetParent(canvas.transform, false);
         }
 
         /// <summary>컴포넌트를 처음 추가할 때 같은 GameObject의 Image를 연결한다.</summary>

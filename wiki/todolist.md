@@ -13,11 +13,6 @@
 - [ ] `[Bad Ending 텍스트 대체본]` 실제 문구 작성 및 화자 확정
 - [ ] `[Happy Ending 텍스트 대체본]` 실제 문구 작성 및 화자 확정
 
-## Sector2 GeneratorRoom - 작업 15
-
-- [ ] `Generator_Boiler/ApproachPoint`를 실제 플레이 이동으로 확인하고 필요 시 최종 위치/회전 미세조정
-- [ ] GeneratorRoom에서 실제 UI 입력으로 `WrongItem` / `Cancel` / `Fuse` 선택을 각각 수행해 Inventory 감소와 두 Story Flag를 엔드투엔드 확인
-- [ ] Save3 CheckpointDefinition이 실제 배치되는 작업에서 `FuseInstalled`, `GeneratorPowered`를 ProgressFlags에 포함하고 Restart 복원을 최종 확인
 
 ## 별도 항목
 
