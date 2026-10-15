@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="./docs/images/monitored-title.webp" alt="MONITORED" width="900">
-</p>
-
 # 화면 클릭 기반 3D 폐병원 탈출 공포 게임
 
 ## 플레이 영상
