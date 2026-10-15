@@ -6,7 +6,7 @@
 
 ## 플레이 영상
 
-[![플레이 영상](https://img.youtube.com/vi/SeBrb0dcahg/hqdefault.jpg)](https://youtu.be/SeBrb0dcahg)
+[![플레이 영상](https://img.youtube.com/vi/H3RYKfMJ7fQ/hqdefault.jpg)](https://youtu.be/H3RYKfMJ7fQ)
 
 ## 플레이 링크
 
