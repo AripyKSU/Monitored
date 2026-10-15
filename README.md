@@ -9,3 +9,7 @@ Unity 6.3으로 제작한 짧은 플레이 타임의 Web 클릭기반 공포게�
 ## 플레이 링크
 
 https://play.unity.com/en/games/a46e562b-e4c4-4fcc-821a-ddc8f7d364fe/monitored
+
+## 개발 과정
+
+https://app.notion.com/p/Monitored-3ce0faae3f3380e690e1f23fd30c309e
